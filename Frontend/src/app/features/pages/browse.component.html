@@ -1,0 +1,8 @@
+<app-nav />
+<main class="page container">
+    <h1 class="page-title">Browse</h1>
+    <p class="page-intro">Explore your next favorite story.</p>
+    <div class="filters"><button class="selected">{{type || 'All'}}</button><button>All
+            Genres</button><button>2026</button><button>Popular</button></div>
+    <div class="grid">@for(item of list;track item.id){<app-content-card [item]="item" />}</div>
+</main><app-footer />

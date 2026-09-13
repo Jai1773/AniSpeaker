@@ -1,0 +1,6 @@
+<app-nav />
+<main class="page container">
+    <h1 class="page-title">My Watch Later</h1>
+    <p class="page-intro">Keep your next great story close.</p>
+    <div class="grid">@for(item of svc.items.slice(0,4);track item.id){<app-content-card [item]="item" />}</div>
+</main><app-footer />

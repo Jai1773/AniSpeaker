@@ -1,0 +1,10 @@
+<app-nav />
+<main class="page container">
+    <h1 class="page-title">Recently Watched</h1>@for(item of svc.items.slice(0,3);track item.id){<article
+        class="history"><img [src]="item.backdrop">
+        <div>
+            <h3>{{item.title}}</h3>
+            <p>Episode 12 · Watched today</p>
+        </div><a class="btn primary" [routerLink]="['/watch',item.id]">Continue</a>
+    </article>}<button class="clear">Clear history</button>
+</main><app-footer />
