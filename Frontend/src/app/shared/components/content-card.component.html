@@ -1,0 +1,5 @@
+<a class="card" [routerLink]="['/content',item().slug]">
+    <div class="visual"><img [src]="item().image" [alt]="item().title"><span class="play">▶</span></div>
+    <h3>{{item().title}}</h3>
+    <p>★ {{item().rating}} <i></i> {{item().year}} <i></i> {{item().genre}}</p>
+</a>

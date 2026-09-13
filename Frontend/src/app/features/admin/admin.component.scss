@@ -1,0 +1,98 @@
+main {
+    min-height: 100vh;
+    background: #f6f7f9;
+    color: #20232c;
+    display: flex;
+    font-family: Arial
+}
+
+aside {
+    width: 230px;
+    background: #172033;
+    color: #cfd5df;
+    padding: 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px
+}
+
+aside b {
+    font-size: 1.2rem;
+    color: #fff;
+    margin-bottom: 18px
+}
+
+aside a {
+    font-size: .9rem
+}
+
+section {
+    padding: 45px;
+    width: 100%;
+    max-width: 1100px
+}
+
+section>p {
+    color: #697386;
+    font-size: .75rem;
+    font-weight: bold
+}
+
+h1 {
+    font-size: 2.2rem
+}
+
+.cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px
+}
+
+.cards article {
+    padding: 24px;
+    background: #fff;
+    border: 1px solid #e6e8ec;
+    border-radius: 9px
+}
+
+.cards b {
+    display: block;
+    font-size: 2rem
+}
+
+.cards span {
+    color: #747a86;
+    font-size: .85rem
+}
+
+.table {
+    background: #fff;
+    padding: 18px;
+    margin: 8px 0;
+    border-radius: 7px
+}
+
+.table span {
+    float: right;
+    color: #24966a
+}
+
+@media(max-width:700px) {
+    aside {
+        width: 65px;
+        padding: 20px 10px
+    }
+
+    aside a,
+    aside b {
+        font-size: 0
+    }
+
+    section {
+        padding: 25px
+    }
+
+    .cards {
+        grid-template-columns: 1fr
+    }
+}

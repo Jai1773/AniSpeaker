@@ -1,0 +1,6 @@
+<section class="container row">
+    <div>
+        <h2>{{title}}</h2><a routerLink="/browse">See all →</a>
+    </div>
+    <section>@for(item of items;track item.id){<app-content-card [item]="item" />}</section>
+</section>

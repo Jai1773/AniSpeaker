@@ -1,0 +1,25 @@
+<app-nav />
+<main class="page container">
+  <h1 class="page-title">Search</h1>
+  <div class="search">
+    <svg class="search-icon" viewBox="0 0 24 24" aria-hidden="true">
+      <circle cx="11" cy="11" r="6"></circle>
+      <path d="m16 16 4 4"></path>
+    </svg>
+    <input [(ngModel)]="query" (ngModelChange)="search()" placeholder="Search cartoons, anime, movies..." />
+  </div>
+  @if (query) {
+    <p class="results">
+      Search results for <b>“{{ query }}”</b>
+    </p>
+  }
+  <div class="grid">
+    @for (item of filtered; track item.id) {
+      <app-content-card [item]="item" />
+    }
+  </div>
+  @if (query && !filtered.length) {
+    <div class="empty"><strong>No titles found</strong>Try another title.</div>
+  }
+</main>
+<app-footer />

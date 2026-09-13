@@ -1,7 +1,7 @@
-# Toon Speaker — Platform Rework Architecture
+# AniSpeaker — Platform Rework Architecture
 
 **Status:** Proposed
-**Scope:** Backend migration (Cloudflare Worker + JSON DB → .NET API + real DB, Dockerized on Render), Admin CMS, Guest-first auth with optional login, Watch Later / Continue Watching.
+**Scope:** Backend migration (Cloudflare Worker + JSON DB → .NET API + PostgreSQL, Dockerized on Render), Admin CMS, Guest-first auth with optional login, Watch Later / Continue Watching.
 
 ---
 
@@ -54,7 +54,7 @@ flowchart LR
     end
 
     subgraph Storage
-        DB[(PostgreSQL - Render/Neon)]
+        DB[(PostgreSQL - Render Postgres)]
         OBJ[(Object Storage - Cloudflare R2 / Bunny)]
     end
 
@@ -76,17 +76,17 @@ flowchart LR
 |---|---|---|
 | Backend framework | ASP.NET Core 8 Web API | Modern, fast, first-class Docker support, great EF Core tooling |
 | ORM | Entity Framework Core | Migrations, LINQ, works cleanly with Postgres |
-| Database | PostgreSQL | Free/cheap managed tiers (Render, Neon, Supabase); relational fit for catalog + users |
+| Database | PostgreSQL (Render Postgres, managed) | Real relational DB replacing the JSON file — no Cloudflare DB involved at all; same host (Render) as the API for simplicity |
 | Auth | ASP.NET Identity + JWT (access + refresh token) | Stateless, works well with SPA, supports optional/guest flow |
 | Video/image storage | Cloudflare R2 (you already use Cloudflare) or Bunny Storage | S3-compatible, cheap egress (R2 has **zero egress fees**, which matters a lot for video) |
 | Video delivery | Cloudflare CDN in front of R2; HLS (`.m3u8` + `.ts`) for adaptive playback | Avoids re-buffering on slow connections, standard for OTT |
 | Containerization | Docker (multi-stage build) | Required for Render deployment |
 | Hosting (API) | Render (Web Service, Docker) | You already picked this |
-| Hosting (DB) | Render Postgres, or Neon (serverless Postgres, generous free tier) | Managed, backups included |
+| Hosting (DB) | Render Postgres | Managed, automatic backups, same dashboard/billing as the API — no separate DB vendor |
 | Frontend | Angular (existing), standalone components + lazy routes | Keep your investment, just restructure |
 | Admin auth | Same JWT system, `Admin` role claim | One backend, role-gated endpoints |
 
-> If budget is a real constraint: Neon (Postgres) free tier + Render free/starter web service + Cloudflare R2 (10GB free, no egress fee) is essentially a $0–5/month stack to start.
+> If budget is a real constraint: Render free/starter web service + Render's cheapest Postgres tier + Cloudflare R2 (10GB free, no egress fee) is essentially a low-cost stack to start, with everything except object storage sitting on a single host (Render).
 
 ---
 
@@ -175,7 +175,7 @@ erDiagram
 Use a pragmatic **3-layer Clean Architecture** (don't over-engineer this for a catalog app):
 
 ```
-ToonSpeaker.Api/                 (composition root — Program.cs, controllers, DI, middleware)
+AniSpeaker.Api/                 (composition root — Program.cs, controllers, DI, middleware)
 ├── Controllers/
 │   ├── ContentController.cs      # public: browse/search
 │   ├── PlaybackController.cs     # public: get video URL for an episode
@@ -188,13 +188,13 @@ ToonSpeaker.Api/                 (composition root — Program.cs, controllers, 
 ├── Program.cs
 └── Dockerfile
 
-ToonSpeaker.Application/          (business logic, DTOs, interfaces)
+AniSpeaker.Application/          (business logic, DTOs, interfaces)
 ├── Content/
 ├── Watch/
 ├── Auth/
 └── Common/ (pagination, result wrappers)
 
-ToonSpeaker.Infrastructure/       (EF Core, R2/S3 client, Identity)
+AniSpeaker.Infrastructure/       (EF Core, R2/S3 client, Identity)
 ├── Persistence/
 │   ├── AppDbContext.cs
 │   ├── Migrations/
@@ -203,7 +203,7 @@ ToonSpeaker.Infrastructure/       (EF Core, R2/S3 client, Identity)
 │   └── R2StorageService.cs       # generates pre-signed PUT/GET URLs
 └── Identity/
 
-ToonSpeaker.Domain/                (entities only, no dependencies)
+AniSpeaker.Domain/                (entities only, no dependencies)
 ```
 
 ### Video upload flow (important — don't proxy big files through your API)
@@ -349,20 +349,20 @@ FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
 COPY . .
 RUN dotnet restore
-RUN dotnet publish ToonSpeaker.Api -c Release -o /app/publish
+RUN dotnet publish AniSpeaker.Api -c Release -o /app/publish
 
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS final
 WORKDIR /app
 COPY --from=build /app/publish .
 ENV ASPNETCORE_URLS=http://+:8080
 EXPOSE 8080
-ENTRYPOINT ["dotnet", "ToonSpeaker.Api.dll"]
+ENTRYPOINT ["dotnet", "AniSpeaker.Api.dll"]
 ```
 
 **Render setup:**
 - New **Web Service** → "Docker" runtime → point at your repo/Dockerfile.
 - Set environment variables in Render dashboard: `ConnectionStrings__Default`, `Jwt__Secret`, `R2__AccessKey`, `R2__SecretKey`, `R2__BucketName`, `R2__PublicBaseUrl`.
-- Add a **Render Postgres** instance (or point `ConnectionStrings__Default` at Neon) — run `dotnet ef database update` as a one-off job or on container startup (`app.Migrate()` guarded by an env flag) for the first deploy.
+- Add a **Render Postgres** instance and set `ConnectionStrings__Default` to its connection string — run `dotnet ef database update` as a one-off job or on container startup (`app.Migrate()` guarded by an env flag) for the first deploy. No Cloudflare involvement in the data layer at all.
 - Angular frontend: deploy separately as a static site (Render Static Site, or keep it on Cloudflare Pages where it already lives) — just point its `environment.prod.ts` `apiBaseUrl` at the Render API URL.
 
 ---
@@ -392,6 +392,6 @@ ENTRYPOINT ["dotnet", "ToonSpeaker.Api.dll"]
 
 ## 14. Open Decisions (flag before building)
 
-- **DB host:** Render Postgres vs Neon (Neon's serverless free tier is generous and separates DB scaling from API scaling — worth considering even though Render Postgres is one less vendor).
+- **DB host:** locked to **Render Postgres** — same vendor and billing as the API, no separate database provider to manage.
 - **HLS now or later:** starting with plain MP4 is simpler; only add HLS transcoding if buffering becomes a real user complaint.
 - **Email verification** on register — skip for v1 given login is optional/low-stakes, revisit if abuse becomes an issue.
