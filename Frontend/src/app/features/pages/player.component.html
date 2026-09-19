@@ -1,1 +1,16 @@
-<app-nav /><main class="page container"><div class="player"><div class="screen">@if(videoUrl){<video #video controls autoplay [src]="videoUrl" (timeupdate)="progress()"></video>}@else {<span>Play</span>}<p>{{item?.title}} · {{selected?.title}}</p><small>{{error}}</small></div><aside><h3>Episodes</h3>@for(ep of episodes;track ep.id){<button (click)="select(ep)"><b>{{ep.number}}</b> {{ep.title}}<small>{{ep.duration}}</small></button>}</aside></div><section><h1>{{item?.title}}</h1><p class="page-intro">{{selected?.title}}</p></section></main>
+<app-nav />
+<main class="page container">
+    <div class="player">
+        <div class="screen"><span>▶</span>
+            <p>Solar Guardians · Episode 12 — The Final Gate</p><small>❚❚　━━━●━━━━━━━━　18:24 / 24:00　⚙ ⛶</small>
+        </div>
+        <aside>
+            <h3>Up Next</h3>@for(ep of svc.episodes;track ep.number){<a><b>{{ep.number}}</b> {{ep.title}}
+                <small>{{ep.duration}}</small></a>}
+        </aside>
+    </div>
+    <section><span class="eyebrow">ANIME · EPISODE 12</span>
+        <h1>Solar Guardians</h1>
+        <p class="page-intro">The team faces their biggest choice yet as the last signal reaches home.</p>
+    </section>
+</main>

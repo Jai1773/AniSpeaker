@@ -1,0 +1,40 @@
+footer {
+    border-top: 1px solid var(--line);
+    padding: 36px max(40px, calc((100vw - 1380px)/2));
+    color: #a7a9b3;
+    display: flex;
+    align-items: center;
+    gap: 35px;
+    font-size: .85rem
+}
+
+b {
+    color: #fff;
+    font: 700 1rem Outfit
+}
+
+p {
+    margin: 5px 0 0
+}
+
+.links {
+    display: flex;
+    gap: 19px;
+    margin-left: auto
+}
+
+.links a:hover {
+    color: #fff
+}
+
+@media(max-width:700px) {
+    footer {
+        padding: 28px 16px 88px;
+        display: block
+    }
+
+    .links {
+        margin: 22px 0;
+        flex-wrap: wrap
+    }
+}

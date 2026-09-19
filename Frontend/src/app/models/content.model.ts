@@ -16,7 +16,6 @@ export interface Content {
   episode?: string;
 }
 export interface Episode {
-  id: string;
   number: number;
   title: string;
   duration: string;

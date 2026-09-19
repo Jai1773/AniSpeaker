@@ -1,7 +1,16 @@
-<main><aside><b>AniSpeaker Admin</b><button (click)="section='dashboard'">Dashboard</button><button (click)="section='categories'">Categories</button><button (click)="section='content'">Content</button><button (click)="section='new'">New content</button><button (click)="section='uploads'">Uploads</button></aside><section><p>ADMIN PANEL</p><p class="error">{{error}}</p><p class="notice">{{notice}}</p>
-@if(section === 'dashboard'){<h1>Dashboard</h1><div class="cards"><article><b>{{content.length}}</b><span>Content items</span></article><article><b>{{categories.length}}</b><span>Categories</span></article><article><b>{{content.filter(x => x.published).length}}</b><span>Published</span></article></div>}
-@if(section === 'categories'){<h1>Categories</h1><div class="form"><input [(ngModel)]="category.name" placeholder="Name"><input [(ngModel)]="category.slug" placeholder="Slug"><input [(ngModel)]="category.sortOrder" type="number"><button (click)="createCategory()">Add category</button></div>@for(item of categories;track item.id){<div class="table">{{item.name}} <small>{{item.slug}}</small><button (click)="deleteCategory(item.id)">Delete</button></div>}}
-@if(section === 'content'){<h1>Content</h1><button (click)="section='new'">New content</button>@for(item of content;track item.id){<div class="table"><b>{{item.title}}</b><small>{{item.type}} · {{item.published ? 'Published' : 'Draft'}}</small><button (click)="toggle(item)">{{item.published ? 'Unpublish' : 'Publish'}}</button><button (click)="remove(item)">Delete</button></div>}}
-@if(section === 'new'){<h1>New content</h1><div class="form"><label>Title<input [(ngModel)]="form.title"></label><label>Slug<input [(ngModel)]="form.slug"></label><label>Category<select [(ngModel)]="form.categoryId">@for(x of categories;track x.id){<option [value]="x.id">{{x.name}}</option>}</select></label><label>Type<select [(ngModel)]="form.type"><option value="Series">Series</option><option value="Movie">Movie</option></select></label><label>Description<textarea [(ngModel)]="form.description"></textarea></label><label>Tags (comma-separated)<input #tags (change)="form.tags = tags.value.split(',')"></label><label>Poster URL<input [(ngModel)]="form.posterUrl"></label><label><input [(ngModel)]="form.published" type="checkbox"> Published</label><button (click)="saveContent()">Save content</button></div>@if(selectedContentId && form.type === 'Series'){<h2>Seasons and episodes</h2><div class="form"><input [(ngModel)]="season.number" type="number"><input [(ngModel)]="season.title"><button (click)="addSeason()">Add season</button></div>@for(s of seasons;track s.id){<div class="table"><b>{{s.title}}</b><div class="form"><input [(ngModel)]="episode.number" type="number"><input [(ngModel)]="episode.title" placeholder="Episode title"><input [(ngModel)]="episode.durationSeconds" type="number" placeholder="Seconds"><button (click)="addEpisode(s.id)">Add episode using uploaded video</button></div></div>}}}
-@if(section === 'uploads'){<h1>Upload media</h1><p>Files upload directly to R2; they never pass through Render.</p><input type="file" (change)="upload($event)">@if(uploading){<p>Uploading…</p>}<p>For images, the poster field is populated. For videos, upload first then add an episode.</p>}
-</section></main>
+<main>
+    <aside><b>AniSpeaker</b><a>Dashboard</a><a>Categories</a><a>Content</a><a>Episodes</a><a>Uploads</a><a>Users</a>
+    </aside>
+    <section>
+        <p>ADMIN OVERVIEW</p>
+        <h1>Dashboard</h1>
+        <div class="cards">
+            <article><b>248</b><span>Total Content</span></article>
+            <article><b>18.4k</b><span>Total Users</span></article>
+            <article><b>1.2M</b><span>Total Views</span></article>
+        </div>
+        <h2>Recent activity</h2>
+        <div class="table">Solar Guardians <span>Published</span></div>
+        <div class="table">Wildwood Chronicles <span>Draft saved</span></div>
+    </section>
+</main>

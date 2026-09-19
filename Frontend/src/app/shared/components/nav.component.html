@@ -1,2 +1,10 @@
-<header><a routerLink="/" class="brand"><span>▶</span> AniSpeaker</a><nav><a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">Home</a><a routerLink="/browse" routerLinkActive="active">Browse</a><a routerLink="/browse/cartoons">Cartoons</a><a routerLink="/browse/anime">Anime</a><a routerLink="/browse/movies">Movies</a></nav><div class="actions"><a routerLink="/search" aria-label="Search">⌕</a>@if(auth.isLoggedIn){<a routerLink="/watch-later" aria-label="Watch later">♡</a><a routerLink="/profile" class="avatar" [title]="auth.session?.displayName">{{initials()}}</a>@if(auth.isAdmin){<a routerLink="/admin" class="admin-link">Admin</a>}} @else {<a routerLink="/login" class="sign-in">Sign in</a><a routerLink="/register" class="join">Join free</a>}</div></header>
-<nav class="mobile"><a routerLink="/">⌂<small>Home</small></a><a routerLink="/browse">▦<small>Browse</small></a><a routerLink="/search">⌕<small>Search</small></a><a routerLink="/watch-later">♡<small>Saved</small></a><a [routerLink]="auth.isLoggedIn ? '/profile' : '/login'">◉<small>{{auth.isLoggedIn ? 'Profile' : 'Sign in'}}</small></a></nav>
+<header><a routerLink="/" class="brand"><span>▶</span> AniSpeaker</a>
+    <nav><a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">Home</a><a
+            routerLink="/browse" routerLinkActive="active">Browse</a><a routerLink="/browse/cartoons">Cartoons</a><a
+            routerLink="/browse/anime">Anime</a><a routerLink="/browse/movies">Movies</a></nav>
+    <div class="actions"><a routerLink="/search" aria-label="Search">⌕</a><a routerLink="/watch-later"
+            aria-label="Watch later">♡</a><a routerLink="/profile" class="avatar">TS</a></div>
+</header>
+<nav class="mobile"><a routerLink="/">⌂<small>Home</small></a><a routerLink="/browse">▦<small>Browse</small></a><a
+        routerLink="/search">⌕<small>Search</small></a><a routerLink="/watch-later">♡<small>Saved</small></a><a
+        routerLink="/profile">◉<small>Profile</small></a></nav>

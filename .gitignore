@@ -1,0 +1,21 @@
+# Build results
+**/bin/
+**/obj/
+**/dist/
+**/.angular/
+
+# Node
+**/node_modules/
+
+# Environment files with secrets
+appsettings.Development.json
+
+# IDE
+.vs/
+.vscode/*
+!.vscode/extensions.json
+!.vscode/launch.json
+!.vscode/tasks.json
+.idea/
+*.suo
+*.user

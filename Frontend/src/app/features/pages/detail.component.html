@@ -1,3 +1,22 @@
 <app-nav />
-<main><section class="detail" [style.background-image]="'url('+item.backdrop+')'"><div class="overlay"></div><div class="container detail-body"><img [src]="item.image" [alt]="item.title"><div><span class="eyebrow">{{item.type}}</span><h1>{{item.title}}</h1><p>{{item.genre}}</p><p>{{item.description}}</p><button class="btn primary" (click)="play()">Play Now</button> <button class="btn ghost" (click)="save()">Watch Later</button><p>{{message}}</p></div></div></section>
-<section class="page container"><h2>Episodes</h2>@for(ep of episodes;track ep.id){<article class="episode"><img [src]="ep.image"><div><b>Episode {{ep.number}} · {{ep.title}}</b><p>{{ep.description}}</p></div><button class="btn ghost" (click)="play(ep)">Play</button></article>}<h2>More Like This</h2><div class="grid">@for(x of related;track x.id){<app-content-card [item]="x" />}</div></section></main><app-footer />
+<main>
+    <section class="detail" [style.background-image]="'url('+item.backdrop+')'">
+        <div class="overlay"></div>
+        <div class="container detail-body"><img [src]="item.image" [alt]="item.title">
+            <div><span class="eyebrow">{{item.type}}</span>
+                <h1>{{item.title}}</h1>
+                <p>★ {{item.rating}} · {{item.year}} · 13+ · {{item.duration}} · {{item.genre}}</p>
+                <p>{{item.description}}</p><a class="btn primary" [routerLink]="['/watch',item.id]">▶ Play Now</a> <a
+                    class="btn ghost" routerLink="/watch-later">＋ Watch Later</a>
+            </div>
+        </div>
+    </section>
+    <section class="page container">
+        <h2>Episodes</h2>@for(ep of episodes;track ep.number){<article class="episode"><img [src]="ep.image">
+            <div><b>Episode {{ep.number}} · {{ep.title}}</b>
+                <p>{{ep.description}}</p>
+            </div><a [routerLink]="['/watch',item.id]">▶</a>
+        </article>}<h2>More Like This</h2>
+        <div class="grid">@for(x of related;track x.id){<app-content-card [item]="x" />}</div>
+    </section>
+</main><app-footer />

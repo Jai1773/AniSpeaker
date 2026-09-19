@@ -2,8 +2,6 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Content, ContentType, Episode, ApiContent, ApiContentDetail, ApiContentType, PageResult } from '../../models/content.model';
 import { Observable, map } from 'rxjs';
-import { API_BASE_URL } from '../api.config';
-
 @Injectable({ providedIn: 'root' })
 export class ContentService {
   constructor(private readonly http: HttpClient) {}
@@ -103,7 +101,6 @@ export class ContentService {
     },
   ];
   episodes: Episode[] = Array.from({ length: 6 }, (_, i) => ({
-    id: `demo-${i + 1}`,
     number: i + 1,
     title: [
       'The Last Signal',
@@ -126,18 +123,18 @@ export class ContentService {
     let params = new HttpParams().set('page', '1').set('pageSize', '100');
     if (type) params = params.set('type', type);
     return this.http
-      .get<PageResult<ApiContent>>(`${API_BASE_URL}/api/content`, { params })
+      .get<PageResult<ApiContent>>('/api/content', { params })
       .pipe(map((result) => result.items.map((item) => this.toContent(item))));
   }
 
   search(query: string): Observable<Content[]> {
     return this.http
-      .get<ApiContent[]>(`${API_BASE_URL}/api/search`, { params: new HttpParams().set('q', query) })
+      .get<ApiContent[]>('/api/search', { params: new HttpParams().set('q', query) })
       .pipe(map((items) => items.map((item) => this.toContent(item))));
   }
 
   detail(slug: string): Observable<{ item: Content; episodes: Episode[] }> {
-    return this.http.get<ApiContentDetail>(`${API_BASE_URL}/api/content/${encodeURIComponent(slug)}`).pipe(
+    return this.http.get<ApiContentDetail>(`/api/content/${encodeURIComponent(slug)}`).pipe(
       map((result) => ({
         item: this.toContent(result),
         episodes: [...result.episodes, ...result.seasons.flatMap((season) => season.episodes)]
@@ -146,11 +143,7 @@ export class ContentService {
     );
   }
 
-  playback(episodeId: string): Observable<{ videoUrl: string }> {
-    return this.http.get<{ videoUrl: string }>(`${API_BASE_URL}/api/playback/${episodeId}`);
-  }
-
-  toContent(item: ApiContent): Content {
+  private toContent(item: ApiContent): Content {
     const type: ContentType = item.type === 'Movie' ? 'Movie' : 'Anime';
     return {
       id: item.id, slug: item.slug, title: item.title, type, year: 0, rating: 0,
@@ -163,7 +156,6 @@ export class ContentService {
 
   private toEpisode(episode: ApiContentDetail['episodes'][number]): Episode {
     return {
-      id: episode.id,
       number: episode.number, title: episode.title,
       duration: this.formatDuration(episode.durationSeconds), description: '',
       image: episode.thumbnailUrl || 'https://placehold.co/600x340/171b29/ffffff?text=Episode',

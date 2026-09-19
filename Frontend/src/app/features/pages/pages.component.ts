@@ -1,39 +1,112 @@
-import { Component, ElementRef, inject, OnInit, ViewChild } from '@angular/core';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { FormsModule } from '@angular/forms';
+import { Component, inject, OnInit } from '@angular/core';
 import { Content, Episode } from '../../models/content.model';
+import { ActivatedRoute, RouterLink } from '@angular/router';
+import { FormsModule } from '@angular/forms';
 import { ContentService } from '../../core/services/content.service';
-import { AccountService, HistoryItem } from '../../core/services/account.service';
-import { AuthService } from '../../core/services/auth.service';
-import { LocalHistory, LocalHistoryService } from '../../core/services/local-history.service';
-import { NavComponent, ContentCardComponent, FooterComponent } from '../../shared/components/layout.component';
-const shell = [NavComponent, ContentCardComponent, FooterComponent];
-
-@Component({ standalone: true, imports: [NavComponent, ContentCardComponent, FooterComponent], templateUrl: './browse.component.html', styleUrl: './pages.component.scss' })
-export class BrowseComponent implements OnInit { svc = inject(ContentService); route = inject(ActivatedRoute); type = this.route.snapshot.paramMap.get('type'); list: Content[] = []; ngOnInit(): void { this.svc.browse(this.type === 'movie' || this.type === 'movies' ? 'Movie' : undefined).subscribe({ next: x => this.list = x }); } }
-@Component({ standalone: true, imports: [NavComponent, ContentCardComponent, FooterComponent, FormsModule], templateUrl: './search.component.html', styleUrl: './pages.component.scss' })
-export class SearchComponent { svc = inject(ContentService); query = ''; filtered: Content[] = []; search(): void { const q = this.query.trim(); if (!q) { this.filtered = []; return; } this.svc.search(q).subscribe({ next: x => this.filtered = x }); } }
-@Component({ standalone: true, imports: shell, templateUrl: './detail.component.html', styleUrl: './pages.component.scss' })
+import {
+  NavComponent,
+  ContentCardComponent,
+  FooterComponent,
+} from '../../shared/components/layout.component';
+const shell = [NavComponent, ContentCardComponent, FooterComponent, RouterLink];
+@Component({
+  standalone: true,
+  imports: [NavComponent, ContentCardComponent, FooterComponent],
+  templateUrl: './browse.component.html',
+  styleUrl: './pages.component.scss',
+})
+export class BrowseComponent implements OnInit {
+  svc = inject(ContentService);
+  route = inject(ActivatedRoute);
+  type = this.route.snapshot.paramMap.get('type');
+  list: Content[] = [];
+  ngOnInit(): void {
+    const apiType = this.type === 'movie' || this.type === 'movies' ? 'Movie' : undefined;
+    this.svc.browse(apiType).subscribe({ next: (items) => (this.list = items) });
+  }
+}
+@Component({
+  standalone: true,
+  imports: [NavComponent, ContentCardComponent, FooterComponent, FormsModule],
+  templateUrl: './search.component.html',
+  styleUrl: './pages.component.scss',
+})
+export class SearchComponent {
+  svc = inject(ContentService);
+  query = '';
+  filtered: Content[] = [];
+  search(): void {
+    const query = this.query.trim();
+    if (!query) { this.filtered = []; return; }
+    this.svc.search(query).subscribe({ next: (items) => (this.filtered = items) });
+  }
+}
+@Component({
+  standalone: true,
+  imports: shell,
+  templateUrl: './detail.component.html',
+  styleUrl: './pages.component.scss',
+})
 export class DetailComponent implements OnInit {
-  svc = inject(ContentService); account = inject(AccountService); auth = inject(AuthService); route = inject(ActivatedRoute); router = inject(Router); item: Content = this.svc.get(null); episodes: Episode[] = []; related: Content[] = []; message = '';
-  ngOnInit(): void { const slug = this.route.snapshot.paramMap.get('slug'); if (slug) this.svc.detail(slug).subscribe({ next: result => { this.item = result.item; this.episodes = result.episodes; this.svc.browse().subscribe({ next: x => this.related = x.filter(y => y.id !== result.item.id).slice(0, 6) }); } }); }
-  play(episode?: Episode): void { const chosen = episode ?? this.episodes[0]; if (chosen) this.router.navigate(['/watch', this.item.slug], { queryParams: { episode: chosen.id } }); }
-  save(): void { if (!this.auth.isLoggedIn) { this.router.navigate(['/login']); return; } this.account.addWatchLater(String(this.item.id)).subscribe({ next: () => this.message = 'Saved to Watch Later.', error: () => this.message = 'Could not save this title.' }); }
+  svc = inject(ContentService);
+  private route = inject(ActivatedRoute);
+  item: Content = this.svc.get(null);
+  episodes: Episode[] = [];
+  related: Content[] = [];
+  ngOnInit(): void {
+    const slug = this.route.snapshot.paramMap.get('slug');
+    if (slug) this.svc.detail(slug).subscribe({ next: (result) => {
+      this.item = result.item;
+      this.episodes = result.episodes;
+      this.svc.browse().subscribe({ next: (items) => (this.related = items.filter((item) => item.id !== result.item.id).slice(0, 6)) });
+    } });
+  }
 }
-@Component({ standalone: true, imports: [NavComponent], templateUrl: './player.component.html', styleUrl: './pages.component.scss' })
-export class PlayerComponent implements OnInit {
-  @ViewChild('video') video?: ElementRef<HTMLVideoElement>; svc = inject(ContentService); account = inject(AccountService); auth = inject(AuthService); local = inject(LocalHistoryService); route = inject(ActivatedRoute); router = inject(Router); item?: Content; episodes: Episode[] = []; selected?: Episode; videoUrl = ''; error = ''; private lastSaved = 0;
-  ngOnInit(): void { const slug = this.route.snapshot.paramMap.get('id'); if (slug) this.svc.detail(slug).subscribe({ next: x => { this.item = x.item; this.episodes = x.episodes; this.select(x.episodes.find(e => e.id === this.route.snapshot.queryParamMap.get('episode')) ?? x.episodes[0]); }, error: () => this.error = 'This title could not be loaded.' }); }
-  select(episode?: Episode): void { if (!episode || !this.item) return; this.selected = episode; this.videoUrl = ''; this.router.navigate([], { relativeTo: this.route, queryParams: { episode: episode.id }, queryParamsHandling: 'merge' }); this.svc.playback(episode.id).subscribe({ next: x => this.videoUrl = x.videoUrl, error: () => this.error = 'Video is not available yet.' }); }
-  progress(): void { const v = this.video?.nativeElement; if (!v || !this.selected || !this.item || v.currentTime - this.lastSaved < 5) return; this.lastSaved = v.currentTime; const value = { slug: this.item.slug, episodeId: this.selected.id, title: `${this.item.title} — ${this.selected.title}`, image: this.item.backdrop, progressSeconds: Math.floor(v.currentTime), durationSeconds: Math.floor(v.duration || 0), updatedAt: new Date().toISOString() }; if (this.auth.isLoggedIn) this.account.saveHistory(this.selected.id, value.progressSeconds).subscribe(); else this.local.save(value); }
+@Component({
+  standalone: true,
+  imports: [NavComponent],
+  templateUrl: './player.component.html',
+  styleUrl: './pages.component.scss',
+})
+export class PlayerComponent {
+  svc = inject(ContentService);
 }
-@Component({ standalone: true, imports: [NavComponent, ContentCardComponent, FooterComponent], templateUrl: './watch-later.component.html', styleUrl: './pages.component.scss' })
-export class WatchLaterComponent implements OnInit { svc = inject(ContentService); account = inject(AccountService); list: Content[] = []; error = ''; ngOnInit(): void { this.account.watchLater().subscribe({ next: x => this.list = x.map(y => this.svc.toContent(y)), error: () => this.error = 'Could not load your saved titles.' }); } remove(item: Content): void { this.account.removeWatchLater(String(item.id)).subscribe({ next: () => this.list = this.list.filter(x => x.id !== item.id), error: () => this.error = 'Could not remove this title.' }); } }
-@Component({ standalone: true, imports: [NavComponent, FooterComponent, RouterLink], templateUrl: './history.component.html', styleUrl: './pages.component.scss' })
-export class HistoryComponent implements OnInit { auth = inject(AuthService); account = inject(AccountService); local = inject(LocalHistoryService); remote: HistoryItem[] = []; guest: LocalHistory[] = []; ngOnInit(): void { if (this.auth.isLoggedIn) this.account.history().subscribe({ next: x => this.remote = x }); else this.guest = this.local.list(); } clear(): void { this.local.clear(); this.guest = []; } }
-@Component({ standalone: true, imports: [RouterLink, FormsModule], templateUrl: './login.component.html', styleUrl: './pages.component.scss' })
-export class LoginComponent { auth = inject(AuthService); router = inject(Router); email = ''; password = ''; error = ''; loading = false; submit(): void { if (!this.email || !this.password) { this.error = 'Enter your email and password.'; return; } this.error = ''; this.loading = true; this.auth.login(this.email.trim(), this.password).subscribe({ next: x => this.router.navigate([x.role === 'Admin' ? '/admin' : '/']), error: () => { this.loading = false; this.error = 'Invalid email or password.'; } }); } }
-@Component({ standalone: true, imports: [RouterLink, FormsModule], templateUrl: './register.component.html', styleUrl: './pages.component.scss' })
-export class RegisterComponent { auth = inject(AuthService); router = inject(Router); name = ''; email = ''; password = ''; error = ''; loading = false; submit(): void { if (!this.name.trim() || !this.email.trim() || this.password.length < 8) { this.error = 'Enter your name, email, and a password with at least 8 characters.'; return; } this.error = ''; this.loading = true; this.auth.register(this.name.trim(), this.email.trim(), this.password).subscribe({ next: () => this.router.navigate(['/']), error: e => { this.loading = false; this.error = e.error?.errors?.[0]?.description ?? 'Could not create your account.'; } }); } }
-@Component({ standalone: true, imports: [NavComponent, FooterComponent, RouterLink], templateUrl: './profile.component.html', styleUrl: './pages.component.scss' })
-export class ProfileComponent { auth = inject(AuthService); router = inject(Router); logout(): void { this.auth.logout(); this.router.navigate(['/']); } }
+@Component({
+  standalone: true,
+  imports: [NavComponent, ContentCardComponent, FooterComponent],
+  templateUrl: './watch-later.component.html',
+  styleUrl: './pages.component.scss',
+})
+export class WatchLaterComponent {
+  svc = inject(ContentService);
+}
+@Component({
+  standalone: true,
+  imports: [NavComponent, FooterComponent, RouterLink],
+  templateUrl: './history.component.html',
+  styleUrl: './pages.component.scss',
+})
+export class HistoryComponent {
+  svc = inject(ContentService);
+}
+@Component({
+  standalone: true,
+  imports: [RouterLink],
+  templateUrl: './login.component.html',
+  styleUrl: './pages.component.scss',
+})
+export class LoginComponent {}
+@Component({
+  standalone: true,
+  imports: [RouterLink],
+  templateUrl: './register.component.html',
+  styleUrl: './pages.component.scss',
+})
+export class RegisterComponent {}
+@Component({
+  standalone: true,
+  imports: [NavComponent, FooterComponent, RouterLink],
+  templateUrl: './profile.component.html',
+  styleUrl: './pages.component.scss',
+})
+export class ProfileComponent {}

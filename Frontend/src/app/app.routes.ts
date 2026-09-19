@@ -1,5 +1,4 @@
 import { Routes } from '@angular/router';
-import { adminGuard, signedInGuard } from './core/guards/auth.guard';
 export const routes: Routes = [
   {
     path: '',
@@ -27,7 +26,6 @@ export const routes: Routes = [
   },
   {
     path: 'watch-later',
-    canActivate: [signedInGuard],
     loadComponent: () =>
       import('./features/pages/pages.component').then((m) => m.WatchLaterComponent),
   },
@@ -50,7 +48,6 @@ export const routes: Routes = [
   },
   {
     path: 'admin',
-    canActivate: [adminGuard],
     loadChildren: () => import('./features/admin/admin.routes').then((m) => m.ADMIN_ROUTES),
   },
   { path: '**', redirectTo: '' },

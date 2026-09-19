@@ -1,0 +1,42 @@
+.row {
+    padding-top: 46px
+}
+
+.row>div {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px
+}
+
+.row h2 {
+    margin: 0;
+    font: 700 1.6rem Outfit
+}
+
+.row a {
+    color: #ffae62;
+    font-size: .84rem
+}
+
+.row>section {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: calc((100% - 72px)/5);
+    gap: 18px;
+    overflow: auto;
+    padding-bottom: 6px;
+    scrollbar-width: none
+}
+
+@media(max-width:800px) {
+    .row>section {
+        grid-auto-columns: 32%
+    }
+}
+
+@media(max-width:600px) {
+    .row>section {
+        grid-auto-columns: 43%
+    }
+}

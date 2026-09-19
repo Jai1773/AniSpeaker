@@ -1,1 +1,8 @@
-<main class="auth"><a routerLink="/" class="logo">AniSpeaker</a><section><span class="eyebrow">JOIN ANISPEAKER</span><h1>Create your account.</h1><p class="auth-copy">Browsing stays free. Create an account to save titles and continue watching.</p><form (ngSubmit)="submit()"><label>Name<input [(ngModel)]="name" name="name" autocomplete="name" required placeholder="Your name"></label><label>Email<input [(ngModel)]="email" name="email" type="email" autocomplete="email" required placeholder="you@example.com"></label><label>Password<input [(ngModel)]="password" name="password" type="password" autocomplete="new-password" minlength="8" required><small>At least 8 characters</small></label><button class="btn primary" type="submit" [disabled]="loading">{{loading ? 'Creating account…' : 'Create Account'}}</button></form>@if(error){<p class="form-error" role="alert">{{error}}</p>}<p>Already a member? <a routerLink="/login">Sign in</a></p></section></main>
+<main class="auth"><a routerLink="/" class="logo">▶ AniSpeaker</a>
+    <section><span class="eyebrow">JOIN ANISPEAKER</span>
+        <h1>Create your account.</h1><label>Name<input placeholder="Your name"></label><label>Email<input
+                placeholder="you@example.com"></label><label>Password<input type="password"
+                placeholder="••••••••"></label><button class="btn primary">Create Account</button>
+        <p>Already a member? <a routerLink="/login">Sign in</a></p>
+    </section>
+</main>
