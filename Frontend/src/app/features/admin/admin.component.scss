@@ -1,0 +1,13 @@
+:host { display: block; color: #20232c; font-family: Inter, Arial, sans-serif; }
+main { min-height: 100vh; display: flex; background: #f4f6fa; }
+aside { width: 245px; flex: 0 0 auto; padding: 28px 16px; background: #141d2e; color: #d8deeb; display: flex; flex-direction: column; gap: 7px; }
+aside b { color: white; font-size: 1.25rem; padding: 0 12px 24px; }
+aside button { border: 0; border-radius: 8px; padding: 12px; text-align: left; color: inherit; background: transparent; font: inherit; }
+aside button:hover { background: #293652; color: white; }
+section { width: min(1120px, 100%); padding: 46px; }
+section > p:first-child { margin: 0; color: #64748b; letter-spacing: .1em; font-size: .72rem; font-weight: 800; }
+h1 { margin: 8px 0 28px; font-size: 2.25rem; } h2 { margin-top: 38px; }
+.cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }.cards article, .table, .form { background: #fff; border: 1px solid #e3e7ef; border-radius: 10px; }.cards article { padding: 24px; }.cards b { display: block; font-size: 2rem; }.cards span, small { color: #6b7280; }
+.table { margin: 9px 0; padding: 16px; display: flex; align-items: center; gap: 12px; }.table small { margin-right: auto; }.table button, .form button { border: 0; border-radius: 7px; padding: 9px 12px; background: #24324d; color: #fff; }.table button:last-child { background: #bb3c42; }
+.form { padding: 18px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 13px; margin: 12px 0; }.form label { display: grid; gap: 6px; font-size: .83rem; font-weight: 700; }.form input, .form select, .form textarea { min-width: 0; width: 100%; padding: 10px; border: 1px solid #cfd6e2; border-radius: 6px; background: #fff; }.form textarea { min-height: 90px; resize: vertical; }.form button { align-self: end; background: #2563eb; }.notice { color: #14804a !important; }.error { color: #c0343d !important; }
+@media(max-width: 760px) { aside { width: 70px; padding: 20px 10px; } aside b { font-size: 0; padding: 0 0 20px; } aside b::after { content: 'A'; font-size: 1.2rem; } aside button { font-size: 0; min-height: 42px; } aside button::first-letter { font-size: 1rem; } section { padding: 24px 16px; }.cards, .form { grid-template-columns: 1fr; }.table { flex-wrap: wrap; } }
