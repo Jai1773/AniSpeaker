@@ -1,6 +1,37 @@
 <app-nav />
 <main class="page container">
-    <h1 class="page-title">My Watch Later</h1>
-    <p class="page-intro">Keep your next great story close.</p>
-    <div class="grid">@for(item of svc.items.slice(0,4);track item.id){<app-content-card [item]="item" />}</div>
-</main><app-footer />
+  <h1 class="page-title">My Watch Later</h1>
+  <p class="page-intro">Your personal watchlist of stories to enjoy anytime.</p>
+
+  @if (!auth.isLoggedIn) {
+    <div class="empty-box">
+      <span>♡</span>
+      <h3>Sign in to access your Watch Later list</h3>
+      <p>Save shows and movies to watch later across all your devices.</p>
+      <a routerLink="/login" class="btn primary">Sign In</a>
+    </div>
+  } @else if (loading) {
+    <div class="empty-box">
+      <p>Loading your saved titles...</p>
+    </div>
+  } @else if (items.length === 0) {
+    <div class="empty-box">
+      <span>♡</span>
+      <h3>Your Watch Later list is empty</h3>
+      <p>Explore anime, cartoons, and movies, and save your favorites here.</p>
+      <a routerLink="/browse" class="btn primary">Browse Catalog</a>
+    </div>
+  } @else {
+    <div class="grid">
+      @for (item of items; track item.id) {
+        <div class="watch-later-card">
+          <app-content-card [item]="item" />
+          <button class="btn-remove" (click)="remove(item.id)" title="Remove from Watch Later">
+            ✕ Remove
+          </button>
+        </div>
+      }
+    </div>
+  }
+</main>
+<app-footer />

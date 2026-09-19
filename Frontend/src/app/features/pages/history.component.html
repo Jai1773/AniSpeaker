@@ -1,10 +1,51 @@
 <app-nav />
 <main class="page container">
-    <h1 class="page-title">Recently Watched</h1>@for(item of svc.items.slice(0,3);track item.id){<article
-        class="history"><img [src]="item.backdrop">
-        <div>
-            <h3>{{item.title}}</h3>
-            <p>Episode 12 · Watched today</p>
-        </div><a class="btn primary" [routerLink]="['/watch',item.id]">Continue</a>
-    </article>}<button class="clear">Clear history</button>
-</main><app-footer />
+  <div class="history-header">
+    <div>
+      <h1 class="page-title">Watch History</h1>
+      <p class="page-intro">Pick up right where you left off.</p>
+    </div>
+    @if (items.length > 0) {
+      <button class="btn-clear" (click)="clear()">Clear History</button>
+    }
+  </div>
+
+  @if (loading) {
+    <div class="empty-box">
+      <p>Loading your history...</p>
+    </div>
+  } @else if (items.length === 0) {
+    <div class="empty-box">
+      <span>⏱</span>
+      <h3>No watch history yet</h3>
+      <p>Start watching anime, cartoons, and movies to see your progress here.</p>
+      <a routerLink="/browse" class="btn primary">Start Watching</a>
+    </div>
+  } @else {
+    <div class="history-list">
+      @for (item of items; track item.episodeId) {
+        <article class="history-card">
+          <div class="history-thumb">
+            <img [src]="item.image" [alt]="item.title" />
+            <div class="history-progress-bar">
+              <span [style.width.%]="item.progressPercent"></span>
+            </div>
+          </div>
+          <div class="history-meta">
+            <h3>{{ item.title }}</h3>
+            <p>{{ item.subtitle }}</p>
+            <small>{{ item.progressPercent }}% watched</small>
+          </div>
+          <a
+            class="btn primary"
+            [routerLink]="['/watch', item.slug]"
+            [queryParams]="{ episode: item.episodeId }"
+          >
+            Continue ▶
+          </a>
+        </article>
+      }
+    </div>
+  }
+</main>
+<app-footer />

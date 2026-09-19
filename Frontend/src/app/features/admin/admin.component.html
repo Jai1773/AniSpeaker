@@ -1,16 +1,447 @@
-<main>
-    <aside><b>AniSpeaker</b><a>Dashboard</a><a>Categories</a><a>Content</a><a>Episodes</a><a>Uploads</a><a>Users</a>
-    </aside>
-    <section>
-        <p>ADMIN OVERVIEW</p>
+<main class="admin-shell">
+  <aside class="admin-nav">
+    <a routerLink="/" class="admin-brand">▶ AniSpeaker</a>
+    <nav>
+      <button [class.active]="activeTab === 'dashboard'" (click)="activeTab = 'dashboard'">
+        📊 Dashboard
+      </button>
+      <button [class.active]="activeTab === 'categories'" (click)="activeTab = 'categories'">
+        📁 Categories
+      </button>
+      <button [class.active]="activeTab === 'content'" (click)="activeTab = 'content'">
+        🎬 Content Catalog
+      </button>
+      <button [class.active]="activeTab === 'episodes'" (click)="activeTab = 'episodes'">
+        📺 Seasons & Episodes
+      </button>
+      <button [class.active]="activeTab === 'upload'" (click)="activeTab = 'upload'">
+        ☁ Video & Asset Upload
+      </button>
+    </nav>
+    <div class="admin-footer">
+      <a routerLink="/" class="btn-back">← Back to Site</a>
+    </div>
+  </aside>
+
+  <section class="admin-content">
+    @if (notice) {
+      <div class="banner notice">{{ notice }}</div>
+    }
+    @if (error) {
+      <div class="banner alert">{{ error }}</div>
+    }
+
+    <!-- ───────────────────────────────────────────────────────────────── -->
+    <!-- TAB 1: DASHBOARD -->
+    <!-- ───────────────────────────────────────────────────────────────── -->
+    @if (activeTab === 'dashboard') {
+      <header class="admin-header">
+        <span class="eyebrow">ADMIN OVERVIEW</span>
         <h1>Dashboard</h1>
-        <div class="cards">
-            <article><b>248</b><span>Total Content</span></article>
-            <article><b>18.4k</b><span>Total Users</span></article>
-            <article><b>1.2M</b><span>Total Views</span></article>
+        <p>Monitor your anime & cartoon streaming platform.</p>
+      </header>
+
+      <div class="stats-grid">
+        <article class="stat-card">
+          <b>{{ contentList.length }}</b>
+          <span>Total Titles</span>
+        </article>
+        <article class="stat-card">
+          <b>{{ categories.length }}</b>
+          <span>Categories</span>
+        </article>
+        <article class="stat-card">
+          <b>{{ getSeriesCount() }}</b>
+          <span>Series</span>
+        </article>
+        <article class="stat-card">
+          <b>{{ getMovieCount() }}</b>
+          <span>Movies</span>
+        </article>
+      </div>
+
+      <div class="quick-actions-bar">
+        <button class="btn primary" (click)="resetContentForm(); activeTab = 'content'">
+          ＋ New Title
+        </button>
+        <button class="btn ghost" (click)="activeTab = 'upload'">
+          ☁ Upload Media
+        </button>
+      </div>
+
+      <h2>Recent Titles</h2>
+      <div class="admin-table-wrapper">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>Title</th>
+              <th>Type</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (item of contentList.slice(0, 5); track item.id) {
+              <tr>
+                <td><b>{{ item.title }}</b></td>
+                <td><span class="type-pill">{{ item.type }}</span></td>
+                <td>
+                  <span [class.published]="item.published" class="status-pill">
+                    {{ item.published ? 'Published' : 'Draft' }}
+                  </span>
+                </td>
+                <td>
+                  <button class="btn-sm" (click)="editContent(item)">Edit</button>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+
+    <!-- ───────────────────────────────────────────────────────────────── -->
+    <!-- TAB 2: CATEGORIES -->
+    <!-- ───────────────────────────────────────────────────────────────── -->
+    @if (activeTab === 'categories') {
+      <header class="admin-header">
+        <span class="eyebrow">TAXONOMY</span>
+        <h1>Categories</h1>
+        <p>Organize titles by genre or theme.</p>
+      </header>
+
+      <div class="two-col-layout">
+        <div class="admin-card">
+          <h3>Add Category</h3>
+          <form (ngSubmit)="createCategory()">
+            <label>
+              Category Name
+              <input type="text" [(ngModel)]="catForm.name" name="catName" placeholder="e.g. Shonen, Action, Sci-Fi" required />
+            </label>
+            <label>
+              Slug (optional)
+              <input type="text" [(ngModel)]="catForm.slug" name="catSlug" placeholder="auto-generated if blank" />
+            </label>
+            <label>
+              Sort Order
+              <input type="number" [(ngModel)]="catForm.sortOrder" name="catSort" />
+            </label>
+            <button type="submit" class="btn primary">Add Category</button>
+          </form>
         </div>
-        <h2>Recent activity</h2>
-        <div class="table">Solar Guardians <span>Published</span></div>
-        <div class="table">Wildwood Chronicles <span>Draft saved</span></div>
-    </section>
+
+        <div class="admin-card">
+          <h3>Existing Categories ({{ categories.length }})</h3>
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Order</th>
+                <th>Name</th>
+                <th>Slug</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (cat of categories; track cat.id) {
+                <tr>
+                  <td>{{ cat.sortOrder }}</td>
+                  <td><b>{{ cat.name }}</b></td>
+                  <td><code>{{ cat.slug }}</code></td>
+                  <td>
+                    <button class="btn-danger-sm" (click)="deleteCategory(cat.id)">Delete</button>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </div>
+    }
+
+    <!-- ───────────────────────────────────────────────────────────────── -->
+    <!-- TAB 3: CONTENT CATALOG -->
+    <!-- ───────────────────────────────────────────────────────────────── -->
+    @if (activeTab === 'content') {
+      <header class="admin-header">
+        <span class="eyebrow">CATALOG CMS</span>
+        <h1>{{ editingContentId ? 'Edit Title' : 'Content Catalog' }}</h1>
+        <p>Create and edit movies, cartoons, and anime series.</p>
+      </header>
+
+      <div class="admin-card content-editor-card">
+        <h3>{{ editingContentId ? 'Edit Title' : '＋ Add New Title' }}</h3>
+        <form (ngSubmit)="saveContent()">
+          <div class="form-row">
+            <label class="flex-2">
+              Title
+              <input
+                type="text"
+                [(ngModel)]="contentForm.title"
+                name="title"
+                (ngModelChange)="onTitleChange()"
+                placeholder="Title name"
+                required
+              />
+            </label>
+            <label class="flex-1">
+              Type
+              <select [(ngModel)]="contentForm.type" name="type">
+                <option value="Series">Series</option>
+                <option value="Movie">Movie</option>
+              </select>
+            </label>
+            <label class="flex-1">
+              Category
+              <select [(ngModel)]="contentForm.categoryId" name="categoryId" required>
+                @for (c of categories; track c.id) {
+                  <option [value]="c.id">{{ c.name }}</option>
+                }
+              </select>
+            </label>
+          </div>
+
+          <div class="form-row">
+            <label class="flex-2">
+              Slug
+              <input type="text" [(ngModel)]="contentForm.slug" name="slug" placeholder="e.g. attack-on-titan" required />
+            </label>
+            <label class="flex-2">
+              Tags (comma separated)
+              <input type="text" [(ngModel)]="contentTagsInput" name="tags" placeholder="Action, Adventure, Anime" />
+            </label>
+          </div>
+
+          <div class="form-row">
+            <label class="flex-1">
+              Poster Image URL
+              <input type="url" [(ngModel)]="contentForm.posterUrl" name="posterUrl" placeholder="https://..." />
+            </label>
+            <label class="flex-1">
+              Banner / Backdrop Image URL
+              <input type="url" [(ngModel)]="contentForm.bannerUrl" name="bannerUrl" placeholder="https://..." />
+            </label>
+          </div>
+
+          <label>
+            Description
+            <textarea [(ngModel)]="contentForm.description" name="description" rows="3" placeholder="Overview of the story..."></textarea>
+          </label>
+
+          <div class="form-checkbox">
+            <label>
+              <input type="checkbox" [(ngModel)]="contentForm.published" name="published" />
+              Published (visible to public)
+            </label>
+          </div>
+
+          <div class="form-actions">
+            <button type="submit" class="btn primary">
+              {{ editingContentId ? 'Update Title' : 'Save Title' }}
+            </button>
+            @if (editingContentId) {
+              <button type="button" class="btn ghost" (click)="resetContentForm()">Cancel</button>
+            }
+          </div>
+        </form>
+      </div>
+
+      <h2>All Content Titles ({{ contentList.length }})</h2>
+      <div class="admin-table-wrapper">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>Poster</th>
+              <th>Title</th>
+              <th>Type</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (item of contentList; track item.id) {
+              <tr>
+                <td>
+                  <img [src]="item.posterUrl || item.bannerUrl || 'https://images.unsplash.com/photo-1578632767115-351597cf2477?auto=format&fit=crop&w=80&q=80'" class="table-thumb" alt="" />
+                </td>
+                <td>
+                  <b>{{ item.title }}</b>
+                  <small>slug: {{ item.slug }}</small>
+                </td>
+                <td><span class="type-pill">{{ item.type }}</span></td>
+                <td>
+                  <button
+                    class="btn-toggle"
+                    [class.active]="item.published"
+                    (click)="togglePublished(item)"
+                  >
+                    {{ item.published ? 'Published' : 'Draft' }}
+                  </button>
+                </td>
+                <td>
+                  <button class="btn-sm" (click)="editContent(item)">Edit</button>
+                  <button class="btn-sm" (click)="selectContentForEpisodes(item)">Episodes</button>
+                  <button class="btn-danger-sm" (click)="deleteContent(item)">Delete</button>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+
+    <!-- ───────────────────────────────────────────────────────────────── -->
+    <!-- TAB 4: SEASONS & EPISODES -->
+    <!-- ───────────────────────────────────────────────────────────────── -->
+    @if (activeTab === 'episodes') {
+      <header class="admin-header">
+        <span class="eyebrow">EPISODE MANAGER</span>
+        <h1>Seasons & Episodes</h1>
+        <p>Manage seasons and playable episodes for series and movies.</p>
+      </header>
+
+      <div class="admin-card">
+        <h3>Step 1: Select a Title</h3>
+        <select
+          [ngModel]="selectedContentForEpisodes?.id"
+          (ngModelChange)="onContentSelect($event)"
+          class="title-select"
+        >
+          <option [ngValue]="null">-- Select Content --</option>
+          @for (item of contentList; track item.id) {
+            <option [value]="item.id">{{ item.title }} ({{ item.type }})</option>
+          }
+        </select>
+      </div>
+
+      @if (selectedContentForEpisodes) {
+        <div class="two-col-layout">
+          <!-- Create Season -->
+          <div class="admin-card">
+            <h3>Add Season to {{ selectedContentForEpisodes.title }}</h3>
+            <form (ngSubmit)="addSeason()">
+              <label>
+                Season Number
+                <input type="number" [(ngModel)]="seasonForm.number" name="seasonNum" required />
+              </label>
+              <label>
+                Season Title
+                <input type="text" [(ngModel)]="seasonForm.title" name="seasonTitle" required />
+              </label>
+              <button type="submit" class="btn primary">Create Season</button>
+            </form>
+          </div>
+
+          <!-- Add Episode -->
+          <div class="admin-card">
+            <h3>Add Episode</h3>
+            <form (ngSubmit)="addEpisode()">
+              <label>
+                Target Season ID
+                <input
+                  type="text"
+                  [(ngModel)]="selectedSeasonId"
+                  name="seasonId"
+                  placeholder="Paste Season ID or create above"
+                  required
+                />
+              </label>
+              <div class="form-row">
+                <label class="flex-1">
+                  Ep. Number
+                  <input type="number" [(ngModel)]="episodeForm.number" name="epNum" required />
+                </label>
+                <label class="flex-2">
+                  Episode Title
+                  <input type="text" [(ngModel)]="episodeForm.title" name="epTitle" placeholder="e.g. The Beginning" required />
+                </label>
+              </div>
+
+              <label>
+                Video Key or Outsourced Stream URL
+                <input
+                  type="text"
+                  [(ngModel)]="episodeForm.videoKey"
+                  name="videoKey"
+                  placeholder="Paste outsourced player URL or R2 object key"
+                  required
+                />
+              </label>
+
+              <div class="form-row">
+                <label class="flex-2">
+                  Thumbnail URL
+                  <input type="url" [(ngModel)]="episodeForm.thumbnailUrl" name="thumbUrl" placeholder="https://..." />
+                </label>
+                <label class="flex-1">
+                  Duration (sec)
+                  <input type="number" [(ngModel)]="episodeForm.durationSeconds" name="durSec" />
+                </label>
+              </div>
+
+              <button type="submit" class="btn primary">Add Episode</button>
+            </form>
+          </div>
+        </div>
+      }
+    }
+
+    <!-- ───────────────────────────────────────────────────────────────── -->
+    <!-- TAB 5: VIDEO & ASSET UPLOAD WIDGET -->
+    <!-- ───────────────────────────────────────────────────────────────── -->
+    @if (activeTab === 'upload') {
+      <header class="admin-header">
+        <span class="eyebrow">STORAGE & MEDIA</span>
+        <h1>Video & Asset Upload</h1>
+        <p>Direct upload to Cloudflare R2 / S3 storage via secure pre-signed URLs.</p>
+      </header>
+
+      <div class="admin-card upload-card">
+        <h3>Direct File Upload</h3>
+        <p class="desc">
+          Upload video files (.mp4, .mkv, .webm) or posters/thumbnails directly. The resulting Key/URL will be provided immediately.
+        </p>
+
+        <div class="upload-controls">
+          <label>
+            Target Folder:
+            <select [(ngModel)]="uploadTargetFolder">
+              <option value="videos">Videos (videos/)</option>
+              <option value="images">Images / Posters (images/)</option>
+              <option value="thumbnails">Thumbnails (thumbnails/)</option>
+            </select>
+          </label>
+
+          <label class="file-dropzone">
+            <span>📁 Click or drag file here to upload</span>
+            <input type="file" (change)="onFileSelected($event)" [disabled]="uploading" />
+          </label>
+        </div>
+
+        @if (uploading) {
+          <div class="upload-progress-box">
+            <div class="progress-bar">
+              <span [style.width.%]="uploadProgress"></span>
+            </div>
+            <b>{{ uploadProgress }}% Uploading...</b>
+          </div>
+        }
+
+        @if (lastUploadedKey) {
+          <div class="upload-result-box">
+            <h4>✓ Upload Complete</h4>
+            <label>
+              Object Key (paste into Episode Video Key):
+              <input type="text" [value]="lastUploadedKey" readonly />
+            </label>
+            @if (lastUploadedUrl) {
+              <label>
+                Public URL:
+                <input type="text" [value]="lastUploadedUrl" readonly />
+              </label>
+            }
+          </div>
+        }
+      </div>
+    }
+  </section>
 </main>

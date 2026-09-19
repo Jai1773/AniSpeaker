@@ -1,8 +1,52 @@
-<main class="auth"><a routerLink="/" class="logo">▶ AniSpeaker</a>
-    <section><span class="eyebrow">JOIN ANISPEAKER</span>
-        <h1>Create your account.</h1><label>Name<input placeholder="Your name"></label><label>Email<input
-                placeholder="you@example.com"></label><label>Password<input type="password"
-                placeholder="••••••••"></label><button class="btn primary">Create Account</button>
-        <p>Already a member? <a routerLink="/login">Sign in</a></p>
-    </section>
+<main class="auth">
+  <a routerLink="/" class="logo">▶ AniSpeaker</a>
+  <section>
+    <span class="eyebrow">JOIN ANISPEAKER</span>
+    <h1>Create your account.</h1>
+
+    @if (error) {
+      <div class="auth-error">{{ error }}</div>
+    }
+
+    <form (ngSubmit)="submit()">
+      <label>
+        Display Name
+        <input
+          type="text"
+          name="name"
+          [(ngModel)]="name"
+          placeholder="Your name"
+          required
+          autocomplete="name"
+        />
+      </label>
+      <label>
+        Email
+        <input
+          type="email"
+          name="email"
+          [(ngModel)]="email"
+          placeholder="you@example.com"
+          required
+          autocomplete="email"
+        />
+      </label>
+      <label>
+        Password
+        <input
+          type="password"
+          name="password"
+          [(ngModel)]="password"
+          placeholder="Min. 8 characters"
+          required
+          autocomplete="new-password"
+        />
+      </label>
+      <button type="submit" class="btn primary" [disabled]="loading">
+        {{ loading ? 'Creating Account...' : 'Create Account' }}
+      </button>
+    </form>
+
+    <p>Already a member? <a routerLink="/login">Sign in</a></p>
+  </section>
 </main>

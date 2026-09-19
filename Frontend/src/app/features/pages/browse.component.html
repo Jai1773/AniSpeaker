@@ -1,8 +1,55 @@
 <app-nav />
 <main class="page container">
-    <h1 class="page-title">Browse</h1>
-    <p class="page-intro">Explore your next favorite story.</p>
-    <div class="filters"><button class="selected">{{type || 'All'}}</button><button>All
-            Genres</button><button>2026</button><button>Popular</button></div>
-    <div class="grid">@for(item of list;track item.id){<app-content-card [item]="item" />}</div>
-</main><app-footer />
+  <h1 class="page-title">Browse Catalog</h1>
+  <p class="page-intro">Explore all anime, cartoons, and movies on AniSpeaker.</p>
+
+  <div class="filters">
+    <a
+      routerLink="/browse"
+      [class.selected]="!type"
+      class="filter-btn"
+    >
+      All
+    </a>
+    <a
+      routerLink="/browse/anime"
+      [class.selected]="type === 'anime'"
+      class="filter-btn"
+    >
+      Anime
+    </a>
+    <a
+      routerLink="/browse/cartoons"
+      [class.selected]="type === 'cartoons' || type === 'cartoon'"
+      class="filter-btn"
+    >
+      Cartoons
+    </a>
+    <a
+      routerLink="/browse/movies"
+      [class.selected]="type === 'movies' || type === 'movie'"
+      class="filter-btn"
+    >
+      Movies
+    </a>
+  </div>
+
+  @if (loading) {
+    <div class="empty-box">
+      <p>Loading catalog...</p>
+    </div>
+  } @else if (list.length === 0) {
+    <div class="empty-box">
+      <span>▦</span>
+      <h3>No titles found</h3>
+      <p>Check back soon as new episodes and movies are added regularly.</p>
+    </div>
+  } @else {
+    <div class="grid">
+      @for (item of list; track item.id) {
+        <app-content-card [item]="item" />
+      }
+    </div>
+  }
+</main>
+<app-footer />

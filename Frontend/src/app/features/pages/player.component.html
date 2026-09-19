@@ -1,16 +1,77 @@
 <app-nav />
-<main class="page container">
-    <div class="player">
-        <div class="screen"><span>▶</span>
-            <p>Solar Guardians · Episode 12 — The Final Gate</p><small>❚❚　━━━●━━━━━━━━　18:24 / 24:00　⚙ ⛶</small>
+<main class="page container player-page">
+  <div class="player-layout">
+    <div class="player-container">
+      @if (loading) {
+        <div class="player-placeholder">
+          <div class="spinner"></div>
+          <p>Loading player...</p>
         </div>
-        <aside>
-            <h3>Up Next</h3>@for(ep of svc.episodes;track ep.number){<a><b>{{ep.number}}</b> {{ep.title}}
-                <small>{{ep.duration}}</small></a>}
-        </aside>
+      } @else if (error) {
+        <div class="player-placeholder error">
+          <span>⚠</span>
+          <p>{{ error }}</p>
+        </div>
+      } @else if (isEmbedPlayer) {
+        <iframe
+          [src]="safeVideoUrl"
+          class="player-screen"
+          allow="autoplay; fullscreen; encrypted-media; picture-in-picture"
+          allowfullscreen
+          title="Video Player"
+        ></iframe>
+      } @else if (videoUrl) {
+        <video
+          #videoElement
+          [src]="videoUrl"
+          class="player-screen"
+          controls
+          autoplay
+          (timeupdate)="onTimeUpdate()"
+          (loadedmetadata)="onMetadataLoaded()"
+        ></video>
+      } @else {
+        <div class="player-placeholder">
+          <span>▶</span>
+          <p>No video available for this episode yet.</p>
+        </div>
+      }
+
+      <div class="player-info">
+        <div class="player-header-row">
+          <span class="eyebrow">{{ item?.type || 'ANIME' }} · EPISODE {{ currentEpisode?.number || 1 }}</span>
+          @if (item) {
+            <a [routerLink]="['/content', item.slug]" class="back-to-details">← Overview</a>
+          }
+        </div>
+        <h1>{{ item?.title }} — {{ currentEpisode?.title }}</h1>
+        <p class="desc">{{ currentEpisode?.description || item?.description }}</p>
+      </div>
     </div>
-    <section><span class="eyebrow">ANIME · EPISODE 12</span>
-        <h1>Solar Guardians</h1>
-        <p class="page-intro">The team faces their biggest choice yet as the last signal reaches home.</p>
-    </section>
+
+    <aside class="playlist-sidebar">
+      <h3>Episodes</h3>
+      <div class="playlist-items">
+        @for (ep of episodes; track ep.id) {
+          <a
+            [class.active]="ep.id === currentEpisode?.id"
+            (click)="selectEpisode(ep)"
+            class="playlist-item"
+          >
+            <div class="thumb-wrapper">
+              <img [src]="ep.image" [alt]="ep.title" />
+              @if (ep.id === currentEpisode?.id) {
+                <span class="playing-indicator">▶</span>
+              }
+            </div>
+            <div class="ep-meta">
+              <b>Ep. {{ ep.number }}: {{ ep.title }}</b>
+              <small>{{ ep.duration }}</small>
+            </div>
+          </a>
+        }
+      </div>
+    </aside>
+  </div>
 </main>
+<app-footer />
