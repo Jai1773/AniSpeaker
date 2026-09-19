@@ -462,6 +462,7 @@ export class HistoryComponent implements OnInit {
 export class LoginComponent {
   private auth = inject(AuthService);
   private router = inject(Router);
+  private route = inject(ActivatedRoute);
 
   email = '';
   password = '';
@@ -478,9 +479,12 @@ export class LoginComponent {
     this.loading = true;
 
     this.auth.login(this.email.trim(), this.password).subscribe({
-      next: (session) => {
+      next: () => {
         this.loading = false;
-        if (session.role === 'Admin') {
+        const returnUrl = this.route.snapshot.queryParamMap.get('returnUrl');
+        if (returnUrl && (returnUrl !== '/admin' || this.auth.isAdmin)) {
+          this.router.navigateByUrl(returnUrl);
+        } else if (this.auth.isAdmin) {
           this.router.navigate(['/admin']);
         } else {
           this.router.navigate(['/']);

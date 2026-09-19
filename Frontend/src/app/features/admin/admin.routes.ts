@@ -10,6 +10,7 @@ import {
   Season,
 } from '../../core/services/admin.service';
 import { ApiContent } from '../../models/content.model';
+import { AuthService } from '../../core/services/auth.service';
 
 @Component({
   standalone: true,
@@ -19,6 +20,7 @@ import { ApiContent } from '../../models/content.model';
 })
 export class AdminComponent implements OnInit {
   private api = inject(AdminService);
+  readonly auth = inject(AuthService);
 
   activeTab: 'dashboard' | 'categories' | 'content' | 'episodes' | 'upload' = 'dashboard';
 
@@ -78,7 +80,25 @@ export class AdminComponent implements OnInit {
   lastUploadedUrl = '';
 
   ngOnInit(): void {
+    // Only call the protected API if the session already says Admin.
+    // The interceptor will attach the Bearer token automatically.
+    if (!this.auth.isLoggedIn) {
+      this.error = 'You are not signed in. Please sign in with an Admin account to use this panel.';
+      return;
+    }
+    if (!this.auth.isAdmin) {
+      this.error =
+        `Signed in as "${this.auth.session?.displayName || this.auth.session?.email}" ` +
+        `but your role is "${this.auth.session?.role}". Admin role is required.`;
+      return;
+    }
+    // Admin confirmed – load data
     this.loadAll();
+  }
+
+  logoutAndRedirect(): void {
+    this.auth.logout();
+    this.error = '';
   }
 
   getSeriesCount(): number {
@@ -95,14 +115,26 @@ export class AdminComponent implements OnInit {
 
   loadAll(): void {
     this.loading = true;
+    this.error = '';
+
     this.api.categories().subscribe({
       next: (cats) => {
+        this.error = '';
         this.categories = cats;
         if (!this.contentForm.categoryId && cats.length > 0) {
           this.contentForm.categoryId = cats[0].id;
         }
       },
-      error: () => (this.error = 'Failed to load categories. Ensure you are signed in as Admin.'),
+      error: (err: { status?: number }) => {
+        // Admin IS logged in — never say "Ensure you are signed in as Admin"
+        if (err?.status === 401) {
+          this.error = 'Session expired or token rejected. Please sign out and sign in again.';
+        } else if (err?.status === 403) {
+          this.error = 'Server denied access (403). Verify your account has the Admin role in the database.';
+        } else {
+          this.error = 'Could not reach the backend. Make sure the API server is running.';
+        }
+      },
     });
 
     this.api.content().subscribe({

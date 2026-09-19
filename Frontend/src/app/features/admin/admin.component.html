@@ -1,5 +1,29 @@
 <main class="admin-shell">
-  <aside class="admin-nav">
+  @if (!auth.isAdmin) {
+    <div class="admin-auth-guard">
+      <div class="auth-guard-card">
+        <div class="icon">🔒</div>
+        <h2>Admin Access Required</h2>
+        <p class="subtitle">
+          @if (!auth.isLoggedIn) {
+            You must be signed in with an administrator account to access the AniSpeaker Control Center.
+          } @else {
+            You are currently signed in as <b>{{ auth.session?.displayName || auth.session?.email }}</b> with role <code>{{ auth.session?.role || 'User' }}</code>.<br />
+            Only accounts with the <b>Admin</b> role can access the platform management dashboard.
+          }
+        </p>
+        <div class="guard-actions">
+          @if (!auth.isLoggedIn) {
+            <a routerLink="/login" [queryParams]="{ returnUrl: '/admin' }" class="btn-primary">Sign In as Admin</a>
+          } @else {
+            <button (click)="logoutAndRedirect()" class="btn-primary">Switch to Admin Account</button>
+          }
+          <a routerLink="/" class="btn-secondary">← Return to AniSpeaker</a>
+        </div>
+      </div>
+    </div>
+  } @else {
+    <aside class="admin-nav">
     <a routerLink="/" class="admin-brand">▶ AniSpeaker</a>
     <nav>
       <button [class.active]="activeTab === 'dashboard'" (click)="activeTab = 'dashboard'">
@@ -19,6 +43,12 @@
       </button>
     </nav>
     <div class="admin-footer">
+      @if (auth.session) {
+        <small style="display:block;color:#94a3b8;margin-bottom:6px;line-height:1.4;">
+          <b style="color:#e2e8f0">{{ auth.session.displayName || auth.session.email }}</b><br/>
+          Role: <span style="color:#a855f7;font-weight:600;">{{ auth.session.role }}</span>
+        </small>
+      }
       <a routerLink="/" class="btn-back">← Back to Site</a>
     </div>
   </aside>
@@ -28,7 +58,12 @@
       <div class="banner notice">{{ notice }}</div>
     }
     @if (error) {
-      <div class="banner alert">{{ error }}</div>
+      <div class="banner alert">
+        {{ error }}
+        @if (!auth.isLoggedIn) {
+          &nbsp;<a routerLink="/login" style="color:inherit;text-decoration:underline;font-weight:700;">Sign in here →</a>
+        }
+      </div>
     }
 
     <!-- ───────────────────────────────────────────────────────────────── -->
@@ -36,7 +71,7 @@
     <!-- ───────────────────────────────────────────────────────────────── -->
     @if (activeTab === 'dashboard') {
       <header class="admin-header">
-        <span class="eyebrow">ADMIN OVERVIEW</span>
+        <span class="eyebrow">ADMIN OVERVIEW · {{ auth.session?.role || '' }}</span>
         <h1>Dashboard</h1>
         <p>Monitor your anime & cartoon streaming platform.</p>
       </header>
@@ -443,5 +478,6 @@
         }
       </div>
     }
-  </section>
+    </section>
+  }
 </main>
