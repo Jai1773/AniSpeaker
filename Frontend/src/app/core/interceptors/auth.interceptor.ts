@@ -1,6 +1,7 @@
 import { HttpInterceptorFn } from '@angular/common/http';
 import { inject } from '@angular/core';
-import { AuthService } from '../services/auth.service';
+import { catchError, switchMap, throwError } from 'rxjs';
+import { AuthService, skipAuthRefresh } from '../services/auth.service';
 import { API_BASE_URL } from '../api.config';
 
 export const authInterceptor: HttpInterceptorFn = (request, next) => {
@@ -19,5 +20,23 @@ export const authInterceptor: HttpInterceptorFn = (request, next) => {
     request = request.clone({ withCredentials: true });
   }
 
-  return next(request);
+  return next(request).pipe(
+    catchError((error) => {
+      if (error.status !== 401 || !isApiUrl || request.context.get(skipAuthRefresh)) {
+        return throwError(() => error);
+      }
+
+      return auth.refresh().pipe(
+        switchMap((session) =>
+          next(
+            request.clone({
+              setHeaders: { Authorization: `Bearer ${session.accessToken}` },
+              withCredentials: true,
+            }),
+          ),
+        ),
+        catchError((refreshError) => throwError(() => refreshError)),
+      );
+    }),
+  );
 };

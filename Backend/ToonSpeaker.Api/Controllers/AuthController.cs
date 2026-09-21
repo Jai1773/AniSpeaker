@@ -72,11 +72,14 @@ public sealed class AuthController(UserManager<AppUser> users, AppDbContext db, 
         var refreshExpiry = tokens.RefreshExpiry();
         db.RefreshTokens.Add(new RefreshToken { UserId = user.Id, TokenHash = tokens.HashRefreshToken(raw), ExpiresAt = refreshExpiry });
         await db.SaveChangesAsync(ct);
-        // Secure=true: ForwardedHeaders middleware makes Request.IsHttps correct behind Render/Cloudflare edge.
+        // ForwardedHeaders middleware makes Request.IsHttps correct behind Render/Cloudflare edge.
         // SameSite=None: required for cross-origin cookie (Angular on .pages.dev -> API on .onrender.com).
         Response.Cookies.Append("refresh_token", raw, new CookieOptions
         {
-            HttpOnly = true, Secure = true, SameSite = SameSiteMode.None, Expires = refreshExpiry
+            HttpOnly = true,
+            Secure = Request.IsHttps,
+            SameSite = Request.IsHttps ? SameSiteMode.None : SameSiteMode.Lax,
+            Expires = refreshExpiry
         });
         return Ok(new AuthResponse(access, exp, user.Email!, user.DisplayName, user.Role));
     }

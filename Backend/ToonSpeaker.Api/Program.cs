@@ -82,16 +82,22 @@ builder.Services.AddScoped<IContentService, ContentService>();
 
 // ─── Authentication ───────────────────────────────────────────────────────────
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer(options => options.TokenValidationParameters = new TokenValidationParameters
+    .AddJwtBearer(options =>
     {
-        ValidateIssuer = true,
-        ValidIssuer = jwt.Issuer,
-        ValidateAudience = true,
-        ValidAudience = jwt.Audience,
-        ValidateIssuerSigningKey = true,
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwt.Secret)),
-        ValidateLifetime = true,
-        ClockSkew = TimeSpan.FromSeconds(30)
+        options.MapInboundClaims = false;
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidIssuer = jwt.Issuer,
+            ValidateAudience = true,
+            ValidAudience = jwt.Audience,
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwt.Secret)),
+            ValidateLifetime = true,
+            ClockSkew = TimeSpan.FromSeconds(30),
+            RoleClaimType = "role",
+            NameClaimType = "sub"
+        };
     });
 builder.Services.AddAuthorization();
 
@@ -157,10 +163,51 @@ if (app.Configuration.GetValue<bool>("Database:ApplyMigrations"))
 {
     using var scope = app.Services.CreateScope();
     var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    var userManager = scope.ServiceProvider.GetRequiredService<UserManager<AppUser>>();
     try
     {
         await db.Database.MigrateAsync();
         app.Logger.LogInformation("Database migrations are up to date.");
+
+        // Seed initial categories if table is empty
+        if (!await db.Categories.AnyAsync())
+        {
+            db.Categories.AddRange(
+                new Category { Name = "Action", Slug = "action", SortOrder = 1 },
+                new Category { Name = "Adventure", Slug = "adventure", SortOrder = 2 },
+                new Category { Name = "Comedy", Slug = "comedy", SortOrder = 3 },
+                new Category { Name = "Fantasy", Slug = "fantasy", SortOrder = 4 },
+                new Category { Name = "Sci-Fi", Slug = "sci-fi", SortOrder = 5 }
+            );
+            await db.SaveChangesAsync();
+            app.Logger.LogInformation("Seeded default categories.");
+        }
+
+        // Ensure default admin user exists
+        var adminEmail = "admin@anispeaker.com";
+        var adminUser = await userManager.FindByEmailAsync(adminEmail);
+        if (adminUser is null)
+        {
+            adminUser = new AppUser
+            {
+                UserName = adminEmail,
+                Email = adminEmail,
+                DisplayName = "AniSpeaker Admin",
+                Role = "Admin",
+                EmailConfirmed = true
+            };
+            var createRes = await userManager.CreateAsync(adminUser, "Admin@123456");
+            if (createRes.Succeeded)
+            {
+                app.Logger.LogInformation("Created default admin user: {Email} (Password: Admin@123456)", adminEmail);
+            }
+        }
+        else if (adminUser.Role != "Admin")
+        {
+            adminUser.Role = "Admin";
+            await userManager.UpdateAsync(adminUser);
+            app.Logger.LogInformation("Updated user {Email} role to Admin.", adminEmail);
+        }
     }
     catch (Exception ex)
     {

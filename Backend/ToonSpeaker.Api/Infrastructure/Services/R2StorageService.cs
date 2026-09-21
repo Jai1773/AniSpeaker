@@ -17,19 +17,27 @@ public sealed class R2Options
 public sealed class R2StorageService(R2Options options) : IStorageService
 {
     private readonly R2Options _options = options;
-    private readonly IAmazonS3 _client = CreateClient(options);
+    private readonly IAmazonS3? _client = CreateClient(options);
 
     public Task<UploadInitResponse> CreateUploadAsync(UploadInitRequest request, CancellationToken ct)
     {
-        if (string.IsNullOrWhiteSpace(_options.BucketName)) throw new InvalidOperationException("R2 storage is not configured.");
+        if (_client is null || string.IsNullOrWhiteSpace(_options.BucketName))
+            throw new InvalidOperationException("R2 storage is not configured.");
+
         var safeName = Path.GetFileName(request.FileName).Replace(" ", "-");
         var folder = request.Folder.Trim('/').ToLowerInvariant();
-        if (folder is not ("videos" or "images" or "thumbnails")) throw new ArgumentException("folder must be videos, images, or thumbnails.");
+        if (folder is not ("videos" or "images" or "thumbnails"))
+            throw new ArgumentException("folder must be videos, images, or thumbnails.");
+
         var objectKey = $"{folder}/{DateTime.UtcNow:yyyy/MM}/{Guid.NewGuid():N}-{safeName}";
         var expiry = DateTimeOffset.UtcNow.AddMinutes(15);
         var url = _client.GetPreSignedURL(new GetPreSignedUrlRequest
         {
-            BucketName = _options.BucketName, Key = objectKey, Verb = HttpVerb.PUT, Expires = expiry.UtcDateTime, ContentType = request.ContentType
+            BucketName = _options.BucketName,
+            Key = objectKey,
+            Verb = HttpVerb.PUT,
+            Expires = expiry.UtcDateTime,
+            ContentType = request.ContentType
         });
         return Task.FromResult(new UploadInitResponse(url, BuildPublicUrl(objectKey), objectKey, expiry));
     }
@@ -37,15 +45,40 @@ public sealed class R2StorageService(R2Options options) : IStorageService
     public Task<PlaybackDto> CreateReadUrlAsync(Guid episodeId, string objectKey, CancellationToken ct)
     {
         var expiry = DateTimeOffset.UtcNow.AddMinutes(30);
-        if (!string.IsNullOrWhiteSpace(_options.PublicBaseUrl)) return Task.FromResult(new PlaybackDto(episodeId, BuildPublicUrl(objectKey), expiry));
-        var url = _client.GetPreSignedURL(new GetPreSignedUrlRequest { BucketName = _options.BucketName, Key = objectKey, Verb = HttpVerb.GET, Expires = expiry.UtcDateTime });
+        if (!string.IsNullOrWhiteSpace(_options.PublicBaseUrl))
+            return Task.FromResult(new PlaybackDto(episodeId, BuildPublicUrl(objectKey), expiry));
+
+        if (_client is null)
+            return Task.FromResult(new PlaybackDto(episodeId, objectKey, expiry));
+
+        var url = _client.GetPreSignedURL(new GetPreSignedUrlRequest
+        {
+            BucketName = _options.BucketName,
+            Key = objectKey,
+            Verb = HttpVerb.GET,
+            Expires = expiry.UtcDateTime
+        });
         return Task.FromResult(new PlaybackDto(episodeId, url, expiry));
     }
 
-    private string BuildPublicUrl(string key) => string.IsNullOrWhiteSpace(_options.PublicBaseUrl) ? key : $"{_options.PublicBaseUrl.TrimEnd('/')}/{key}";
-    private static IAmazonS3 CreateClient(R2Options options) => new AmazonS3Client(new BasicAWSCredentials(options.AccessKey, options.SecretKey), new AmazonS3Config
+    private string BuildPublicUrl(string key) =>
+        string.IsNullOrWhiteSpace(_options.PublicBaseUrl) ? key : $"{_options.PublicBaseUrl.TrimEnd('/')}/{key}";
+
+    private static IAmazonS3? CreateClient(R2Options options)
     {
-        ServiceURL = string.IsNullOrWhiteSpace(options.AccountId) ? null : $"https://{options.AccountId}.r2.cloudflarestorage.com",
-        ForcePathStyle = true
-    });
+        if (string.IsNullOrWhiteSpace(options.AccountId) ||
+            string.IsNullOrWhiteSpace(options.AccessKey) ||
+            string.IsNullOrWhiteSpace(options.SecretKey))
+        {
+            return null;
+        }
+
+        return new AmazonS3Client(
+            new BasicAWSCredentials(options.AccessKey, options.SecretKey),
+            new AmazonS3Config
+            {
+                ServiceURL = $"https://{options.AccountId}.r2.cloudflarestorage.com",
+                ForcePathStyle = true
+            });
+    }
 }

@@ -208,33 +208,68 @@ export class AdminComponent implements OnInit {
       this.contentForm.slug.trim() ||
       this.contentForm.title.toLowerCase().trim().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
 
-    this.contentForm.tags = this.contentTagsInput
-      .split(',')
-      .map((t) => t.trim())
-      .filter(Boolean);
+    const payload: SaveContent = {
+      ...this.contentForm,
+      categoryId: this.contentForm.categoryId,
+      title: this.contentForm.title.trim(),
+      slug: this.contentForm.slug,
+      description: this.contentForm.description?.trim() || null,
+      posterUrl: this.contentForm.posterUrl?.trim() || null,
+      bannerUrl: this.contentForm.bannerUrl?.trim() || null,
+      tags: this.contentTagsInput
+        .split(',')
+        .map((t) => t.trim())
+        .filter(Boolean),
+    };
 
+    this.api.categories().subscribe({
+      next: (categories) => {
+        this.categories = categories;
+        const category = categories.find((x) => x.id === payload.categoryId) || categories[0];
+        if (!category) {
+          this.error = 'Create a category before adding content.';
+          return;
+        }
+
+        payload.categoryId = category.id;
+        this.contentForm.categoryId = category.id;
+        this.submitContent(payload);
+      },
+      error: (err) => (this.error = this.apiError(err, 'Could not load categories before saving content.')),
+    });
+  }
+
+  private submitContent(payload: SaveContent): void {
     if (this.editingContentId) {
-      this.api.updateContent(this.editingContentId, this.contentForm).subscribe({
+      this.api.updateContent(this.editingContentId, payload).subscribe({
         next: () => {
           this.notice = 'Content updated successfully!';
           this.resetContentForm();
           this.loadAll();
           setTimeout(() => (this.notice = ''), 3000);
         },
-        error: () => (this.error = 'Failed to update content.'),
+        error: (err) => (this.error = this.apiError(err, 'Failed to update content.')),
       });
-    } else {
-      this.api.createContent(this.contentForm).subscribe({
-        next: (created) => {
-          this.notice = 'Content created successfully! You can now add seasons & episodes.';
-          this.selectedContentForEpisodes = created;
-          this.resetContentForm();
-          this.loadAll();
-          setTimeout(() => (this.notice = ''), 4000);
-        },
-        error: () => (this.error = 'Failed to create content.'),
-      });
+      return;
     }
+
+    this.api.createContent(payload).subscribe({
+      next: (created) => {
+        this.notice = 'Content created successfully! You can now add seasons & episodes.';
+        this.selectedContentForEpisodes = created;
+        this.resetContentForm();
+        this.loadAll();
+        setTimeout(() => (this.notice = ''), 4000);
+      },
+      error: (err) => (this.error = this.apiError(err, 'Failed to create content.')),
+    });
+  }
+
+  private apiError(err: { error?: { detail?: string; title?: string; errors?: Record<string, string[]> } }, fallback: string): string {
+    const details = err.error?.errors
+      ? Object.values(err.error.errors).flat().join(' ')
+      : err.error?.detail || err.error?.title;
+    return details || fallback;
   }
 
   editContent(item: ApiContent): void {
