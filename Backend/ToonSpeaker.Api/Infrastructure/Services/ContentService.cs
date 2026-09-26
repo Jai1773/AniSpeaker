@@ -99,7 +99,7 @@ public sealed class ContentService(AppDbContext db, IMemoryCache? cache = null) 
             .Where(x => x.CategoryId == detail.CategoryId && x.Slug != detail.Slug && (includeUnpublished || x.Published))
             .OrderByDescending(x => x.UpdatedAt)
             .Take(6)
-            .Select(ToSummary)
+            .Select(x => ToSummary(x))
             .ToListAsync(ct);
 
         bool isSaved = false;

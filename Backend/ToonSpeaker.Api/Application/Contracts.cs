@@ -78,4 +78,17 @@ public interface IContentService
     Task<ContentDetailDto?> GetBySlugAsync(string slug, bool includeUnpublished, CancellationToken ct);
     Task<IReadOnlyList<ContentSummaryDto>> SearchAsync(string query, CancellationToken ct);
     Task<PlaybackSourcesDto?> GetPlaybackAsync(Guid episodeId, CancellationToken ct);
+    Task<CompositeDetailDto?> GetCompositeDetailAsync(string slug, Guid? userId, bool includeUnpublished, CancellationToken ct);
+}
+
+public sealed record UploadInitRequest(string FileName, string Folder, string ContentType);
+
+public sealed record UploadInitResponse(string UploadUrl, string PublicUrl, string ObjectKey, DateTimeOffset Expiry);
+
+public sealed record PlaybackDto(Guid EpisodeId, string Url, DateTimeOffset Expiry);
+
+public interface IStorageService
+{
+    Task<UploadInitResponse> CreateUploadAsync(UploadInitRequest request, CancellationToken ct);
+    Task<PlaybackDto> CreateReadUrlAsync(Guid episodeId, string objectKey, CancellationToken ct);
 }
