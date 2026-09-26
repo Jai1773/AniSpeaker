@@ -121,6 +121,15 @@
   border-radius: 10px;
 }
 
+ @media (max-width: 500px) {
+  .detail-body {
+     gap: 0px;
+  }
+  .detail-body > img {
+    width: 0px;
+}
+  }
+
 .detail h1 {
   font: 800 clamp(3rem, 5vw, 5rem) Outfit;
   margin: 8px 0;
