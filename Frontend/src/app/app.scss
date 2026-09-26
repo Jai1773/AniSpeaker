@@ -1,4 +1,29 @@
-:host {
-    display: block;
-    min-height: 100vh;
+// Global Mobile Variables & Mixins
+$breakpoint-mobile: 700px;
+$breakpoint-tablet: 900px;
+$touch-target: 44px;
+
+@mixin fluid-type($min, $max) {
+  font-size: clamp(#{$min}, 5vw, #{$max});
+}
+
+// Global Reset & Base Styles
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #08090d;
+  color: #d2d2d6;
+  font-family: 'Outfit', sans-serif;
+}
+
+// Standard Container for responsiveness
+.container {
+  width: 100%;
+  max-width: 1380px;
+  margin: 0 auto;
+  padding: 0 max(24px, calc((100vw - 1380px) / 2));
+
+  @media (max-width: $breakpoint-mobile) {
+    padding: 0 16px;
+  }
 }

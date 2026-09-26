@@ -21,7 +21,14 @@ public sealed class TokenService(JwtOptions options)
     public (string Token, DateTimeOffset ExpiresAt) CreateAccessToken(AppUser user)
     {
         var expiry = DateTimeOffset.UtcNow.AddMinutes(options.AccessTokenMinutes);
-        var claims = new[] { new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()), new Claim(JwtRegisteredClaimNames.Email, user.Email ?? string.Empty), new Claim(ClaimTypes.Role, user.Role), new Claim("display_name", user.DisplayName) };
+        var claims = new[]
+        {
+            new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
+            new Claim(JwtRegisteredClaimNames.Email, user.Email ?? string.Empty),
+            new Claim("role", user.Role),
+            new Claim(ClaimTypes.Role, user.Role),
+            new Claim("display_name", user.DisplayName)
+        };
         var credentials = new SigningCredentials(new SymmetricSecurityKey(Encoding.UTF8.GetBytes(options.Secret)), SecurityAlgorithms.HmacSha256);
         return (new JwtSecurityTokenHandler().WriteToken(new JwtSecurityToken(options.Issuer, options.Audience, claims, expires: expiry.UtcDateTime, signingCredentials: credentials)), expiry);
     }

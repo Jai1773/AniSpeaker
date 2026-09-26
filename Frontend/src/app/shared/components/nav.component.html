@@ -1,10 +1,33 @@
-<header><a routerLink="/" class="brand"><span>▶</span> AniSpeaker</a>
-    <nav><a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">Home</a><a
-            routerLink="/browse" routerLinkActive="active">Browse</a><a routerLink="/browse/cartoons">Cartoons</a><a
-            routerLink="/browse/anime">Anime</a><a routerLink="/browse/movies">Movies</a></nav>
-    <div class="actions"><a routerLink="/search" aria-label="Search">⌕</a><a routerLink="/watch-later"
-            aria-label="Watch later">♡</a><a routerLink="/profile" class="avatar">TS</a></div>
+<header>
+  <a routerLink="/" class="brand"><span>▶</span> AniSpeaker</a>
+  <nav>
+    <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Home</a>
+    <a routerLink="/browse" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Browse</a>
+    <a routerLink="/browse/cartoons" routerLinkActive="active">Cartoons</a>
+    <a routerLink="/browse/anime" routerLinkActive="active">Anime</a>
+    <a routerLink="/browse/movies" routerLinkActive="active">Movies</a>
+  </nav>
+  <div class="actions">
+    <a routerLink="/search" aria-label="Search" class="icon-link">⌕</a>
+    <a routerLink="/watch-later" aria-label="Watch later" class="icon-link">♡</a>
+    @if (auth.isAdmin) {
+      <a routerLink="/admin" class="admin-badge">Admin</a>
+    }
+    @if (auth.isLoggedIn) {
+      <a routerLink="/profile" class="avatar" [title]="auth.session?.displayName || 'Profile'">{{ initials() }}</a>
+    } @else {
+      <a routerLink="/login" class="btn-signin">Sign In</a>
+    }
+  </div>
 </header>
-<nav class="mobile"><a routerLink="/">⌂<small>Home</small></a><a routerLink="/browse">▦<small>Browse</small></a><a
-        routerLink="/search">⌕<small>Search</small></a><a routerLink="/watch-later">♡<small>Saved</small></a><a
-        routerLink="/profile">◉<small>Profile</small></a></nav>
+<nav class="mobile">
+  <a routerLink="/">⌂<small>Home</small></a>
+  <a routerLink="/browse">▦<small>Browse</small></a>
+  <a routerLink="/search">⌕<small>Search</small></a>
+  <a routerLink="/watch-later">♡<small>Saved</small></a>
+  @if (auth.isLoggedIn) {
+    <a routerLink="/profile">◉<small>Profile</small></a>
+  } @else {
+    <a routerLink="/login">→<small>Sign In</small></a>
+  }
+</nav>

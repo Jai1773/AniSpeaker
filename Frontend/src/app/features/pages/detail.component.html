@@ -1,22 +1,66 @@
 <app-nav />
 <main>
-    <section class="detail" [style.background-image]="'url('+item.backdrop+')'">
-        <div class="overlay"></div>
-        <div class="container detail-body"><img [src]="item.image" [alt]="item.title">
-            <div><span class="eyebrow">{{item.type}}</span>
-                <h1>{{item.title}}</h1>
-                <p>★ {{item.rating}} · {{item.year}} · 13+ · {{item.duration}} · {{item.genre}}</p>
-                <p>{{item.description}}</p><a class="btn primary" [routerLink]="['/watch',item.id]">▶ Play Now</a> <a
-                    class="btn ghost" routerLink="/watch-later">＋ Watch Later</a>
-            </div>
+  @if (item) {
+    <section class="detail" [style.background-image]="'url(' + item.backdrop + ')'">
+      <div class="overlay"></div>
+      <div class="container detail-body">
+        <img [src]="item.image" [alt]="item.title" loading="lazy" width="300" height="450" />
+        <div>
+          <span class="eyebrow">{{ item.type }}</span>
+          <h1>{{ item.title }}</h1>
+          <p>★ {{ item.rating }} · {{ item.year }} · {{ item.duration }} · {{ item.genre }}</p>
+          <p class="description">{{ item.description }}</p>
+          <div class="detail-actions">
+            @if (episodes.length > 0) {
+              <a class="btn primary" [routerLink]="['/watch', item.slug, 'season-' + (episodes[0].seasonNumber || 1), 'ep-' + episodes[0].number]">
+                ▶ Play Now
+              </a>
+            } @else {
+              <a class="btn primary" [routerLink]="['/watch', item.slug, 'season-1', 'ep-1']">
+                ▶ Play Now
+              </a>
+            }
+            <button class="btn ghost" (click)="toggleWatchLater()">
+              {{ isSaved ? '✓ Saved' : '＋ Watch Later' }}
+            </button>
+          </div>
+          @if (feedback) {
+            <small class="feedback-msg">{{ feedback }}</small>
+          }
         </div>
+      </div>
     </section>
-    <section class="page container">
-        <h2>Episodes</h2>@for(ep of episodes;track ep.number){<article class="episode"><img [src]="ep.image">
-            <div><b>Episode {{ep.number}} · {{ep.title}}</b>
-                <p>{{ep.description}}</p>
-            </div><a [routerLink]="['/watch',item.id]">▶</a>
-        </article>}<h2>More Like This</h2>
-        <div class="grid">@for(x of related;track x.id){<app-content-card [item]="x" />}</div>
-    </section>
-</main><app-footer />
+  } @else {
+    <div class="empty-box">
+      <p>Loading title details...</p>
+    </div>
+  }
+  <section class="page container">
+    @if (item && episodes.length > 0) {
+      <h2>Episodes ({{ episodes.length }})</h2>
+      <div class="episodes-list">
+        @for (ep of episodes; track ep.id) {
+          <article class="episode">
+            <img [src]="ep.image" [alt]="ep.title" />
+            <div class="ep-info">
+              <b>Episode {{ ep.number }}: {{ ep.title }}</b>
+              <small>{{ ep.duration }}</small>
+            </div>
+            <a [routerLink]="['/watch', item.slug, 'season-' + (ep.seasonNumber || 1), 'ep-' + ep.number]" class="btn-play-ep" aria-label="Play episode">
+              ▶
+            </a>
+          </article>
+        }
+      </div>
+    }
+    @if (item && related.length > 0) {
+      <h2>More Like This</h2>
+      <div class="grid">
+        @for (x of related; track x.id) {
+          <app-content-card [item]="x" />
+        }
+      </div>
+    }
+  </section>
+</main>
+<app-footer />

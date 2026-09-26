@@ -1,15 +1,26 @@
 <app-nav />
 <main class="page container profile">
-    <div class="identity">
-        <div>TS</div>
-        <h1>Toon Speaker</h1>
-        <p>hello@anispeaker.app</p>
-    </div>
-    <section>
-        <h2>Account</h2><a>Profile details <span>›</span></a><a routerLink="/history">Watch History <span>›</span></a><a
-            routerLink="/watch-later">Watch Later <span>›</span></a>
-    </section>
-    <section>
-        <h2>Playback settings</h2><a>Autoplay next episode <b>On</b></a><a>Video quality <b>Auto</b></a>
-    </section>
-</main><app-footer />
+  <div class="identity">
+    <div class="profile-avatar">{{ initials() }}</div>
+    <h1>{{ auth.session?.displayName || 'Anime Fan' }}</h1>
+    <p>{{ auth.session?.email || 'Guest User' }}</p>
+    @if (auth.isAdmin) {
+      <span class="role-badge">Admin</span>
+    }
+  </div>
+
+  <section>
+    <h2>Account & Lists</h2>
+    <a routerLink="/history">Watch History <span>›</span></a>
+    <a routerLink="/watch-later">Watch Later <span>›</span></a>
+    @if (auth.isAdmin) {
+      <a routerLink="/admin" class="admin-link">★ Open Admin Panel <span>›</span></a>
+    }
+  </section>
+
+  <section>
+    <h2>Actions</h2>
+    <button class="btn-logout" (click)="logout()">Sign Out</button>
+  </section>
+</main>
+<app-footer />

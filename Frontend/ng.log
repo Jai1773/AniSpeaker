@@ -1,0 +1,2005 @@
+[33m>[39m Building...
+[32m√[39m Building...
+Application bundle generation failed. [3.660 seconds] - 2026-09-25T17:55:43.640Z
+
+[1m[31m[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2663: Cannot find name 'bulkCreateEpisodes'. Did you mean the instance member 'this.bulkCreateEpisodes'?[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:135:2:
+[37m      135 │   [32mbulkCreateEpisodes[37m(seasonId: string, payload: BulkEpisodeReques...
+          ╵   [32m~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS1005: ',' expected.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:135:29:
+[37m      135 │   bulkCreateEpisodes(seasonId[32m:[37m string, payload: BulkEpisodeReques...
+          ╵                              [32m^[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2693: 'string' only refers to a type, but is being used as a value here.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:135:31:
+[37m      135 │   bulkCreateEpisodes(seasonId: [32mstring[37m, payload: BulkEpisodeReques...
+          ╵                                [32m~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2304: Cannot find name 'payload'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:135:39:
+[37m      135 │ ...eEpisodes(seasonId: string, [32mpayload[37m: BulkEpisodeRequest): Obse...
+          ╵                                [32m~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS1005: ',' expected.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:135:46:
+[37m      135 │ ...sodes(seasonId: string, payload[32m:[37m BulkEpisodeRequest): Observab...
+          ╵                                   [32m^[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2693: 'BulkEpisodeRequest' only refers to a type, but is being used as a value here.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:135:48:
+[37m      135 │ ...nId: string, payload: [32mBulkEpisodeRequest[37m): Observable<ApiEpiso...
+          ╵                          [32m~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS1005: ';' expected.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:135:67:
+[37m      135 │ ... string, payload: BulkEpisodeRequest)[32m:[37m Observable<ApiEpisode[]> {
+          ╵                                         [32m^[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2365: Operator '>' cannot be applied to types 'boolean' and '{ return: Observable<ApiEpisode[]>; }'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:135:69:
+[37m      135 │ ... string, payload: BulkEpisodeRequest): [32mObservable<ApiEpisode[]> {[37m
+          ╵                                           [32m~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2693: 'ApiEpisode' only refers to a type, but is being used as a value here.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:135:80:
+[37m      135 │ ... string, payload: BulkEpisodeRequest): Observable<[32mApiEpisode[37m[]> {
+          ╵                                                      [32m~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS1011: An element access expression should take an argument.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:135:91:
+[37m      135 │ ... string, payload: BulkEpisodeRequest): Observable<ApiEpisode[[32m[37m]> {
+          ╵                                                                 [32m^[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS1005: ':' expected.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:136:11:
+[37m      136 │     return [32mthis[37m.http.post<ApiEpisode[]>(`${API_BASE_URL}/api/admi...
+          ╵            [32m~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2304: Cannot find name 'payload'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:136:108:
+[37m      136 │ ...URL}/api/admin/seasons/${seasonId}/episodes/bulk-urls`, [32mpayload[37m);
+          ╵                                                            [32m~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS1005: ',' expected.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:136:116:
+[37m      136 │ ...URL}/api/admin/seasons/${seasonId}/episodes/bulk-urls`, payload)[32m;[37m
+          ╵                                                                    [32m^[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2304: Cannot find name 'createEpisodeForMovie'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:139:2:
+[37m      139 │   [32mcreateEpisodeForMovie[37m(contentId: string, value: SaveEpisode): O...
+          ╵   [32m~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2304: Cannot find name 'contentId'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:139:24:
+[37m      139 │   createEpisodeForMovie([32mcontentId[37m: string, value: SaveEpisode): O...
+          ╵                         [32m~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS1005: ',' expected.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:139:33:
+[37m      139 │   createEpisodeForMovie(contentId[32m:[37m string, value: SaveEpisode): O...
+          ╵                                  [32m^[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2693: 'string' only refers to a type, but is being used as a value here.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:139:35:
+[37m      139 │ ...eEpisodeForMovie(contentId: [32mstring[37m, value: SaveEpisode): Obser...
+          ╵                                [32m~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2304: Cannot find name 'value'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:139:43:
+[37m      139 │ ...eForMovie(contentId: string, [32mvalue[37m: SaveEpisode): Observable<{...
+          ╵                                 [32m~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS1005: ',' expected.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:139:48:
+[37m      139 │ ...rMovie(contentId: string, value[32m:[37m SaveEpisode): Observable<{ id...
+          ╵                                   [32m^[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2693: 'SaveEpisode' only refers to a type, but is being used as a value here.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:139:50:
+[37m      139 │ ...contentId: string, value: [32mSaveEpisode[37m): Observable<{ id: strin...
+          ╵                              [32m~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS1005: ';' expected.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:139:62:
+[37m      139 │ ...tentId: string, value: SaveEpisode)[32m:[37m Observable<{ id: string }> {
+          ╵                                       [32m^[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2365: Operator '<' cannot be applied to types 'typeof Observable' and '{ id: any; }'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:139:64:
+[37m      139 │ ...tentId: string, value: SaveEpisode): [32mObservable<{ id: string }[37m> {
+          ╵                                         [32m~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2365: Operator '>' cannot be applied to types 'boolean' and '{ return: Observable<{ id: string; }>; }'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:139:64:
+[37m      139 │ ...tentId: string, value: SaveEpisode): [32mObservable<{ id: string }> {[37m
+          ╵                                         [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2693: 'string' only refers to a type, but is being used as a value here.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:139:81:
+[37m      139 │ ...tentId: string, value: SaveEpisode): Observable<{ id: [32mstring[37m }> {
+          ╵                                                          [32m~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS1005: ':' expected.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:140:11:
+[37m      140 │     return [32mthis[37m.http.post<{ id: string }>(`${API_BASE_URL}/api/ad...
+          ╵            [32m~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2304: Cannot find name 'contentId'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:140:79:
+[37m      140 │ ...${API_BASE_URL}/api/admin/content/${[32mcontentId[37m}/episodes`, value);
+          ╵                                        [32m~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2304: Cannot find name 'value'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:140:101:
+[37m      140 │ ...${API_BASE_URL}/api/admin/content/${contentId}/episodes`, [32mvalue[37m);
+          ╵                                                              [32m~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS1005: ',' expected.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:140:107:
+[37m      140 │ ...${API_BASE_URL}/api/admin/content/${contentId}/episodes`, value)[32m;[37m
+          ╵                                                                    [32m^[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2304: Cannot find name 'updateEpisode'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:143:2:
+[37m      143 │   [32mupdateEpisode[37m(id: string, value: SaveEpisode): Observable<void> {
+          ╵   [32m~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2304: Cannot find name 'id'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:143:16:
+[37m      143 │   updateEpisode([32mid[37m: string, value: SaveEpisode): Observable<void> {
+          ╵                 [32m~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS1005: ',' expected.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:143:18:
+[37m      143 │   updateEpisode(id[32m:[37m string, value: SaveEpisode): Observable<void> {
+          ╵                   [32m^[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2693: 'string' only refers to a type, but is being used as a value here.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:143:20:
+[37m      143 │   updateEpisode(id: [32mstring[37m, value: SaveEpisode): Observable<void> {
+          ╵                     [32m~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2304: Cannot find name 'value'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:143:28:
+[37m      143 │   updateEpisode(id: string, [32mvalue[37m: SaveEpisode): Observable<void> {
+          ╵                             [32m~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS1005: ',' expected.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:143:33:
+[37m      143 │   updateEpisode(id: string, value[32m:[37m SaveEpisode): Observable<void> {
+          ╵                                  [32m^[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2693: 'SaveEpisode' only refers to a type, but is being used as a value here.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:143:35:
+[37m      143 │   updateEpisode(id: string, value: [32mSaveEpisode[37m): Observable<void> {
+          ╵                                    [32m~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS1005: ';' expected.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:143:47:
+[37m      143 │   updateEpisode(id: string, value: SaveEpisode)[32m:[37m Observable<void> {
+          ╵                                                [32m^[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2365: Operator '>' cannot be applied to types 'boolean' and '{ return: Observable<void>; }'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:143:49:
+[37m      143 │   updateEpisode(id: string, value: SaveEpisode): [32mObservable<void> {[37m
+          ╵                                                  [32m~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2532: Object is possibly 'undefined'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:143:60:
+[37m      143 │   updateEpisode(id: string, value: SaveEpisode): Observable<[32mvoid[37m> {
+          ╵                                                             [32m~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS1109: Expression expected.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:143:64:
+[37m      143 │   updateEpisode(id: string, value: SaveEpisode): Observable<void[32m>[37m {
+          ╵                                                                 [32m^[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS1005: ':' expected.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:144:11:
+[37m      144 │     return [32mthis[37m.http.put<void>(`${API_BASE_URL}/api/admin/episode...
+          ╵            [32m~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2304: Cannot find name 'id'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:144:69:
+[37m      144 │ ...ttp.put<void>(`${API_BASE_URL}/api/admin/episodes/${[32mid[37m}`, value);
+          ╵                                                        [32m~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2304: Cannot find name 'value'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:144:75:
+[37m      144 │ ...ttp.put<void>(`${API_BASE_URL}/api/admin/episodes/${id}`, [32mvalue[37m);
+          ╵                                                              [32m~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS1005: ',' expected.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:144:81:
+[37m      144 │ ...ttp.put<void>(`${API_BASE_URL}/api/admin/episodes/${id}`, value)[32m;[37m
+          ╵                                                                    [32m^[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2304: Cannot find name 'deleteEpisode'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:147:2:
+[37m      147 │   [32mdeleteEpisode[37m(id: string): Observable<void> {
+          ╵   [32m~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2304: Cannot find name 'id'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:147:16:
+[37m      147 │   deleteEpisode([32mid[37m: string): Observable<void> {
+          ╵                 [32m~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS1005: ',' expected.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:147:18:
+[37m      147 │   deleteEpisode(id[32m:[37m string): Observable<void> {
+          ╵                   [32m^[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2693: 'string' only refers to a type, but is being used as a value here.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:147:20:
+[37m      147 │   deleteEpisode(id: [32mstring[37m): Observable<void> {
+          ╵                     [32m~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS1005: ';' expected.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:147:27:
+[37m      147 │   deleteEpisode(id: string)[32m:[37m Observable<void> {
+          ╵                            [32m^[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2365: Operator '>' cannot be applied to types 'boolean' and '{ return: Observable<void>; }'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:147:29:
+[37m      147 │   deleteEpisode(id: string): [32mObservable<void> {[37m
+          ╵                              [32m~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2532: Object is possibly 'undefined'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:147:40:
+[37m      147 │   deleteEpisode(id: string): Observable<[32mvoid[37m> {
+          ╵                                         [32m~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS1109: Expression expected.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:147:44:
+[37m      147 │   deleteEpisode(id: string): Observable<void[32m>[37m {
+          ╵                                             [32m^[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS1005: ':' expected.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:148:11:
+[37m      148 │     return [32mthis[37m.http.delete<void>(`${API_BASE_URL}/api/admin/epis...
+          ╵            [32m~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2304: Cannot find name 'id'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:148:72:
+[37m      148 │ ...is.http.delete<void>(`${API_BASE_URL}/api/admin/episodes/${[32mid[37m}`);
+          ╵                                                               [32m~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS1005: ',' expected.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:148:77:
+[37m      148 │ ...is.http.delete<void>(`${API_BASE_URL}/api/admin/episodes/${id}`)[32m;[37m
+          ╵                                                                    [32m^[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2304: Cannot find name 'getEpisodeSources'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:151:2:
+[37m      151 │   [32mgetEpisodeSources[37m(episodeId: string): Observable<AdminVideoSour...
+          ╵   [32m~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2304: Cannot find name 'episodeId'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:151:20:
+[37m      151 │   getEpisodeSources([32mepisodeId[37m: string): Observable<AdminVideoSour...
+          ╵                     [32m~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS1005: ',' expected.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:151:29:
+[37m      151 │   getEpisodeSources(episodeId[32m:[37m string): Observable<AdminVideoSour...
+          ╵                              [32m^[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2693: 'string' only refers to a type, but is being used as a value here.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:151:31:
+[37m      151 │   getEpisodeSources(episodeId: [32mstring[37m): Observable<AdminVideoSour...
+          ╵                                [32m~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS1005: ';' expected.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:151:38:
+[37m      151 │ ...isodeSources(episodeId: string)[32m:[37m Observable<AdminVideoSource[]> {
+          ╵                                   [32m^[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2365: Operator '>' cannot be applied to types 'boolean' and '{ return: Observable<AdminVideoSource[]>; }'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:151:40:
+[37m      151 │ ...isodeSources(episodeId: string): [32mObservable<AdminVideoSource[]> {[37m
+          ╵                                     [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2693: 'AdminVideoSource' only refers to a type, but is being used as a value here.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:151:51:
+[37m      151 │ ...isodeSources(episodeId: string): Observable<[32mAdminVideoSource[37m[]> {
+          ╵                                                [32m~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS1011: An element access expression should take an argument.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:151:68:
+[37m      151 │ ...isodeSources(episodeId: string): Observable<AdminVideoSource[[32m[37m]> {
+          ╵                                                                 [32m^[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS1005: ':' expected.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:152:11:
+[37m      152 │     return [32mthis[37m.http.get<AdminVideoSource[]>(`${API_BASE_URL}/api...
+          ╵            [32m~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2304: Cannot find name 'episodeId'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:152:83:
+[37m      152 │ ...ce[]>(`${API_BASE_URL}/api/admin/episodes/${[32mepisodeId[37m}/sources`);
+          ╵                                                [32m~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS1005: ',' expected.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:152:103:
+[37m      152 │ ...ce[]>(`${API_BASE_URL}/api/admin/episodes/${episodeId}/sources`)[32m;[37m
+          ╵                                                                    [32m^[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2304: Cannot find name 'createSource'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:155:2:
+[37m      155 │   [32mcreateSource[37m(episodeId: string, value: SaveVideoSource): Observ...
+          ╵   [32m~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2304: Cannot find name 'episodeId'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:155:15:
+[37m      155 │   createSource([32mepisodeId[37m: string, value: SaveVideoSource): Observ...
+          ╵                [32m~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS1005: ',' expected.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:155:24:
+[37m      155 │   createSource(episodeId[32m:[37m string, value: SaveVideoSource): Observ...
+          ╵                         [32m^[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2693: 'string' only refers to a type, but is being used as a value here.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:155:26:
+[37m      155 │   createSource(episodeId: [32mstring[37m, value: SaveVideoSource): Observ...
+          ╵                           [32m~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2304: Cannot find name 'value'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:155:34:
+[37m      155 │ ...ateSource(episodeId: string, [32mvalue[37m: SaveVideoSource): Observab...
+          ╵                                 [32m~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS1005: ',' expected.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:155:39:
+[37m      155 │ ...Source(episodeId: string, value[32m:[37m SaveVideoSource): Observable<...
+          ╵                                   [32m^[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2693: 'SaveVideoSource' only refers to a type, but is being used as a value here.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:155:41:
+[37m      155 │ ...isodeId: string, value: [32mSaveVideoSource[37m): Observable<AdminVide...
+          ╵                            [32m~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS1005: ';' expected.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:155:57:
+[37m      155 │ ...: string, value: SaveVideoSource)[32m:[37m Observable<AdminVideoSource> {
+          ╵                                     [32m^[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2365: Operator '>' cannot be applied to types 'boolean' and '{ return: Observable<AdminVideoSource>; }'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:155:59:
+[37m      155 │ ...: string, value: SaveVideoSource): [32mObservable<AdminVideoSource> {[37m
+          ╵                                       [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2693: 'AdminVideoSource' only refers to a type, but is being used as a value here.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:155:70:
+[37m      155 │ ...: string, value: SaveVideoSource): Observable<[32mAdminVideoSource[37m> {
+          ╵                                                  [32m~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS1005: ':' expected.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:156:11:
+[37m      156 │     return [32mthis[37m.http.post<AdminVideoSource>(`${API_BASE_URL}/api/...
+          ╵            [32m~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2304: Cannot find name 'episodeId'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:156:82:
+[37m      156 │ ...${API_BASE_URL}/api/admin/episodes/${[32mepisodeId[37m}/sources`, value);
+          ╵                                         [32m~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2304: Cannot find name 'value'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:156:103:
+[37m      156 │ ...${API_BASE_URL}/api/admin/episodes/${episodeId}/sources`, [32mvalue[37m);
+          ╵                                                              [32m~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS1005: ',' expected.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:156:109:
+[37m      156 │ ...${API_BASE_URL}/api/admin/episodes/${episodeId}/sources`, value)[32m;[37m
+          ╵                                                                    [32m^[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2304: Cannot find name 'updateSource'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:159:2:
+[37m      159 │   [32mupdateSource[37m(id: string, value: SaveVideoSource): Observable<vo...
+          ╵   [32m~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2304: Cannot find name 'id'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:159:15:
+[37m      159 │   updateSource([32mid[37m: string, value: SaveVideoSource): Observable<vo...
+          ╵                [32m~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS1005: ',' expected.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:159:17:
+[37m      159 │   updateSource(id[32m:[37m string, value: SaveVideoSource): Observable<vo...
+          ╵                  [32m^[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2693: 'string' only refers to a type, but is being used as a value here.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:159:19:
+[37m      159 │   updateSource(id: [32mstring[37m, value: SaveVideoSource): Observable<vo...
+          ╵                    [32m~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2304: Cannot find name 'value'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:159:27:
+[37m      159 │   updateSource(id: string, [32mvalue[37m: SaveVideoSource): Observable<vo...
+          ╵                            [32m~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS1005: ',' expected.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:159:32:
+[37m      159 │   updateSource(id: string, value[32m:[37m SaveVideoSource): Observable<vo...
+          ╵                                 [32m^[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2693: 'SaveVideoSource' only refers to a type, but is being used as a value here.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:159:34:
+[37m      159 │ ...ateSource(id: string, value: [32mSaveVideoSource[37m): Observable<void> {
+          ╵                                 [32m~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS1005: ';' expected.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:159:50:
+[37m      159 │ ...ateSource(id: string, value: SaveVideoSource)[32m:[37m Observable<void> {
+          ╵                                                 [32m^[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2365: Operator '>' cannot be applied to types 'boolean' and '{ return: Observable<void>; }'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:159:52:
+[37m      159 │ ...ateSource(id: string, value: SaveVideoSource): [32mObservable<void> {[37m
+          ╵                                                   [32m~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2532: Object is possibly 'undefined'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:159:63:
+[37m      159 │ ...ateSource(id: string, value: SaveVideoSource): Observable<[32mvoid[37m> {
+          ╵                                                              [32m~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS1109: Expression expected.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:159:67:
+[37m      159 │ ...ateSource(id: string, value: SaveVideoSource): Observable<void[32m>[37m {
+          ╵                                                                  [32m^[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS1005: ':' expected.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:160:11:
+[37m      160 │     return [32mthis[37m.http.put<void>(`${API_BASE_URL}/api/admin/sources...
+          ╵            [32m~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2304: Cannot find name 'id'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:160:68:
+[37m      160 │ ...http.put<void>(`${API_BASE_URL}/api/admin/sources/${[32mid[37m}`, value);
+          ╵                                                        [32m~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2304: Cannot find name 'value'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:160:74:
+[37m      160 │ ...http.put<void>(`${API_BASE_URL}/api/admin/sources/${id}`, [32mvalue[37m);
+          ╵                                                              [32m~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS1005: ',' expected.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:160:80:
+[37m      160 │ ...http.put<void>(`${API_BASE_URL}/api/admin/sources/${id}`, value)[32m;[37m
+          ╵                                                                    [32m^[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2304: Cannot find name 'deleteSource'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:163:2:
+[37m      163 │   [32mdeleteSource[37m(id: string): Observable<void> {
+          ╵   [32m~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2304: Cannot find name 'id'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:163:15:
+[37m      163 │   deleteSource([32mid[37m: string): Observable<void> {
+          ╵                [32m~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS1005: ',' expected.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:163:17:
+[37m      163 │   deleteSource(id[32m:[37m string): Observable<void> {
+          ╵                  [32m^[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2693: 'string' only refers to a type, but is being used as a value here.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:163:19:
+[37m      163 │   deleteSource(id: [32mstring[37m): Observable<void> {
+          ╵                    [32m~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS1005: ';' expected.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:163:26:
+[37m      163 │   deleteSource(id: string)[32m:[37m Observable<void> {
+          ╵                           [32m^[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2365: Operator '>' cannot be applied to types 'boolean' and '{ return: Observable<void>; }'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:163:28:
+[37m      163 │   deleteSource(id: string): [32mObservable<void> {[37m
+          ╵                             [32m~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2532: Object is possibly 'undefined'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:163:39:
+[37m      163 │   deleteSource(id: string): Observable<[32mvoid[37m> {
+          ╵                                        [32m~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS1109: Expression expected.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:163:43:
+[37m      163 │   deleteSource(id: string): Observable<void[32m>[37m {
+          ╵                                            [32m^[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS1005: ':' expected.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:164:11:
+[37m      164 │     return [32mthis[37m.http.delete<void>(`${API_BASE_URL}/api/admin/sour...
+          ╵            [32m~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2304: Cannot find name 'id'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:164:71:
+[37m      164 │ ...his.http.delete<void>(`${API_BASE_URL}/api/admin/sources/${[32mid[37m}`);
+          ╵                                                               [32m~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS1005: ',' expected.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:164:76:
+[37m      164 │ ...his.http.delete<void>(`${API_BASE_URL}/api/admin/sources/${id}`)[32m;[37m
+          ╵                                                                    [32m^[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2304: Cannot find name 'reorderSources'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:167:2:
+[37m      167 │   [32mreorderSources[37m(episodeId: string, orderedSourceIds: string[]): ...
+          ╵   [32m~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2304: Cannot find name 'episodeId'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:167:17:
+[37m      167 │   reorderSources([32mepisodeId[37m: string, orderedSourceIds: string[]): ...
+          ╵                  [32m~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS1005: ',' expected.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:167:26:
+[37m      167 │   reorderSources(episodeId[32m:[37m string, orderedSourceIds: string[]): ...
+          ╵                           [32m^[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2693: 'string' only refers to a type, but is being used as a value here.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:167:28:
+[37m      167 │   reorderSources(episodeId: [32mstring[37m, orderedSourceIds: string[]): ...
+          ╵                             [32m~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2304: Cannot find name 'orderedSourceIds'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:167:36:
+[37m      167 │ ...ces(episodeId: string, [32morderedSourceIds[37m: string[]): Observable...
+          ╵                           [32m~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS1005: ',' expected.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:167:52:
+[37m      167 │ ...pisodeId: string, orderedSourceIds[32m:[37m string[]): Observable<void> {
+          ╵                                      [32m^[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2693: 'string' only refers to a type, but is being used as a value here.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:167:54:
+[37m      167 │ ...pisodeId: string, orderedSourceIds: [32mstring[37m[]): Observable<void> {
+          ╵                                        [32m~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS1011: An element access expression should take an argument.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:167:61:
+[37m      167 │ ...pisodeId: string, orderedSourceIds: string[[32m[37m]): Observable<void> {
+          ╵                                               [32m^[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS1005: ';' expected.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:167:63:
+[37m      167 │ ...pisodeId: string, orderedSourceIds: string[])[32m:[37m Observable<void> {
+          ╵                                                 [32m^[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2365: Operator '>' cannot be applied to types 'boolean' and '{ return: Observable<void>; }'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:167:65:
+[37m      167 │ ...pisodeId: string, orderedSourceIds: string[]): [32mObservable<void> {[37m
+          ╵                                                   [32m~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2532: Object is possibly 'undefined'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:167:76:
+[37m      167 │ ...pisodeId: string, orderedSourceIds: string[]): Observable<[32mvoid[37m> {
+          ╵                                                              [32m~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS1109: Expression expected.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:167:80:
+[37m      167 │ ...pisodeId: string, orderedSourceIds: string[]): Observable<void[32m>[37m {
+          ╵                                                                  [32m^[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS1005: ':' expected.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:168:11:
+[37m      168 │     return [32mthis[37m.http.put<void>(`${API_BASE_URL}/api/admin/episode...
+          ╵            [32m~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2304: Cannot find name 'episodeId'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:168:69:
+[37m      168 │ ...API_BASE_URL}/api/admin/episodes/${[32mepisodeId[37m}/sources/reorder`, {
+          ╵                                       [32m~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS18004: No value exists in scope for the shorthand property 'orderedSourceIds'. Either declare one or provide an initializer.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:169:6:
+[37m      169 │       [32morderedSourceIds[37m,
+          ╵       [32m~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS1005: ',' expected.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:170:6:
+[37m      170 │     })[32m;[37m
+          ╵       [32m^[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS1005: '}' expected.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:174:0:
+[37m      174 │ [32m[37m
+          ╵ [32m^[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'createEpisodeForMovie' does not exist on type 'AdminService'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/admin/admin.routes.ts:429:17:
+[37m      429 │       ? this.api.[32mcreateEpisodeForMovie[37m(this.selectedContentForEpi...
+          ╵                  [32m~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS7006: Parameter 'created' implicitly has an 'any' type.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/admin/admin.routes.ts:433:13:
+[37m      433 │       next: ([32mcreated[37m) => {
+          ╵              [32m~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'createSource' does not exist on type 'AdminService'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/admin/admin.routes.ts:437:19:
+[37m      437 │           this.api.[32mcreateSource[37m(created.id, {
+          ╵                    [32m~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS7006: Parameter 'err' implicitly has an 'any' type.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/admin/admin.routes.ts:461:14:
+[37m      461 │       error: ([32merr[37m) => (this.error = this.apiError(err, 'Failed to...
+          ╵               [32m~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'deleteEpisode' does not exist on type 'AdminService'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/admin/admin.routes.ts:502:13:
+[37m      502 │     this.api.[32mdeleteEpisode[37m(episodeId).subscribe({
+          ╵              [32m~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'getEpisodeSources' does not exist on type 'AdminService'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/admin/admin.routes.ts:527:13:
+[37m      527 │     this.api.[32mgetEpisodeSources[37m(episodeId).subscribe({
+          ╵              [32m~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS7006: Parameter 'sources' implicitly has an 'any' type.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/admin/admin.routes.ts:528:13:
+[37m      528 │       next: ([32msources[37m) => {
+          ╵              [32m~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'createSource' does not exist on type 'AdminService'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/admin/admin.routes.ts:543:13:
+[37m      543 │     this.api.[32mcreateSource[37m(this.selectedEpisodeForSources.id, {
+          ╵              [32m~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS7006: Parameter 'err' implicitly has an 'any' type.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/admin/admin.routes.ts:564:14:
+[37m      564 │       error: ([32merr[37m) => (this.error = this.apiError(err, 'Failed to...
+          ╵               [32m~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'updateSource' does not exist on type 'AdminService'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/admin/admin.routes.ts:569:13:
+[37m      569 │     this.api.[32mupdateSource[37m(source.id, {
+          ╵              [32m~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'deleteSource' does not exist on type 'AdminService'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/admin/admin.routes.ts:587:13:
+[37m      587 │     this.api.[32mdeleteSource[37m(sourceId).subscribe({
+          ╵              [32m~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'reorderSources' does not exist on type 'AdminService'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/admin/admin.routes.ts:611:13:
+[37m      611 │     this.api.[32mreorderSources[37m(this.selectedEpisodeForSources.id, or...
+          ╵              [32m~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mUnexpected "]"[0m
+
+    src/app/core/services/admin.service.ts:55:32:
+[37m      55 │         Observable < ApiEpisode[[32m][37m > {
+         ╵                                 [32m^[0m
+
+[39m[22m
+Watch mode enabled. Watching for file changes...
+[33m>[39m Changes detected. Rebuilding...
+[32m√[39m Changes detected. Rebuilding...
+Application bundle generation failed. [0.793 seconds] - 2026-09-25T17:55:59.109Z
+
+[1m[31m[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2554: Expected 2 arguments, but got 4.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/admin/admin.routes.ts:480:61:
+[37m      480 │ ...Id, urls, [32mthis.bulkPlayerName.trim() || 'Vidmoly', this.bulkEm[37m...
+          ╵              [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+[39m[22m
+[33m>[39m Changes detected. Rebuilding...
+[32m√[39m Changes detected. Rebuilding...
+Application bundle generation failed. [0.655 seconds] - 2026-09-25T17:56:20.021Z
+
+[1m[31m[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2554: Expected 2 arguments, but got 4.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/admin/admin.routes.ts:480:61:
+[37m      480 │ ...Id, urls, [32mthis.bulkPlayerName.trim() || 'Vidmoly', this.bulkEm[37m...
+          ╵              [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+[39m[22m
+[33m>[39m Changes detected. Rebuilding...
+[32m√[39m Changes detected. Rebuilding...
+Application bundle generation failed. [0.651 seconds] - 2026-09-25T17:56:53.725Z
+
+[1m[31m[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2554: Expected 2 arguments, but got 4.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/admin/admin.routes.ts:480:61:
+[37m      480 │ ...Id, urls, [32mthis.bulkPlayerName.trim() || 'Vidmoly', this.bulkEm[37m...
+          ╵              [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+[39m[22m
+[33m>[39m Changes detected. Rebuilding...
+[32m√[39m Changes detected. Rebuilding...
+[1mInitial chunk files[22m[2m | [22m[1mNames[22m          [2m | [22m [1mRaw size[22m
+[32mmain.js[39m            [2m | [22m[2mmain[22m           [2m | [22m  [36m5.82 kB[39m[2m | [22m
+[32mchunk-2ALRAJ5I.js[39m  [2m | [22m[2m-[22m              [2m | [22m  [36m4.64 kB[39m[2m | [22m
+[32mstyles.css[39m         [2m | [22m[2mstyles[22m         [2m | [22m  [36m2.14 kB[39m[2m | [22m
+
+[1m [22m                  [2m | [22m[1mInitial total[22m  [2m | [22m [1m12.60 kB[22m
+
+[1mLazy chunk files[22m   [2m | [22m[1mNames[22m          [2m | [22m [1mRaw size[22m
+[32mchunk-XFMVOBBX.js[39m  [2m | [22m[2mpages-component[22m[2m | [22m[36m220.74 kB[39m[2m | [22m
+[32mchunk-RG3JNB5C.js[39m  [2m | [22m[2madmin-routes[22m   [2m | [22m[36m162.62 kB[39m[2m | [22m
+[32mchunk-P557IEAN.js[39m  [2m | [22m[2m-[22m              [2m | [22m [36m28.60 kB[39m[2m | [22m
+[32mchunk-CKE7ZDXP.js[39m  [2m | [22m[2mhome-component[22m [2m | [22m [36m27.49 kB[39m[2m | [22m
+[32mchunk-KWABULTQ.js[39m  [2m | [22m[2m-[22m              [2m | [22m  [36m6.55 kB[39m[2m | [22m
+
+Application bundle generation complete. [0.415 seconds] - 2026-09-25T17:58:11.257Z
+
+NOTE: Raw file sizes do not reflect development server per-request transformations.
+[2m11:28:11 pm[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m Re-optimizing dependencies because vite config has changed
+  [32m➜[39m  [1mLocal[22m:   [36mhttp://localhost:[1m4200[22m/[39m
+[33m>[39m Changes detected. Rebuilding...
+[32m√[39m Changes detected. Rebuilding...
+[1mInitial chunk files[22m[2m | [22m[1mNames[22m       [2m | [22m [1mRaw size[22m
+[32mmain.js[39m            [2m | [22m[2mmain[22m        [2m | [22m  [36m5.82 kB[39m[2m | [22m
+
+[1mLazy chunk files[22m   [2m | [22m[1mNames[22m       [2m | [22m [1mRaw size[22m
+[32mchunk-HJ35XBVN.js[39m  [2m | [22m[2madmin-routes[22m[2m | [22m[36m162.65 kB[39m[2m | [22m
+
+Application bundle generation complete. [0.599 seconds] - 2026-09-25T17:58:43.262Z
+
+Page reload sent to client(s).
+[33m>[39m Changes detected. Rebuilding...
+[32m√[39m Changes detected. Rebuilding...
+[1mInitial chunk files[22m[2m | [22m[1mNames[22m       [2m | [22m [1mRaw size[22m
+[32mmain.js[39m            [2m | [22m[2mmain[22m        [2m | [22m  [36m5.82 kB[39m[2m | [22m
+
+[1mLazy chunk files[22m   [2m | [22m[1mNames[22m       [2m | [22m [1mRaw size[22m
+[32mchunk-DJMA2NY3.js[39m  [2m | [22m[2madmin-routes[22m[2m | [22m[36m162.87 kB[39m[2m | [22m
+
+Application bundle generation complete. [0.614 seconds] - 2026-09-25T17:58:58.444Z
+
+Page reload sent to client(s).
+[33m>[39m Changes detected. Rebuilding...
+[32m√[39m Changes detected. Rebuilding...
+Application bundle generation failed. [0.503 seconds] - 2026-09-25T17:59:12.394Z
+
+[1m[31m[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2304: Cannot find name 'BulkEpisodeItem'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/admin/admin.routes.ts:528:17:
+[37m      528 │     const items: [32mBulkEpisodeItem[37m[] = [];
+          ╵                  [32m~~~~~~~~~~~~~~~[0m
+
+[39m[22m
+[33m>[39m Changes detected. Rebuilding...
+[32m√[39m Changes detected. Rebuilding...
+[1mInitial chunk files[22m[2m | [22m[1mNames[22m          [2m | [22m [1mRaw size[22m
+[32mmain.js[39m            [2m | [22m[2mmain[22m           [2m | [22m  [36m5.82 kB[39m[2m | [22m
+[32mchunk-2ALRAJ5I.js[39m  [2m | [22m[2m-[22m              [2m | [22m  [36m4.64 kB[39m[2m | [22m
+[32mstyles.css[39m         [2m | [22m[2mstyles[22m         [2m | [22m  [36m2.14 kB[39m[2m | [22m
+
+[1m [22m                  [2m | [22m[1mInitial total[22m  [2m | [22m [1m12.60 kB[22m
+
+[1mLazy chunk files[22m   [2m | [22m[1mNames[22m          [2m | [22m [1mRaw size[22m
+[32mchunk-XFMVOBBX.js[39m  [2m | [22m[2mpages-component[22m[2m | [22m[36m220.74 kB[39m[2m | [22m
+[32mchunk-UXAPUYZJ.js[39m  [2m | [22m[2madmin-routes[22m   [2m | [22m[36m164.55 kB[39m[2m | [22m
+[32mchunk-P557IEAN.js[39m  [2m | [22m[2m-[22m              [2m | [22m [36m28.60 kB[39m[2m | [22m
+[32mchunk-CKE7ZDXP.js[39m  [2m | [22m[2mhome-component[22m [2m | [22m [36m27.49 kB[39m[2m | [22m
+[32mchunk-KWABULTQ.js[39m  [2m | [22m[2m-[22m              [2m | [22m  [36m6.55 kB[39m[2m | [22m
+
+Application bundle generation complete. [0.522 seconds] - 2026-09-25T17:59:37.134Z
+
+Page reload sent to client(s).
+[33m>[39m Changes detected. Rebuilding...
+[32m√[39m Changes detected. Rebuilding...
+Application bundle generation failed. [1.012 seconds] - 2026-09-25T18:01:12.574Z
+
+[1m[31m[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2663: Cannot find name 'bulkCreateEpisodes'. Did you mean the instance member 'this.bulkCreateEpisodes'?[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:135:2:
+[37m      135 │   [32mbulkCreateEpisodes[37m(seasonId: string, payload: BulkEpisodeReques...
+          ╵   [32m~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS1005: ',' expected.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:135:29:
+[37m      135 │   bulkCreateEpisodes(seasonId[32m:[37m string, payload: BulkEpisodeReques...
+          ╵                              [32m^[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2693: 'string' only refers to a type, but is being used as a value here.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:135:31:
+[37m      135 │   bulkCreateEpisodes(seasonId: [32mstring[37m, payload: BulkEpisodeReques...
+          ╵                                [32m~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2304: Cannot find name 'payload'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:135:39:
+[37m      135 │ ...eEpisodes(seasonId: string, [32mpayload[37m: BulkEpisodeRequest): Obse...
+          ╵                                [32m~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS1005: ',' expected.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:135:46:
+[37m      135 │ ...sodes(seasonId: string, payload[32m:[37m BulkEpisodeRequest): Observab...
+          ╵                                   [32m^[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2693: 'BulkEpisodeRequest' only refers to a type, but is being used as a value here.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:135:48:
+[37m      135 │ ...nId: string, payload: [32mBulkEpisodeRequest[37m): Observable<ApiEpiso...
+          ╵                          [32m~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS1005: ';' expected.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:135:67:
+[37m      135 │ ... string, payload: BulkEpisodeRequest)[32m:[37m Observable<ApiEpisode[]> {
+          ╵                                         [32m^[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2365: Operator '>' cannot be applied to types 'boolean' and '{ return: Observable<ApiEpisode[]>; }'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:135:69:
+[37m      135 │ ... string, payload: BulkEpisodeRequest): [32mObservable<ApiEpisode[]> {[37m
+          ╵                                           [32m~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2693: 'ApiEpisode' only refers to a type, but is being used as a value here.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:135:80:
+[37m      135 │ ... string, payload: BulkEpisodeRequest): Observable<[32mApiEpisode[37m[]> {
+          ╵                                                      [32m~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS1011: An element access expression should take an argument.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:135:91:
+[37m      135 │ ... string, payload: BulkEpisodeRequest): Observable<ApiEpisode[[32m[37m]> {
+          ╵                                                                 [32m^[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS1005: ':' expected.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:136:11:
+[37m      136 │     return [32mthis[37m.http.post<ApiEpisode[]>(`${API_BASE_URL}/api/admi...
+          ╵            [32m~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2304: Cannot find name 'payload'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:136:108:
+[37m      136 │ ...URL}/api/admin/seasons/${seasonId}/episodes/bulk-urls`, [32mpayload[37m);
+          ╵                                                            [32m~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS1005: ',' expected.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:136:116:
+[37m      136 │ ...URL}/api/admin/seasons/${seasonId}/episodes/bulk-urls`, payload)[32m;[37m
+          ╵                                                                    [32m^[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2304: Cannot find name 'createEpisodeForMovie'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:139:2:
+[37m      139 │   [32mcreateEpisodeForMovie[37m(contentId: string, value: SaveEpisode): O...
+          ╵   [32m~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2304: Cannot find name 'contentId'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:139:24:
+[37m      139 │   createEpisodeForMovie([32mcontentId[37m: string, value: SaveEpisode): O...
+          ╵                         [32m~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS1005: ',' expected.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:139:33:
+[37m      139 │   createEpisodeForMovie(contentId[32m:[37m string, value: SaveEpisode): O...
+          ╵                                  [32m^[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2693: 'string' only refers to a type, but is being used as a value here.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:139:35:
+[37m      139 │ ...eEpisodeForMovie(contentId: [32mstring[37m, value: SaveEpisode): Obser...
+          ╵                                [32m~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2304: Cannot find name 'value'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:139:43:
+[37m      139 │ ...eForMovie(contentId: string, [32mvalue[37m: SaveEpisode): Observable<{...
+          ╵                                 [32m~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS1005: ',' expected.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:139:48:
+[37m      139 │ ...rMovie(contentId: string, value[32m:[37m SaveEpisode): Observable<{ id...
+          ╵                                   [32m^[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2693: 'SaveEpisode' only refers to a type, but is being used as a value here.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:139:50:
+[37m      139 │ ...contentId: string, value: [32mSaveEpisode[37m): Observable<{ id: strin...
+          ╵                              [32m~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS1005: ';' expected.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:139:62:
+[37m      139 │ ...tentId: string, value: SaveEpisode)[32m:[37m Observable<{ id: string }> {
+          ╵                                       [32m^[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2365: Operator '<' cannot be applied to types 'typeof Observable' and '{ id: any; }'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:139:64:
+[37m      139 │ ...tentId: string, value: SaveEpisode): [32mObservable<{ id: string }[37m> {
+          ╵                                         [32m~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2365: Operator '>' cannot be applied to types 'boolean' and '{ return: Observable<{ id: string; }>; }'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:139:64:
+[37m      139 │ ...tentId: string, value: SaveEpisode): [32mObservable<{ id: string }> {[37m
+          ╵                                         [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2693: 'string' only refers to a type, but is being used as a value here.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:139:81:
+[37m      139 │ ...tentId: string, value: SaveEpisode): Observable<{ id: [32mstring[37m }> {
+          ╵                                                          [32m~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS1005: ':' expected.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:140:11:
+[37m      140 │     return [32mthis[37m.http.post<{ id: string }>(`${API_BASE_URL}/api/ad...
+          ╵            [32m~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2304: Cannot find name 'contentId'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:140:79:
+[37m      140 │ ...${API_BASE_URL}/api/admin/content/${[32mcontentId[37m}/episodes`, value);
+          ╵                                        [32m~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2304: Cannot find name 'value'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:140:101:
+[37m      140 │ ...${API_BASE_URL}/api/admin/content/${contentId}/episodes`, [32mvalue[37m);
+          ╵                                                              [32m~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS1005: ',' expected.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:140:107:
+[37m      140 │ ...${API_BASE_URL}/api/admin/content/${contentId}/episodes`, value)[32m;[37m
+          ╵                                                                    [32m^[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2304: Cannot find name 'updateEpisode'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:143:2:
+[37m      143 │   [32mupdateEpisode[37m(id: string, value: SaveEpisode): Observable<void> {
+          ╵   [32m~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2304: Cannot find name 'id'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:143:16:
+[37m      143 │   updateEpisode([32mid[37m: string, value: SaveEpisode): Observable<void> {
+          ╵                 [32m~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS1005: ',' expected.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:143:18:
+[37m      143 │   updateEpisode(id[32m:[37m string, value: SaveEpisode): Observable<void> {
+          ╵                   [32m^[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2693: 'string' only refers to a type, but is being used as a value here.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:143:20:
+[37m      143 │   updateEpisode(id: [32mstring[37m, value: SaveEpisode): Observable<void> {
+          ╵                     [32m~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2304: Cannot find name 'value'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:143:28:
+[37m      143 │   updateEpisode(id: string, [32mvalue[37m: SaveEpisode): Observable<void> {
+          ╵                             [32m~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS1005: ',' expected.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:143:33:
+[37m      143 │   updateEpisode(id: string, value[32m:[37m SaveEpisode): Observable<void> {
+          ╵                                  [32m^[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2693: 'SaveEpisode' only refers to a type, but is being used as a value here.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:143:35:
+[37m      143 │   updateEpisode(id: string, value: [32mSaveEpisode[37m): Observable<void> {
+          ╵                                    [32m~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS1005: ';' expected.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:143:47:
+[37m      143 │   updateEpisode(id: string, value: SaveEpisode)[32m:[37m Observable<void> {
+          ╵                                                [32m^[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2365: Operator '>' cannot be applied to types 'boolean' and '{ return: Observable<void>; }'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:143:49:
+[37m      143 │   updateEpisode(id: string, value: SaveEpisode): [32mObservable<void> {[37m
+          ╵                                                  [32m~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2532: Object is possibly 'undefined'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:143:60:
+[37m      143 │   updateEpisode(id: string, value: SaveEpisode): Observable<[32mvoid[37m> {
+          ╵                                                             [32m~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS1109: Expression expected.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:143:64:
+[37m      143 │   updateEpisode(id: string, value: SaveEpisode): Observable<void[32m>[37m {
+          ╵                                                                 [32m^[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS1005: ':' expected.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:144:11:
+[37m      144 │     return [32mthis[37m.http.put<void>(`${API_BASE_URL}/api/admin/episode...
+          ╵            [32m~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2304: Cannot find name 'id'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:144:69:
+[37m      144 │ ...ttp.put<void>(`${API_BASE_URL}/api/admin/episodes/${[32mid[37m}`, value);
+          ╵                                                        [32m~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2304: Cannot find name 'value'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:144:75:
+[37m      144 │ ...ttp.put<void>(`${API_BASE_URL}/api/admin/episodes/${id}`, [32mvalue[37m);
+          ╵                                                              [32m~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS1005: ',' expected.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:144:81:
+[37m      144 │ ...ttp.put<void>(`${API_BASE_URL}/api/admin/episodes/${id}`, value)[32m;[37m
+          ╵                                                                    [32m^[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2304: Cannot find name 'deleteEpisode'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:147:2:
+[37m      147 │   [32mdeleteEpisode[37m(id: string): Observable<void> {
+          ╵   [32m~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2304: Cannot find name 'id'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:147:16:
+[37m      147 │   deleteEpisode([32mid[37m: string): Observable<void> {
+          ╵                 [32m~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS1005: ',' expected.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:147:18:
+[37m      147 │   deleteEpisode(id[32m:[37m string): Observable<void> {
+          ╵                   [32m^[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2693: 'string' only refers to a type, but is being used as a value here.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:147:20:
+[37m      147 │   deleteEpisode(id: [32mstring[37m): Observable<void> {
+          ╵                     [32m~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS1005: ';' expected.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:147:27:
+[37m      147 │   deleteEpisode(id: string)[32m:[37m Observable<void> {
+          ╵                            [32m^[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2365: Operator '>' cannot be applied to types 'boolean' and '{ return: Observable<void>; }'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:147:29:
+[37m      147 │   deleteEpisode(id: string): [32mObservable<void> {[37m
+          ╵                              [32m~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2532: Object is possibly 'undefined'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:147:40:
+[37m      147 │   deleteEpisode(id: string): Observable<[32mvoid[37m> {
+          ╵                                         [32m~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS1109: Expression expected.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:147:44:
+[37m      147 │   deleteEpisode(id: string): Observable<void[32m>[37m {
+          ╵                                             [32m^[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS1005: ':' expected.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:148:11:
+[37m      148 │     return [32mthis[37m.http.delete<void>(`${API_BASE_URL}/api/admin/epis...
+          ╵            [32m~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2304: Cannot find name 'id'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:148:72:
+[37m      148 │ ...is.http.delete<void>(`${API_BASE_URL}/api/admin/episodes/${[32mid[37m}`);
+          ╵                                                               [32m~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS1005: ',' expected.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:148:77:
+[37m      148 │ ...is.http.delete<void>(`${API_BASE_URL}/api/admin/episodes/${id}`)[32m;[37m
+          ╵                                                                    [32m^[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2304: Cannot find name 'getEpisodeSources'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:151:2:
+[37m      151 │   [32mgetEpisodeSources[37m(episodeId: string): Observable<AdminVideoSour...
+          ╵   [32m~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2304: Cannot find name 'episodeId'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:151:20:
+[37m      151 │   getEpisodeSources([32mepisodeId[37m: string): Observable<AdminVideoSour...
+          ╵                     [32m~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS1005: ',' expected.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:151:29:
+[37m      151 │   getEpisodeSources(episodeId[32m:[37m string): Observable<AdminVideoSour...
+          ╵                              [32m^[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2693: 'string' only refers to a type, but is being used as a value here.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:151:31:
+[37m      151 │   getEpisodeSources(episodeId: [32mstring[37m): Observable<AdminVideoSour...
+          ╵                                [32m~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS1005: ';' expected.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:151:38:
+[37m      151 │ ...isodeSources(episodeId: string)[32m:[37m Observable<AdminVideoSource[]> {
+          ╵                                   [32m^[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2365: Operator '>' cannot be applied to types 'boolean' and '{ return: Observable<AdminVideoSource[]>; }'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:151:40:
+[37m      151 │ ...isodeSources(episodeId: string): [32mObservable<AdminVideoSource[]> {[37m
+          ╵                                     [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2693: 'AdminVideoSource' only refers to a type, but is being used as a value here.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:151:51:
+[37m      151 │ ...isodeSources(episodeId: string): Observable<[32mAdminVideoSource[37m[]> {
+          ╵                                                [32m~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS1011: An element access expression should take an argument.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:151:68:
+[37m      151 │ ...isodeSources(episodeId: string): Observable<AdminVideoSource[[32m[37m]> {
+          ╵                                                                 [32m^[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS1005: ':' expected.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:152:11:
+[37m      152 │     return [32mthis[37m.http.get<AdminVideoSource[]>(`${API_BASE_URL}/api...
+          ╵            [32m~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2304: Cannot find name 'episodeId'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:152:83:
+[37m      152 │ ...ce[]>(`${API_BASE_URL}/api/admin/episodes/${[32mepisodeId[37m}/sources`);
+          ╵                                                [32m~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS1005: ',' expected.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:152:103:
+[37m      152 │ ...ce[]>(`${API_BASE_URL}/api/admin/episodes/${episodeId}/sources`)[32m;[37m
+          ╵                                                                    [32m^[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2304: Cannot find name 'createSource'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:155:2:
+[37m      155 │   [32mcreateSource[37m(episodeId: string, value: SaveVideoSource): Observ...
+          ╵   [32m~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2304: Cannot find name 'episodeId'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:155:15:
+[37m      155 │   createSource([32mepisodeId[37m: string, value: SaveVideoSource): Observ...
+          ╵                [32m~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS1005: ',' expected.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:155:24:
+[37m      155 │   createSource(episodeId[32m:[37m string, value: SaveVideoSource): Observ...
+          ╵                         [32m^[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2693: 'string' only refers to a type, but is being used as a value here.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:155:26:
+[37m      155 │   createSource(episodeId: [32mstring[37m, value: SaveVideoSource): Observ...
+          ╵                           [32m~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2304: Cannot find name 'value'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:155:34:
+[37m      155 │ ...ateSource(episodeId: string, [32mvalue[37m: SaveVideoSource): Observab...
+          ╵                                 [32m~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS1005: ',' expected.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:155:39:
+[37m      155 │ ...Source(episodeId: string, value[32m:[37m SaveVideoSource): Observable<...
+          ╵                                   [32m^[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2693: 'SaveVideoSource' only refers to a type, but is being used as a value here.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:155:41:
+[37m      155 │ ...isodeId: string, value: [32mSaveVideoSource[37m): Observable<AdminVide...
+          ╵                            [32m~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS1005: ';' expected.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:155:57:
+[37m      155 │ ...: string, value: SaveVideoSource)[32m:[37m Observable<AdminVideoSource> {
+          ╵                                     [32m^[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2365: Operator '>' cannot be applied to types 'boolean' and '{ return: Observable<AdminVideoSource>; }'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:155:59:
+[37m      155 │ ...: string, value: SaveVideoSource): [32mObservable<AdminVideoSource> {[37m
+          ╵                                       [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2693: 'AdminVideoSource' only refers to a type, but is being used as a value here.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:155:70:
+[37m      155 │ ...: string, value: SaveVideoSource): Observable<[32mAdminVideoSource[37m> {
+          ╵                                                  [32m~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS1005: ':' expected.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:156:11:
+[37m      156 │     return [32mthis[37m.http.post<AdminVideoSource>(`${API_BASE_URL}/api/...
+          ╵            [32m~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2304: Cannot find name 'episodeId'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:156:82:
+[37m      156 │ ...${API_BASE_URL}/api/admin/episodes/${[32mepisodeId[37m}/sources`, value);
+          ╵                                         [32m~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2304: Cannot find name 'value'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:156:103:
+[37m      156 │ ...${API_BASE_URL}/api/admin/episodes/${episodeId}/sources`, [32mvalue[37m);
+          ╵                                                              [32m~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS1005: ',' expected.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:156:109:
+[37m      156 │ ...${API_BASE_URL}/api/admin/episodes/${episodeId}/sources`, value)[32m;[37m
+          ╵                                                                    [32m^[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2304: Cannot find name 'updateSource'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:159:2:
+[37m      159 │   [32mupdateSource[37m(id: string, value: SaveVideoSource): Observable<vo...
+          ╵   [32m~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2304: Cannot find name 'id'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:159:15:
+[37m      159 │   updateSource([32mid[37m: string, value: SaveVideoSource): Observable<vo...
+          ╵                [32m~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS1005: ',' expected.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:159:17:
+[37m      159 │   updateSource(id[32m:[37m string, value: SaveVideoSource): Observable<vo...
+          ╵                  [32m^[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2693: 'string' only refers to a type, but is being used as a value here.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:159:19:
+[37m      159 │   updateSource(id: [32mstring[37m, value: SaveVideoSource): Observable<vo...
+          ╵                    [32m~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2304: Cannot find name 'value'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:159:27:
+[37m      159 │   updateSource(id: string, [32mvalue[37m: SaveVideoSource): Observable<vo...
+          ╵                            [32m~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS1005: ',' expected.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:159:32:
+[37m      159 │   updateSource(id: string, value[32m:[37m SaveVideoSource): Observable<vo...
+          ╵                                 [32m^[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2693: 'SaveVideoSource' only refers to a type, but is being used as a value here.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:159:34:
+[37m      159 │ ...ateSource(id: string, value: [32mSaveVideoSource[37m): Observable<void> {
+          ╵                                 [32m~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS1005: ';' expected.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:159:50:
+[37m      159 │ ...ateSource(id: string, value: SaveVideoSource)[32m:[37m Observable<void> {
+          ╵                                                 [32m^[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2365: Operator '>' cannot be applied to types 'boolean' and '{ return: Observable<void>; }'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:159:52:
+[37m      159 │ ...ateSource(id: string, value: SaveVideoSource): [32mObservable<void> {[37m
+          ╵                                                   [32m~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2532: Object is possibly 'undefined'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:159:63:
+[37m      159 │ ...ateSource(id: string, value: SaveVideoSource): Observable<[32mvoid[37m> {
+          ╵                                                              [32m~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS1109: Expression expected.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:159:67:
+[37m      159 │ ...ateSource(id: string, value: SaveVideoSource): Observable<void[32m>[37m {
+          ╵                                                                  [32m^[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS1005: ':' expected.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:160:11:
+[37m      160 │     return [32mthis[37m.http.put<void>(`${API_BASE_URL}/api/admin/sources...
+          ╵            [32m~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2304: Cannot find name 'id'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:160:68:
+[37m      160 │ ...http.put<void>(`${API_BASE_URL}/api/admin/sources/${[32mid[37m}`, value);
+          ╵                                                        [32m~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2304: Cannot find name 'value'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:160:74:
+[37m      160 │ ...http.put<void>(`${API_BASE_URL}/api/admin/sources/${id}`, [32mvalue[37m);
+          ╵                                                              [32m~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS1005: ',' expected.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:160:80:
+[37m      160 │ ...http.put<void>(`${API_BASE_URL}/api/admin/sources/${id}`, value)[32m;[37m
+          ╵                                                                    [32m^[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2304: Cannot find name 'deleteSource'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:163:2:
+[37m      163 │   [32mdeleteSource[37m(id: string): Observable<void> {
+          ╵   [32m~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2304: Cannot find name 'id'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:163:15:
+[37m      163 │   deleteSource([32mid[37m: string): Observable<void> {
+          ╵                [32m~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS1005: ',' expected.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:163:17:
+[37m      163 │   deleteSource(id[32m:[37m string): Observable<void> {
+          ╵                  [32m^[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2693: 'string' only refers to a type, but is being used as a value here.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:163:19:
+[37m      163 │   deleteSource(id: [32mstring[37m): Observable<void> {
+          ╵                    [32m~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS1005: ';' expected.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:163:26:
+[37m      163 │   deleteSource(id: string)[32m:[37m Observable<void> {
+          ╵                           [32m^[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2365: Operator '>' cannot be applied to types 'boolean' and '{ return: Observable<void>; }'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:163:28:
+[37m      163 │   deleteSource(id: string): [32mObservable<void> {[37m
+          ╵                             [32m~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2532: Object is possibly 'undefined'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:163:39:
+[37m      163 │   deleteSource(id: string): Observable<[32mvoid[37m> {
+          ╵                                        [32m~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS1109: Expression expected.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:163:43:
+[37m      163 │   deleteSource(id: string): Observable<void[32m>[37m {
+          ╵                                            [32m^[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS1005: ':' expected.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:164:11:
+[37m      164 │     return [32mthis[37m.http.delete<void>(`${API_BASE_URL}/api/admin/sour...
+          ╵            [32m~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2304: Cannot find name 'id'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:164:71:
+[37m      164 │ ...his.http.delete<void>(`${API_BASE_URL}/api/admin/sources/${[32mid[37m}`);
+          ╵                                                               [32m~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS1005: ',' expected.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:164:76:
+[37m      164 │ ...his.http.delete<void>(`${API_BASE_URL}/api/admin/sources/${id}`)[32m;[37m
+          ╵                                                                    [32m^[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2304: Cannot find name 'reorderSources'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:167:2:
+[37m      167 │   [32mreorderSources[37m(episodeId: string, orderedSourceIds: string[]): ...
+          ╵   [32m~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2304: Cannot find name 'episodeId'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:167:17:
+[37m      167 │   reorderSources([32mepisodeId[37m: string, orderedSourceIds: string[]): ...
+          ╵                  [32m~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS1005: ',' expected.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:167:26:
+[37m      167 │   reorderSources(episodeId[32m:[37m string, orderedSourceIds: string[]): ...
+          ╵                           [32m^[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2693: 'string' only refers to a type, but is being used as a value here.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:167:28:
+[37m      167 │   reorderSources(episodeId: [32mstring[37m, orderedSourceIds: string[]): ...
+          ╵                             [32m~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2304: Cannot find name 'orderedSourceIds'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:167:36:
+[37m      167 │ ...ces(episodeId: string, [32morderedSourceIds[37m: string[]): Observable...
+          ╵                           [32m~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS1005: ',' expected.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:167:52:
+[37m      167 │ ...pisodeId: string, orderedSourceIds[32m:[37m string[]): Observable<void> {
+          ╵                                      [32m^[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2693: 'string' only refers to a type, but is being used as a value here.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:167:54:
+[37m      167 │ ...pisodeId: string, orderedSourceIds: [32mstring[37m[]): Observable<void> {
+          ╵                                        [32m~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS1011: An element access expression should take an argument.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:167:61:
+[37m      167 │ ...pisodeId: string, orderedSourceIds: string[[32m[37m]): Observable<void> {
+          ╵                                               [32m^[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS1005: ';' expected.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:167:63:
+[37m      167 │ ...pisodeId: string, orderedSourceIds: string[])[32m:[37m Observable<void> {
+          ╵                                                 [32m^[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2365: Operator '>' cannot be applied to types 'boolean' and '{ return: Observable<void>; }'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:167:65:
+[37m      167 │ ...pisodeId: string, orderedSourceIds: string[]): [32mObservable<void> {[37m
+          ╵                                                   [32m~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2532: Object is possibly 'undefined'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:167:76:
+[37m      167 │ ...pisodeId: string, orderedSourceIds: string[]): Observable<[32mvoid[37m> {
+          ╵                                                              [32m~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS1109: Expression expected.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:167:80:
+[37m      167 │ ...pisodeId: string, orderedSourceIds: string[]): Observable<void[32m>[37m {
+          ╵                                                                  [32m^[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS1005: ':' expected.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:168:11:
+[37m      168 │     return [32mthis[37m.http.put<void>(`${API_BASE_URL}/api/admin/episode...
+          ╵            [32m~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2304: Cannot find name 'episodeId'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:168:69:
+[37m      168 │ ...API_BASE_URL}/api/admin/episodes/${[32mepisodeId[37m}/sources/reorder`, {
+          ╵                                       [32m~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS18004: No value exists in scope for the shorthand property 'orderedSourceIds'. Either declare one or provide an initializer.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:169:6:
+[37m      169 │       [32morderedSourceIds[37m,
+          ╵       [32m~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS1005: ',' expected.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:170:6:
+[37m      170 │     })[32m;[37m
+          ╵       [32m^[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS1005: '}' expected.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/core/services/admin.service.ts:174:0:
+[37m      174 │ [32m[37m
+          ╵ [32m^[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'createEpisodeForMovie' does not exist on type 'AdminService'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/admin/admin.routes.ts:429:17:
+[37m      429 │       ? this.api.[32mcreateEpisodeForMovie[37m(this.selectedContentForEpi...
+          ╵                  [32m~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS7006: Parameter 'created' implicitly has an 'any' type.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/admin/admin.routes.ts:433:13:
+[37m      433 │       next: ([32mcreated[37m) => {
+          ╵              [32m~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'createSource' does not exist on type 'AdminService'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/admin/admin.routes.ts:437:19:
+[37m      437 │           this.api.[32mcreateSource[37m(created.id, {
+          ╵                    [32m~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS7006: Parameter 'err' implicitly has an 'any' type.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/admin/admin.routes.ts:461:14:
+[37m      461 │       error: ([32merr[37m) => (this.error = this.apiError(err, 'Failed to...
+          ╵               [32m~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'deleteEpisode' does not exist on type 'AdminService'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/admin/admin.routes.ts:502:13:
+[37m      502 │     this.api.[32mdeleteEpisode[37m(episodeId).subscribe({
+          ╵              [32m~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'getEpisodeSources' does not exist on type 'AdminService'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/admin/admin.routes.ts:527:13:
+[37m      527 │     this.api.[32mgetEpisodeSources[37m(episodeId).subscribe({
+          ╵              [32m~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS7006: Parameter 'sources' implicitly has an 'any' type.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/admin/admin.routes.ts:528:13:
+[37m      528 │       next: ([32msources[37m) => {
+          ╵              [32m~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'createSource' does not exist on type 'AdminService'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/admin/admin.routes.ts:543:13:
+[37m      543 │     this.api.[32mcreateSource[37m(this.selectedEpisodeForSources.id, {
+          ╵              [32m~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS7006: Parameter 'err' implicitly has an 'any' type.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/admin/admin.routes.ts:564:14:
+[37m      564 │       error: ([32merr[37m) => (this.error = this.apiError(err, 'Failed to...
+          ╵               [32m~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'updateSource' does not exist on type 'AdminService'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/admin/admin.routes.ts:569:13:
+[37m      569 │     this.api.[32mupdateSource[37m(source.id, {
+          ╵              [32m~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'deleteSource' does not exist on type 'AdminService'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/admin/admin.routes.ts:587:13:
+[37m      587 │     this.api.[32mdeleteSource[37m(sourceId).subscribe({
+          ╵              [32m~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'reorderSources' does not exist on type 'AdminService'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/admin/admin.routes.ts:611:13:
+[37m      611 │     this.api.[32mreorderSources[37m(this.selectedEpisodeForSources.id, or...
+          ╵              [32m~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mUnexpected "]"[0m
+
+    src/app/core/services/admin.service.ts:55:32:
+[37m      55 │         Observable < ApiEpisode[[32m][37m > {
+         ╵                                 [32m^[0m
+
+[39m[22m

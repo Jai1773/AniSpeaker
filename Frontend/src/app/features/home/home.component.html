@@ -1,30 +1,59 @@
 <app-nav />
 <main>
-    <section class="hero" [style.background-image]="'url('+featured.backdrop+')'">
-        <div class="shade"></div>
-        <div class="container hero-content"><span class="eyebrow">ANISPEAKER ORIGINAL · {{featured.type}}</span>
-            <h1>{{featured.title}}</h1>
-            <div class="meta">★ {{featured.rating}} · {{featured.year}} · 13+ · {{featured.duration}}</div>
-            <p>{{featured.description}}</p><a class="btn primary" [routerLink]="['/watch',featured.id]">▶ Play Now</a>
-            <a class="btn ghost" routerLink="/watch-later">＋ Watch Later</a>
+  @if (featured) {
+    <section class="hero" [style.background-image]="'url(' + featured.backdrop + ')'">
+      <div class="shade"></div>
+      <div class="container hero-content">
+        <span class="eyebrow">ANISPEAKER ORIGINAL · {{ featured.type }}</span>
+        <h1>{{ featured.title }}</h1>
+        <div class="meta">★ {{ featured.rating }} · {{ featured.year }} · {{ featured.duration }}</div>
+        <p>{{ featured.description }}</p>
+        <div class="hero-actions">
+          <a class="btn primary" [routerLink]="['/watch', featured.slug, 'season-1', 'ep-1']">▶ Play Now</a>
+          <a class="btn ghost" [routerLink]="['/content', featured.slug]">ℹ Details</a>
         </div>
+      </div>
     </section>
+  }
+
+  @if (auth.isLoggedIn && continued.length > 0) {
     <section class="container continue">
-        <div class="head">
-            <h2>Continue Watching</h2><a routerLink="/history">View all →</a>
-        </div>
-        <div class="continue-cards">@for(item of continued;track item.id){<a [routerLink]="['/watch',item.id]"><img
-                    [src]="item.backdrop"><b>{{item.title}}</b><small>Episode 12 · {{item.progress}}%
-                    watched</small><i><em [style.width.%]="item.progress"></em></i></a>}</div>
-    </section><app-row title="Trending Now" [items]="items" /><app-row title="Popular Anime" [items]="anime" /><app-row
-        title="Top Cartoons" [items]="cartoons" /><app-row title="Movies for Tonight" [items]="movies" />
-    <section class="container genres">
-        <h2>Find your mood</h2>
-        <div>@for(genre of genres;track genre){<a routerLink="/browse">{{genre}} <span>→</span></a>}</div>
+      <div class="head">
+        <h2>Continue Watching</h2>
+        <a routerLink="/history">View all →</a>
+      </div>
+      <div class="continue-cards">
+        @for (item of continued; track item.episodeId) {
+          <a [routerLink]="['/watch', item.slug, 'season-' + (item.seasonNumber || 1), 'ep-' + (item.episodeNumber || 1)]">
+            <img [src]="item.image" [alt]="item.title" />
+            <b>{{ item.title }}</b>
+            <small>{{ item.subtitle }}</small>
+            <i><em [style.width.%]="item.progressPercent"></em></i>
+          </a>
+        }
+      </div>
     </section>
-    <section class="container cta"><span class="eyebrow">SOMETHING EXTRAORDINARY AWAITS</span>
-        <h2>Your next adventure is waiting.</h2>
-        <p>Thousands of worlds, one place to discover them.</p><a routerLink="/browse" class="btn primary">Explore
-            AniSpeaker</a>
-    </section>
-</main><app-footer />
+  }
+
+  <app-row title="Trending Now" [items]="items" />
+  <app-row title="Popular Anime" [items]="anime" />
+  <app-row title="Top Cartoons" [items]="cartoons" />
+  <app-row title="Movies for Tonight" [items]="movies" />
+
+  <section class="container genres">
+    <h2>Find your mood</h2>
+    <div>
+      @for (genre of genres; track genre) {
+        <a routerLink="/browse">{{ genre }} <span>→</span></a>
+      }
+    </div>
+  </section>
+
+  <section class="container cta">
+    <span class="eyebrow">SOMETHING EXTRAORDINARY AWAITS</span>
+    <h2>Your next adventure is waiting.</h2>
+    <p>Thousands of anime, cartoons, and movies — ready to watch on AniSpeaker.</p>
+    <a routerLink="/browse" class="btn primary">Explore Catalog</a>
+  </section>
+</main>
+<app-footer />

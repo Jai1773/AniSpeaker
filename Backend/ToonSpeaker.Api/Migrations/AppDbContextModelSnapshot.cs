@@ -267,6 +267,9 @@ namespace ToonSpeaker.Api.Migrations
                     b.Property<Guid>("CategoryId")
                         .HasColumnType("uuid");
 
+                    b.Property<string>("CatalogJson")
+                        .HasColumnType("jsonb");
+
                     b.Property<DateTimeOffset>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
@@ -336,10 +339,6 @@ namespace ToonSpeaker.Api.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("VideoKey")
-                        .IsRequired()
-                        .HasColumnType("text");
-
                     b.HasKey("Id");
 
                     b.HasIndex("SeasonId");
@@ -401,6 +400,47 @@ namespace ToonSpeaker.Api.Migrations
                         .IsUnique();
 
                     b.ToTable("Seasons");
+                });
+
+            modelBuilder.Entity("ToonSpeaker.Api.Domain.VideoSource", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("EpisodeId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("EmbedType")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("PlayerName")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
+
+                    b.Property<string>("Quality")
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)");
+
+                    b.Property<int>("SortOrder")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Url")
+                        .IsRequired()
+                        .HasMaxLength(1000)
+                        .HasColumnType("character varying(1000)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EpisodeId", "SortOrder");
+
+                    b.ToTable("VideoSources");
                 });
 
             modelBuilder.Entity("ToonSpeaker.Api.Domain.WatchHistory", b =>
@@ -558,6 +598,17 @@ namespace ToonSpeaker.Api.Migrations
                     b.Navigation("Content");
                 });
 
+            modelBuilder.Entity("ToonSpeaker.Api.Domain.VideoSource", b =>
+                {
+                    b.HasOne("ToonSpeaker.Api.Domain.Episode", "Episode")
+                        .WithMany("VideoSources")
+                        .HasForeignKey("EpisodeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Episode");
+                });
+
             modelBuilder.Entity("ToonSpeaker.Api.Domain.WatchHistory", b =>
                 {
                     b.HasOne("ToonSpeaker.Api.Domain.Episode", "Episode")
@@ -611,6 +662,11 @@ namespace ToonSpeaker.Api.Migrations
                     b.Navigation("Episodes");
 
                     b.Navigation("Seasons");
+                });
+
+            modelBuilder.Entity("ToonSpeaker.Api.Domain.Episode", b =>
+                {
+                    b.Navigation("VideoSources");
                 });
 
             modelBuilder.Entity("ToonSpeaker.Api.Domain.Season", b =>

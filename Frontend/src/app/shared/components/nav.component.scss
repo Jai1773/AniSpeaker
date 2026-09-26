@@ -16,7 +16,7 @@ header {
 }
 
 .brand span {
-  color: #ff9a3c;
+  color: #FF8C00;
 }
 
 header nav {
@@ -40,7 +40,7 @@ header nav a:hover {
 }
 
 .avatar {
-  font-size: 0.7rem;
+  font-size: 0.75rem;
   background: #df7547;
   border: 2px solid #ffd4a3;
   width: 32px;
@@ -49,6 +49,40 @@ header nav a:hover {
   display: grid;
   place-items: center;
   font-weight: 700;
+  color: #fff;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.admin-badge {
+  background: rgba(255, 154, 60, 0.2);
+  border: 1px solid #ff9a3c;
+  color: #ff9a3c;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  text-decoration: none;
+  &:hover {
+    background: #ff9a3c;
+    color: #111;
+  }
+}
+
+.btn-signin {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #fff;
+  background: #ff9a3c;
+  padding: 6px 14px;
+  border-radius: 6px;
+  text-decoration: none;
+  transition: opacity 0.2s;
+  &:hover {
+    opacity: 0.9;
+  }
 }
 
 .mobile {
@@ -78,6 +112,7 @@ header nav a:hover {
     background: #11131af7;
     justify-content: space-around;
     border-top: 1px solid var(--line);
+    padding-bottom: env(safe-area-inset-bottom);
   }
 
   .mobile a {
