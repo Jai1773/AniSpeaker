@@ -1,18 +1,20 @@
 <app-nav />
 <main>
-  <section class="hero" [style.background-image]="'url(' + featured.backdrop + ')'">
-    <div class="shade"></div>
-    <div class="container hero-content">
-      <span class="eyebrow">ANISPEAKER ORIGINAL · {{ featured.type }}</span>
-      <h1>{{ featured.title }}</h1>
-      <div class="meta">★ {{ featured.rating }} · {{ featured.year }} · {{ featured.duration }}</div>
-      <p>{{ featured.description }}</p>
-      <div class="hero-actions">
-        <a class="btn primary" [routerLink]="['/watch', featured.slug]">▶ Play Now</a>
-        <a class="btn ghost" [routerLink]="['/content', featured.slug]">ℹ Details</a>
+  @if (featured) {
+    <section class="hero" [style.background-image]="'url(' + featured.backdrop + ')'">
+      <div class="shade"></div>
+      <div class="container hero-content">
+        <span class="eyebrow">ANISPEAKER ORIGINAL · {{ featured.type }}</span>
+        <h1>{{ featured.title }}</h1>
+        <div class="meta">★ {{ featured.rating }} · {{ featured.year }} · {{ featured.duration }}</div>
+        <p>{{ featured.description }}</p>
+        <div class="hero-actions">
+          <a class="btn primary" [routerLink]="['/watch', featured.slug, 'season-1', 'ep-1']">▶ Play Now</a>
+          <a class="btn ghost" [routerLink]="['/content', featured.slug]">ℹ Details</a>
+        </div>
       </div>
-    </div>
-  </section>
+    </section>
+  }
 
   @if (continued.length > 0) {
     <section class="container continue">
@@ -22,7 +24,7 @@
       </div>
       <div class="continue-cards">
         @for (item of continued; track item.episodeId) {
-          <a [routerLink]="['/watch', item.slug]" [queryParams]="{ episode: item.episodeId }">
+          <a [routerLink]="['/watch', item.slug, 'season-' + (item.seasonNumber || 1), 'ep-' + (item.episodeNumber || 1)]">
             <img [src]="item.image" [alt]="item.title" />
             <b>{{ item.title }}</b>
             <small>{{ item.subtitle }} · {{ item.progressPercent }}% watched</small>

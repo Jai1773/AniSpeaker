@@ -1,4 +1,4 @@
-# Toon Speaker — Platform Rework Architecture
+# Ani Speaker — Platform Rework Architecture
 
 **Status:** Proposed
 **Scope:** Backend migration (Cloudflare Worker + JSON DB → .NET API + real DB, Dockerized on Render), Admin CMS, Guest-first auth with optional login, Watch Later / Continue Watching.

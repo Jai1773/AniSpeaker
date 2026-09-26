@@ -1,12 +1,14 @@
-import { Component, ElementRef, inject, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, inject, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
-import { Content, Episode, ApiContentType } from '../../models/content.model';
+import { of, map } from 'rxjs';
+import { Content, Episode, ApiContentType, VideoSourceDto } from '../../models/content.model';
 import { ContentService } from '../../core/services/content.service';
 import { AccountService } from '../../core/services/account.service';
 import { AuthService } from '../../core/services/auth.service';
 import { LocalHistoryService } from '../../core/services/local-history.service';
+import { LocalWatchLaterService } from '../../core/services/local-watch-later.service';
 import {
   NavComponent,
   ContentCardComponent,
@@ -18,6 +20,8 @@ const shell = [NavComponent, ContentCardComponent, FooterComponent, RouterLink];
 export interface HistoryViewItem {
   episodeId: string;
   slug: string;
+  seasonNumber?: number;
+  episodeNumber?: number;
   title: string;
   subtitle: string;
   image: string;
@@ -36,10 +40,11 @@ export interface HistoryViewItem {
 export class BrowseComponent implements OnInit {
   private svc = inject(ContentService);
   private route = inject(ActivatedRoute);
+  private changeDetector = inject(ChangeDetectorRef);
 
   type: string | null = null;
-  list: Content[] = [];
-  loading = true;
+  list: Content[] = this.svc.getCachedHome();
+  loading = false;
 
   ngOnInit(): void {
     this.route.paramMap.subscribe((params) => {
@@ -51,24 +56,22 @@ export class BrowseComponent implements OnInit {
         apiType = 'Series';
       }
 
-      this.loading = true;
+      this.list = this.filterItems(this.svc.getCachedHome(), this.type);
       this.svc.browse(apiType).subscribe({
         next: (items) => {
-          if (this.type === 'cartoon' || this.type === 'cartoons') {
-            this.list = items.filter((x) => x.type === 'Cartoon');
-          } else if (this.type === 'anime') {
-            this.list = items.filter((x) => x.type === 'Anime');
-          } else {
-            this.list = items;
-          }
-          this.loading = false;
+          this.list = this.filterItems(items, this.type);
+          this.changeDetector.detectChanges();
         },
-        error: () => {
-          this.list = [];
-          this.loading = false;
-        },
+        error: () => this.changeDetector.detectChanges(),
       });
     });
+  }
+
+  private filterItems(items: Content[], type: string | null): Content[] {
+    if (type === 'movies' || type === 'movie') return items.filter((item) => item.type === 'Movie');
+    if (type === 'anime') return items.filter((item) => item.type === 'Anime');
+    if (type === 'cartoon' || type === 'cartoons') return items.filter((item) => item.type === 'Cartoon');
+    return items;
   }
 }
 
@@ -110,8 +113,10 @@ export class SearchComponent {
 })
 export class DetailComponent implements OnInit {
   private svc = inject(ContentService);
+  private changeDetector = inject(ChangeDetectorRef);
   private account = inject(AccountService);
   private auth = inject(AuthService);
+  private localWatchLater = inject(LocalWatchLaterService);
   private route = inject(ActivatedRoute);
   private router = inject(Router);
 
@@ -125,58 +130,81 @@ export class DetailComponent implements OnInit {
     this.route.paramMap.subscribe((params) => {
       const slug = params.get('slug');
       if (!slug) return;
+      const normalizedSlug = decodeURIComponent(slug);
 
-      this.svc.detail(slug).subscribe({
+      this.svc.detail(normalizedSlug).subscribe({
         next: (result) => {
           this.item = result.item;
           this.episodes = result.episodes;
 
+          try {
+            localStorage.setItem('anispeaker_active_slug', result.item.slug);
+          } catch {}
+
+          this.changeDetector.detectChanges();
+
           // Load related titles
           this.svc.browse().subscribe({
-            next: (items) =>
-              (this.related = items
+            next: (items) => {
+              this.related = items
                 .filter((x) => x.id !== result.item.id && x.slug !== result.item.slug)
-                .slice(0, 6)),
+                .slice(0, 6);
+              this.changeDetector.detectChanges();
+            },
           });
 
-          // Check if saved in Watch Later
+          // Check if saved in Watch Later (check both account and local storage)
+          const inLocal = this.localWatchLater.has(this.item.id) || this.localWatchLater.has(this.item.slug);
           if (this.auth.isLoggedIn) {
             this.account.watchLater().subscribe({
               next: (saved) => {
-                this.isSaved = saved.some((s) => s.id === this.item.id || s.slug === this.item.slug);
+                this.isSaved = (saved || []).some((s) => s.id === this.item.id || s.slug === this.item.slug) || inLocal;
+                this.changeDetector.detectChanges();
+              },
+              error: () => {
+                this.isSaved = inLocal;
+                this.changeDetector.detectChanges();
               },
             });
+          } else {
+            this.isSaved = inLocal;
+            this.changeDetector.detectChanges();
           }
+        },
+        error: () => {
+          this.feedback = 'This title could not be loaded. Please try again.';
+          this.changeDetector.detectChanges();
         },
       });
     });
   }
 
   toggleWatchLater(): void {
-    if (!this.auth.isLoggedIn) {
-      this.router.navigate(['/login']);
-      return;
-    }
-
     if (this.isSaved) {
-      this.account.removeWatchLater(String(this.item.id)).subscribe({
-        next: () => {
-          this.isSaved = false;
-          this.feedback = 'Removed from Watch Later.';
-          setTimeout(() => (this.feedback = ''), 3000);
-        },
-      });
+      if (this.auth.isLoggedIn) {
+        this.account.removeWatchLater(String(this.item.id)).subscribe();
+      }
+      this.localWatchLater.remove(this.item.id);
+      this.localWatchLater.remove(this.item.slug);
+      this.isSaved = false;
+      this.feedback = 'Removed from Watch Later.';
+      this.changeDetector.detectChanges();
+      setTimeout(() => {
+        this.feedback = '';
+        this.changeDetector.detectChanges();
+      }, 3000);
     } else {
-      this.account.addWatchLater(String(this.item.id)).subscribe({
-        next: () => {
-          this.isSaved = true;
-          this.feedback = 'Saved to Watch Later!';
-          setTimeout(() => (this.feedback = ''), 3000);
-        },
-        error: () => {
-          this.feedback = 'Could not save to Watch Later.';
-        },
-      });
+      if (this.auth.isLoggedIn) {
+        this.account.addWatchLater(String(this.item.id)).subscribe();
+      }
+      this.localWatchLater.add(this.item);
+      this.isSaved = true;
+      this.feedback = 'Saved to Watch Later!';
+      this.changeDetector.detectChanges();
+      setTimeout(() => {
+        this.feedback = '';
+        this.changeDetector.detectChanges();
+      }, 3000);
     }
   }
 }
@@ -200,6 +228,7 @@ export class PlayerComponent implements OnInit {
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private sanitizer = inject(DomSanitizer);
+  private changeDetector = inject(ChangeDetectorRef);
 
   item?: Content;
   episodes: Episode[] = [];
@@ -209,41 +238,119 @@ export class PlayerComponent implements OnInit {
   safeVideoUrl: SafeResourceUrl | null = null;
   isEmbedPlayer = false;
 
+  availableSources: VideoSourceDto[] = [];
+  selectedSourceIndex = 0;
+
   loading = true;
   error = '';
   private lastSavedSeconds = 0;
 
   ngOnInit(): void {
     this.route.paramMap.subscribe((params) => {
-      const slug = params.get('id'); // route is /watch/:id
-      if (!slug) return;
+      // Support clean URLs:
+      // /watch/:slug/:seasonSegment/:epSegment
+      // /watch/:slug/:epSegment
+      // /watch/:slug
+      // /watch/:seasonSegment/:epSegment
+      // /watch/:id
+      const seasonSegment = params.get('seasonSegment');
+      const epSegment = params.get('epSegment');
+      let slug = params.get('slug') || params.get('id');
+
+      if (!slug) {
+        slug = this.route.snapshot.queryParamMap.get('slug') ||
+               localStorage.getItem('anispeaker_active_slug') ||
+               '';
+      }
 
       this.loading = true;
       this.error = '';
 
-      this.svc.detail(slug).subscribe({
-        next: (detail) => {
-          this.item = detail.item;
-          this.episodes = detail.episodes;
+      const resolveSlug$ = slug
+        ? of(slug)
+        : this.svc.browse().pipe(
+            map((items) => (items && items.length > 0 ? items[0].slug : ''))
+          );
 
-          // Determine active episode from query param or first episode
-          this.route.queryParamMap.subscribe((queryParams) => {
-            const epId = queryParams.get('episode');
-            const target =
-              this.episodes.find((e) => e.id === epId || String(e.number) === epId) ||
-              this.episodes[0];
+      resolveSlug$.subscribe({
+        next: (targetSlug) => {
+          if (!targetSlug) {
+            this.loading = false;
+            this.error = 'No titles found in catalog.';
+            this.changeDetector.detectChanges();
+            return;
+          }
 
-            if (target) {
-              this.selectEpisode(target, false);
-            } else {
+          const normalizedSlug = decodeURIComponent(targetSlug);
+          try {
+            localStorage.setItem('anispeaker_active_slug', normalizedSlug);
+          } catch {}
+
+          this.svc.detail(normalizedSlug).subscribe({
+            next: (detail) => {
+              this.item = detail.item;
+              this.episodes = detail.episodes;
+              this.changeDetector.detectChanges();
+
+              // Parse season number and episode number from URL segments
+              let targetSeasonNum: number | null = null;
+              let targetEpNum: number | null = null;
+
+              if (seasonSegment) {
+                const sMatch = seasonSegment.match(/\d+/);
+                if (sMatch) targetSeasonNum = parseInt(sMatch[0], 10);
+              }
+              if (epSegment) {
+                const epMatch = epSegment.match(/\d+/);
+                if (epMatch) targetEpNum = parseInt(epMatch[0], 10);
+              }
+
+              let target: Episode | undefined;
+
+              if (targetEpNum !== null) {
+                target = this.episodes.find((e) => {
+                  const matchNum = e.number === targetEpNum;
+                  if (targetSeasonNum !== null) {
+                    return matchNum && (e.seasonNumber || 1) === targetSeasonNum;
+                  }
+                  return matchNum;
+                });
+              }
+
+              if (!target) {
+                const epId = this.route.snapshot.queryParamMap.get('episode');
+                if (epId) {
+                  target = this.episodes.find((e) => e.id === epId || String(e.number) === epId);
+                }
+              }
+
+              if (!target) {
+                target = this.episodes[0];
+              }
+
+              if (target) {
+                // Ensure address bar URL matches /watch/:slug/season-:season/ep-:ep format
+                const sNum = target.seasonNumber || 1;
+                const epNum = target.number;
+                this.router.navigate(['/watch', this.item.slug, `season-${sNum}`, `ep-${epNum}`], { replaceUrl: true });
+                this.selectEpisode(target, false);
+              } else {
+                this.loading = false;
+                this.error = 'No playable episodes found for this title.';
+                this.changeDetector.detectChanges();
+              }
+            },
+            error: () => {
               this.loading = false;
-              this.error = 'No playable episodes found for this title.';
-            }
+              this.error = 'Failed to load title information.';
+              this.changeDetector.detectChanges();
+            },
           });
         },
         error: () => {
           this.loading = false;
           this.error = 'Failed to load title information.';
+          this.changeDetector.detectChanges();
         },
       });
     });
@@ -255,45 +362,81 @@ export class PlayerComponent implements OnInit {
     this.error = '';
 
     if (updateUrl && this.item) {
-      this.router.navigate([], {
-        relativeTo: this.route,
-        queryParams: { episode: episode.id },
-        queryParamsHandling: 'merge',
-      });
+      try {
+        localStorage.setItem('anispeaker_active_slug', this.item.slug);
+      } catch {}
+
+      const sNum = episode.seasonNumber || 1;
+      const epNum = episode.number;
+      // Always navigate to /watch/:slug/season-:season/ep-:ep
+      this.router.navigate(['/watch', this.item.slug, `season-${sNum}`, `ep-${epNum}`]);
     }
 
-    // Call backend playback endpoint for outsourced player or direct video stream URL
+    // Call backend playback endpoint for ordered list of active video sources
     this.svc.playback(episode.id).subscribe({
       next: (playback) => {
         this.loading = false;
-        const rawUrl = playback.videoUrl || episode.videoUrl || '';
+        const sources = playback.sources && playback.sources.length > 0
+          ? playback.sources
+          : playback.videoUrl || episode.videoUrl
+            ? [{ id: 'default', playerName: 'Default Player', url: playback.videoUrl || episode.videoUrl || '', embedType: 'Direct' as const, quality: null, sortOrder: 0 }]
+            : [];
 
-        if (!rawUrl) {
+        this.availableSources = sources;
+        this.selectedSourceIndex = 0;
+
+        if (this.availableSources.length === 0) {
           this.error = 'Video stream is not available for this episode yet.';
+          setTimeout(() => this.changeDetector.detectChanges());
           return;
         }
 
-        this.videoUrl = rawUrl;
-        // Detect if URL is an outsourced embed player (e.g. YouTube, Vimeo, iframe embed link)
-        this.isEmbedPlayer =
-          rawUrl.includes('/embed/') ||
-          rawUrl.includes('player.') ||
-          rawUrl.includes('iframe') ||
-          rawUrl.includes('vidsrc') ||
-          (!rawUrl.endsWith('.mp4') && !rawUrl.endsWith('.webm') && !rawUrl.endsWith('.m3u8') && rawUrl.startsWith('http'));
-
-        if (this.isEmbedPlayer) {
-          this.safeVideoUrl = this.sanitizer.bypassSecurityTrustResourceUrl(rawUrl);
-        }
-
-        // Record initial watch event
-        this.saveProgress(1);
+        this.loadSelectedSource();
+        setTimeout(() => this.changeDetector.detectChanges());
       },
       error: () => {
         this.loading = false;
         this.error = 'Could not load video player. Please try again later.';
+        setTimeout(() => this.changeDetector.detectChanges());
       },
     });
+  }
+
+  loadSelectedSource(): void {
+    const src = this.availableSources[this.selectedSourceIndex];
+    const rawUrl = src?.url || '';
+
+    if (!rawUrl) {
+      this.error = 'Selected video stream is unavailable.';
+      return;
+    }
+
+    this.videoUrl = rawUrl;
+    this.isEmbedPlayer = src.embedType !== 'Direct';
+
+    if (this.isEmbedPlayer) {
+      this.safeVideoUrl = this.sanitizer.bypassSecurityTrustResourceUrl(rawUrl);
+    }
+
+    // Record initial watch event
+    this.saveProgress(1);
+  }
+
+  switchSource(index: number): void {
+    if (index >= 0 && index < this.availableSources.length) {
+      this.selectedSourceIndex = index;
+      this.error = '';
+      this.loadSelectedSource();
+    }
+  }
+
+  onVideoError(): void {
+    if (this.selectedSourceIndex + 1 < this.availableSources.length) {
+      this.selectedSourceIndex++;
+      this.loadSelectedSource();
+    } else {
+      this.error = 'Video playback error. All available servers could not be loaded.';
+    }
   }
 
   onMetadataLoaded(): void {
@@ -328,6 +471,8 @@ export class PlayerComponent implements OnInit {
       this.localHistory.save({
         slug: this.item.slug,
         episodeId: this.currentEpisode.id,
+        seasonNumber: this.currentEpisode.seasonNumber || 1,
+        episodeNumber: this.currentEpisode.number || 1,
         title: `${this.item.title} — Ep. ${this.currentEpisode.number}`,
         image: this.currentEpisode.image || this.item.backdrop,
         progressSeconds,
@@ -351,34 +496,50 @@ export class WatchLaterComponent implements OnInit {
   auth = inject(AuthService);
   private account = inject(AccountService);
   private svc = inject(ContentService);
+  private localWatchLater = inject(LocalWatchLaterService);
+  private changeDetector = inject(ChangeDetectorRef);
 
   items: Content[] = [];
   loading = true;
 
   ngOnInit(): void {
+    const guestItems = this.localWatchLater.list();
+
     if (!this.auth.isLoggedIn) {
+      this.items = guestItems;
       this.loading = false;
+      this.changeDetector.detectChanges();
       return;
     }
 
     this.account.watchLater().subscribe({
       next: (apiItems) => {
-        this.items = apiItems.map((x) => this.svc.toContent(x));
+        const remote = (apiItems || []).map((x) => this.svc.toContent(x));
+        const merged = [...remote];
+        for (const g of guestItems) {
+          if (!merged.some((x) => x.id === g.id || x.slug === g.slug)) {
+            merged.push(g);
+          }
+        }
+        this.items = merged;
         this.loading = false;
+        this.changeDetector.detectChanges();
       },
       error: () => {
-        this.items = [];
+        this.items = guestItems;
         this.loading = false;
+        this.changeDetector.detectChanges();
       },
     });
   }
 
   remove(contentId: string): void {
-    this.account.removeWatchLater(contentId).subscribe({
-      next: () => {
-        this.items = this.items.filter((x) => x.id !== contentId);
-      },
-    });
+    if (this.auth.isLoggedIn) {
+      this.account.removeWatchLater(contentId).subscribe();
+    }
+    this.localWatchLater.remove(contentId);
+    this.items = this.items.filter((x) => x.id !== contentId);
+    this.changeDetector.detectChanges();
   }
 }
 
@@ -395,6 +556,7 @@ export class HistoryComponent implements OnInit {
   auth = inject(AuthService);
   private account = inject(AccountService);
   private localHistory = inject(LocalHistoryService);
+  private changeDetector = inject(ChangeDetectorRef);
 
   items: HistoryViewItem[] = [];
   loading = true;
@@ -403,12 +565,14 @@ export class HistoryComponent implements OnInit {
     if (this.auth.isLoggedIn) {
       this.account.history().subscribe({
         next: (historyList) => {
-          this.items = historyList.map((h) => {
+          this.items = (historyList || []).map((h) => {
             const total = h.episode?.durationSeconds || 1440;
             const pct = Math.min(100, Math.max(0, Math.round((h.progressSeconds / total) * 100)));
             return {
               episodeId: h.episode?.id || '',
               slug: h.content?.slug || '',
+              seasonNumber: h.episode?.seasonNumber || 1,
+              episodeNumber: h.episode?.number || 1,
               title: h.content?.title || 'AniSpeaker Content',
               subtitle: `Episode ${h.episode?.number || 1}: ${h.episode?.title || ''}`,
               image: h.episode?.thumbnailUrl || h.content?.posterUrl || 'https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&fit=crop&w=600&q=80',
@@ -416,10 +580,12 @@ export class HistoryComponent implements OnInit {
             };
           });
           this.loading = false;
+          this.changeDetector.detectChanges();
         },
         error: () => {
           this.items = [];
           this.loading = false;
+          this.changeDetector.detectChanges();
         },
       });
     } else {
@@ -430,6 +596,8 @@ export class HistoryComponent implements OnInit {
         return {
           episodeId: g.episodeId,
           slug: g.slug,
+          seasonNumber: g.seasonNumber || 1,
+          episodeNumber: g.episodeNumber || 1,
           title: g.title,
           subtitle: 'Watched on this browser',
           image: g.image,
@@ -437,6 +605,7 @@ export class HistoryComponent implements OnInit {
         };
       });
       this.loading = false;
+      this.changeDetector.detectChanges();
     }
   }
 

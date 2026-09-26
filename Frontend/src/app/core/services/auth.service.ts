@@ -99,6 +99,10 @@ export class AuthService {
   }
 
   logout(): void {
+    this.http.post(`${API_BASE_URL}/api/auth/logout`, {}, {
+      context: new HttpContext().set(skipAuthRefresh, true),
+      withCredentials: true,
+    }).subscribe({ error: () => undefined });
     localStorage.removeItem(this.key);
     this.subject.next(null);
   }

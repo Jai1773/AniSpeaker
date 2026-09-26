@@ -4,12 +4,17 @@ using ToonSpeaker.Api.Domain;
 
 namespace ToonSpeaker.Api.Controllers;
 
+/// <summary>Public content browsing endpoints — no authentication required.</summary>
 [ApiController]
 [Route("api/content")]
 public sealed class ContentController(IContentService content) : ControllerBase
 {
+    /// <summary>
+    /// Browse published content with optional filtering by category, type, and pagination.
+    /// </summary>
     [HttpGet]
     [ProducesResponseType(typeof(PageResult<ContentSummaryDto>), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<PageResult<ContentSummaryDto>>> Browse(
         [FromQuery] Guid? category,
         [FromQuery] ContentType? type,
@@ -23,6 +28,11 @@ public sealed class ContentController(IContentService content) : ControllerBase
         return Ok(await content.BrowseAsync(category, type, page, pageSize, false, cancellationToken));
     }
 
+    /// <summary>
+    /// Get full content detail by slug, including seasons, episodes, and video sources.
+    /// </summary>
+    /// <param name="slug">URL-friendly slug, e.g. "one-piece".</param>
+    /// <param name="cancellationToken"></param>
     [HttpGet("{slug}")]
     [ProducesResponseType(typeof(ContentDetailDto), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]

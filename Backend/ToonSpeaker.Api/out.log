@@ -1,0 +1,20 @@
+info: Microsoft.Hosting.Lifetime[14]
+      Now listening on: http://localhost:5000
+info: Microsoft.Hosting.Lifetime[0]
+      Application started. Press Ctrl+C to shut down.
+info: Microsoft.Hosting.Lifetime[0]
+      Hosting environment: Production
+info: Microsoft.Hosting.Lifetime[0]
+      Content root path: D:\projectFiles\AniSpeaker\Backend\ToonSpeaker.Api
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (319ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT count(*)::int
+      FROM "Content" AS c
+      WHERE c."Published"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (256ms) [Parameters=[@__p_1='?' (DbType = Int32), @__p_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+      SELECT c."Id", c."BannerUrl", c."CatalogJson", c."CategoryId", c."CreatedAt", c."Description", c."PosterUrl", c."Published", c."Slug", c."Tags", c."Title", c."Type", c."UpdatedAt"
+      FROM "Content" AS c
+      WHERE c."Published"
+      ORDER BY c."UpdatedAt" DESC
+      LIMIT @__p_1 OFFSET @__p_0

@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
 import { Content } from '../../models/content.model';
 import { RouterLink } from '@angular/router';
 import { ContentService } from '../../core/services/content.service';
@@ -15,6 +15,8 @@ export interface ContinueWatchingItem {
   id: string;
   slug: string;
   episodeId: string;
+  seasonNumber?: number;
+  episodeNumber?: number;
   title: string;
   subtitle: string;
   image: string;
@@ -45,13 +47,15 @@ export class HomeComponent implements OnInit {
   private account = inject(AccountService);
   private auth = inject(AuthService);
   private localHistory = inject(LocalHistoryService);
+  private changeDetector = inject(ChangeDetectorRef);
 
-  items: Content[] = [];
-  featured: Content = this.service.fallbackItems[0];
+  // Initialize immediately from client cache for 0ms initial render
+  items: Content[] = this.service.getCachedHome();
+  featured: Content = this.items[0];
   continued: ContinueWatchingItem[] = [];
-  anime: Content[] = [];
-  cartoons: Content[] = [];
-  movies: Content[] = [];
+  anime: Content[] = this.items.filter((item) => item.type === 'Anime');
+  cartoons: Content[] = this.items.filter((item) => item.type === 'Cartoon');
+  movies: Content[] = this.items.filter((item) => item.type === 'Movie');
   error = '';
   genres = [
     'Action',
@@ -66,54 +70,83 @@ export class HomeComponent implements OnInit {
   ];
 
   ngOnInit(): void {
-    // 1. Load catalog from API
+    // 1. Fetch live catalog (or memory cache from service)
     this.service.browse().subscribe({
       next: (items) => {
-        this.items = items;
-        if (items.length > 0) {
-          this.featured = items[0];
-          this.anime = items.filter((item) => item.type === 'Anime');
-          this.cartoons = items.filter((item) => item.type === 'Cartoon');
-          this.movies = items.filter((item) => item.type === 'Movie');
-        }
+        this.setCatalog(items);
+        this.changeDetector.detectChanges();
       },
-      error: () => (this.error = 'Unable to load content. Make sure the API is running.'),
+      error: () => {
+        if (!this.featured) {
+          this.error = 'Unable to load live content.';
+        }
+        this.changeDetector.detectChanges();
+      },
     });
 
     // 2. Load Continue Watching (Guest local vs Logged-in synced)
     if (this.auth.isLoggedIn) {
       this.account.history().subscribe({
         next: (hist) => {
-          this.continued = hist.slice(0, 4).map((h) => {
-            const dur = h.episode?.durationSeconds || 1440;
-            const pct = Math.min(100, Math.max(0, Math.round((h.progressSeconds / dur) * 100)));
-            return {
-              id: h.episode?.id || '',
-              slug: h.content?.slug || '',
-              episodeId: h.episode?.id || '',
-              title: h.content?.title || 'Title',
-              subtitle: `Ep. ${h.episode?.number || 1}`,
-              image: h.episode?.thumbnailUrl || h.content?.posterUrl || 'https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&fit=crop&w=600&q=80',
-              progressPercent: pct,
-            };
-          });
+          this.setContinueWatching(hist);
+          this.changeDetector.detectChanges();
+        },
+        error: (err) => {
+          console.warn('Account history unavailable, falling back to local history', err);
+          this.loadGuestHistory();
         },
       });
     } else {
-      const guestHist = this.localHistory.list();
-      this.continued = guestHist.slice(0, 4).map((g) => {
-        const dur = g.durationSeconds || 1440;
-        const pct = Math.min(100, Math.max(0, Math.round((g.progressSeconds / dur) * 100)));
-        return {
-          id: g.episodeId,
-          slug: g.slug,
-          episodeId: g.episodeId,
-          title: g.title,
-          subtitle: 'Resume',
-          image: g.image,
-          progressPercent: pct,
-        };
-      });
+      this.loadGuestHistory();
+    }
+  }
+
+  private loadGuestHistory(): void {
+    const guestHist = this.localHistory.list();
+    this.continued = guestHist.slice(0, 4).map((g) => {
+      const dur = g.durationSeconds || 1440;
+      const pct = Math.min(100, Math.max(0, Math.round((g.progressSeconds / dur) * 100)));
+      return {
+        id: g.episodeId,
+        slug: g.slug,
+        episodeId: g.episodeId,
+        seasonNumber: g.seasonNumber || 1,
+        episodeNumber: g.episodeNumber || 1,
+        title: g.title,
+        subtitle: 'Resume',
+        image: g.image,
+        progressPercent: pct,
+      };
+    });
+    this.changeDetector.detectChanges();
+  }
+
+  private setContinueWatching(hist: any[]): void {
+    this.continued = (hist || []).slice(0, 4).map((h) => {
+      const dur = h.episode?.durationSeconds || 1440;
+      const pct = Math.min(100, Math.max(0, Math.round((h.progressSeconds / dur) * 100)));
+      return {
+        id: h.episode?.id || '',
+        slug: h.content?.slug || '',
+        episodeId: h.episode?.id || '',
+        seasonNumber: h.episode?.seasonNumber || 1,
+        episodeNumber: h.episode?.number || 1,
+        title: h.content?.title || 'Title',
+        subtitle: `Ep. ${h.episode?.number || 1}`,
+        image: h.episode?.thumbnailUrl || h.content?.posterUrl || 'https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&fit=crop&w=600&q=80',
+        progressPercent: pct,
+      };
+    });
+  }
+
+
+  private setCatalog(items: Content[]): void {
+    if (items && items.length > 0) {
+      this.items = items;
+      this.featured = items[0];
+      this.movies = items.filter((item) => item.type === 'Movie');
+      this.cartoons = items.filter((item) => item.type === 'Cartoon');
+      this.anime = items.filter((item) => item.type === 'Anime');
     }
   }
 }

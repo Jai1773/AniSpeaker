@@ -38,9 +38,6 @@
       <button [class.active]="activeTab === 'episodes'" (click)="activeTab = 'episodes'">
         📺 Seasons & Episodes
       </button>
-      <button [class.active]="activeTab === 'upload'" (click)="activeTab = 'upload'">
-        ☁ Video & Asset Upload
-      </button>
     </nav>
     <div class="admin-footer">
       @if (auth.session) {
@@ -60,6 +57,9 @@
     @if (error) {
       <div class="banner alert">
         {{ error }}
+        @if (activeTab === 'dashboard') {
+          <button type="button" class="btn-sm" (click)="loadAll()">Retry</button>
+        }
         @if (!auth.isLoggedIn) {
           &nbsp;<a routerLink="/login" style="color:inherit;text-decoration:underline;font-weight:700;">Sign in here →</a>
         }
@@ -98,9 +98,6 @@
       <div class="quick-actions-bar">
         <button class="btn primary" (click)="resetContentForm(); activeTab = 'content'">
           ＋ New Title
-        </button>
-        <button class="btn ghost" (click)="activeTab = 'upload'">
-          ☁ Upload Media
         </button>
       </div>
 
@@ -327,11 +324,14 @@
     <!-- ───────────────────────────────────────────────────────────────── -->
     <!-- TAB 4: SEASONS & EPISODES -->
     <!-- ───────────────────────────────────────────────────────────────── -->
+    <!-- ───────────────────────────────────────────────────────────────── -->
+    <!-- TAB 4: SEASONS, EPISODES & VIDEO SOURCES -->
+    <!-- ───────────────────────────────────────────────────────────────── -->
     @if (activeTab === 'episodes') {
       <header class="admin-header">
-        <span class="eyebrow">EPISODE MANAGER</span>
-        <h1>Seasons & Episodes</h1>
-        <p>Manage seasons and playable episodes for series and movies.</p>
+        <span class="eyebrow">MEDIA & STREAM CMS</span>
+        <h1>Episodes & Video Sources</h1>
+        <p>Manage seasons, episodes, and hosted video URL sources.</p>
       </header>
 
       <div class="admin-card">
@@ -349,135 +349,368 @@
       </div>
 
       @if (selectedContentForEpisodes) {
-        <div class="two-col-layout">
-          <!-- Create Season -->
-          <div class="admin-card">
-            <h3>Add Season to {{ selectedContentForEpisodes.title }}</h3>
-            <form (ngSubmit)="addSeason()">
-              <label>
-                Season Number
-                <input type="number" [(ngModel)]="seasonForm.number" name="seasonNum" required />
-              </label>
-              <label>
-                Season Title
-                <input type="text" [(ngModel)]="seasonForm.title" name="seasonTitle" required />
-              </label>
-              <button type="submit" class="btn primary">Create Season</button>
-            </form>
-          </div>
-
-          <!-- Add Episode -->
-          <div class="admin-card">
-            <h3>Add Episode</h3>
-            <form (ngSubmit)="addEpisode()">
-              <label>
-                Target Season ID
-                <input
-                  type="text"
-                  [(ngModel)]="selectedSeasonId"
-                  name="seasonId"
-                  placeholder="Paste Season ID or create above"
-                  required
-                />
-              </label>
-              <div class="form-row">
-                <label class="flex-1">
-                  Ep. Number
-                  <input type="number" [(ngModel)]="episodeForm.number" name="epNum" required />
-                </label>
-                <label class="flex-2">
-                  Episode Title
-                  <input type="text" [(ngModel)]="episodeForm.title" name="epTitle" placeholder="e.g. The Beginning" required />
-                </label>
-              </div>
-
-              <label>
-                Video Key or Outsourced Stream URL
-                <input
-                  type="text"
-                  [(ngModel)]="episodeForm.videoKey"
-                  name="videoKey"
-                  placeholder="Paste outsourced player URL or R2 object key"
-                  required
-                />
-              </label>
-
-              <div class="form-row">
-                <label class="flex-2">
-                  Thumbnail URL
-                  <input type="url" [(ngModel)]="episodeForm.thumbnailUrl" name="thumbUrl" placeholder="https://..." />
-                </label>
-                <label class="flex-1">
-                  Duration (sec)
-                  <input type="number" [(ngModel)]="episodeForm.durationSeconds" name="durSec" />
-                </label>
-              </div>
-
-              <button type="submit" class="btn primary">Add Episode</button>
-            </form>
+        <div class="admin-card" style="border-left: 3px solid #ff9a3c; margin-bottom: 20px;">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <div>
+              <span class="eyebrow">{{ selectedContentForEpisodes.type | uppercase }}</span>
+              <h2 style="margin: 4px 0;">{{ selectedContentForEpisodes.title }}</h2>
+              <small style="color: #888;">slug: {{ selectedContentForEpisodes.slug }}</small>
+            </div>
+            <button class="btn-sm" (click)="refreshSelectedContentEpisodes()">🔄 Refresh List</button>
           </div>
         </div>
+
+        <div class="two-col-layout">
+          <!-- Left Column: Season & Episode Creation Forms -->
+          <div>
+            @if (selectedContentForEpisodes.type === 'Series') {
+              <div class="admin-card" style="margin-bottom: 16px;">
+                <h3>Add Season</h3>
+                <form (ngSubmit)="addSeason()">
+                  <div class="form-row">
+                    <label class="flex-1">
+                      Season Number
+                      <input type="number" [(ngModel)]="seasonForm.number" name="seasonNum" required />
+                    </label>
+                    <label class="flex-2">
+                      Season Title
+                      <input type="text" [(ngModel)]="seasonForm.title" name="seasonTitle" required />
+                    </label>
+                  </div>
+                  <button type="submit" class="btn primary">＋ Create Season</button>
+                </form>
+              </div>
+
+              <div class="admin-card bulk-uploader" style="margin-bottom: 16px; border-left: 4px solid #ff9a3c;">
+                <h3 class="bulk-title">Bulk Add Episodes From URLs</h3>
+                <p class="muted">Paste one hosted video URL per line. Each URL becomes the next episode in this season.</p>
+
+                <div class="bulk-season-select">
+                  <label>Target Season</label>
+                  <select [(ngModel)]="selectedSeasonId" name="bulkSeasonSelect" class="title-select">
+                    <option value="" disabled>-- Select Season --</option>
+                    @for (s of seasons; track s.id) {
+                      <option [value]="s.id">{{ s.title }} (Season {{ s.number }})</option>
+                    }
+                  </select>
+                </div>
+
+                <label>
+                  Video URLs
+                  <textarea [(ngModel)]="bulkUrls" name="bulkUrls" rows="7" placeholder="https://vidmoly.to/embed/...&#10;https://vidmoly.to/embed/..." class="bulk-textarea"></textarea>
+                </label>
+
+                <div class="bulk-config-grid">
+                  <label>
+                    Player Name
+                    <input type="text" [(ngModel)]="bulkPlayerName" name="bulkPlayerName" />
+                  </label>
+                  <label>
+                    Render Type
+                    <select [(ngModel)]="bulkEmbedType" name="bulkEmbedType">
+                      <option value="Iframe">Iframe / hosted player</option>
+                      <option value="Direct">Direct MP4 / HLS</option>
+                    </select>
+                  </label>
+                  <label>
+                    Default Thumbnail URL
+                    <div style="display: flex; align-items: center; gap: 12px;">
+                      <input type="url" [(ngModel)]="bulkThumbnailUrl" name="bulkThumbUrl" placeholder="https://..." style="flex: 1;" />
+                      @if (bulkThumbnailUrl) {
+                        <img [src]="bulkThumbnailUrl" alt="Thumbnail Preview"
+                             style="width: 50px; height: 70px; object-fit: cover; border-radius: 4px; border: 1px solid var(--line);"
+                             (error)="bulkThumbnailUrl = ''" />
+                      }
+                    </div>
+                  </label>
+                </div>
+
+                <button type="button" class="btn primary bulk-btn" (click)="bulkAddEpisodes()">Import URL List</button>
+              </div>
+            }
+
+            <div class="admin-card">
+              <h3>{{ selectedContentForEpisodes.type === 'Movie' ? 'Add Movie Episode / Stream' : 'Add Episode' }}</h3>
+              <form (ngSubmit)="addEpisode()">
+                @if (selectedContentForEpisodes.type === 'Series') {
+                  <label>
+                    Target Season
+                    <select [(ngModel)]="selectedSeasonId" name="seasonSelect" required>
+                      <option value="" disabled>-- Select Season --</option>
+                      @for (s of seasons; track s.id) {
+                        <option [value]="s.id">{{ s.title }} (Season {{ s.number }})</option>
+                      }
+                    </select>
+                  </label>
+                }
+
+                <div class="form-row">
+                  <label class="flex-1">
+                    Ep. Number
+                    <input type="number" [(ngModel)]="episodeForm.number" name="epNum" required />
+                  </label>
+                  <label class="flex-2">
+                    Episode Title
+                    <input type="text" [(ngModel)]="episodeForm.title" name="epTitle" placeholder="e.g. The Beginning" required />
+                  </label>
+                </div>
+
+                <div class="form-row">
+                  <label class="flex-2">
+                    Thumbnail URL
+                    <input type="url" [(ngModel)]="episodeForm.thumbnailUrl" name="thumbUrl" placeholder="https://..." />
+                  </label>
+                  <label class="flex-1">
+                    Duration (sec)
+                    <input type="number" [(ngModel)]="episodeForm.durationSeconds" name="durSec" />
+                  </label>
+                </div>
+
+                <div style="border-top: 1px solid rgba(255,255,255,0.08); padding-top: 12px; margin-top: 8px;">
+                  <h4 style="margin: 0 0 8px; font-size: 0.85rem; color: #ff9a3c;">Initial Video Source (Optional)</h4>
+                  <div class="form-row">
+                    <label class="flex-1">
+                      Player Name
+                      <input type="text" [(ngModel)]="initialSource.playerName" name="initPlayer" placeholder="Vidmoly / Direct MP4" />
+                    </label>
+                    <label class="flex-1">
+                      Quality
+                      <input type="text" [(ngModel)]="initialSource.quality" name="initQuality" placeholder="1080p, 720p" />
+                    </label>
+                    <label class="flex-1">
+                      Render Type
+                      <select [(ngModel)]="initialSource.embedType" name="initEmbedType">
+                        <option value="Iframe">Iframe / hosted player</option>
+                        <option value="Direct">Direct MP4 / HLS</option>
+                      </select>
+                    </label>
+                  </div>
+                  <label>
+                    Stream / Embed URL
+                    <input type="url" [(ngModel)]="initialSource.url" name="initUrl" placeholder="https://hosted-video.example/embed/..." />
+                  </label>
+                </div>
+
+                <button type="submit" class="btn primary" style="margin-top: 12px;">Add Episode</button>
+              </form>
+            </div>
+          </div>
+
+          <!-- Right Column: Existing Episodes List -->
+          <div>
+            <div class="admin-card">
+              <h3>Existing Episodes</h3>
+              @if (contentDetailForEpisodes) {
+                @if (selectedContentForEpisodes.type === 'Series') {
+                  @for (s of contentDetailForEpisodes.seasons || []; track s.id) {
+                    <div style="margin-bottom: 20px;">
+                      <h4 style="color: #ff9a3c; margin: 8px 0;">{{ s.title }} ({{ s.episodes.length }} eps)</h4>
+                      <table class="admin-table">
+                        <thead>
+                          <tr>
+                            <th>Thumb</th>
+                            <th>#</th>
+                            <th>Title</th>
+                            <th>Sources</th>
+                            <th>Actions</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          @for (ep of s.episodes || []; track ep.id) {
+                            <tr>
+                              <td>
+                                <img [src]="ep.thumbnailUrl || 'https://images.unsplash.com/photo-1578632767115-351597cf2477?auto=format&fit=crop&w=80&q=80'" class="table-thumb" alt="" />
+                              </td>
+                              <td>{{ ep.number }}</td>
+                              <td><b>{{ ep.title }}</b></td>
+                              <td>
+                                <span class="type-pill" style="font-size: 0.75rem;">{{ ep.videoSources?.length || 0 }} sources</span>
+                              </td>
+                              <td>
+                                <button class="btn-sm" (click)="manageSources(ep)">Manage Sources</button>
+                                <button class="btn-danger-sm" (click)="deleteEpisode(ep.id)">Delete</button>
+                              </td>
+                            </tr>
+                          }
+                          @if (!s.episodes || s.episodes.length === 0) {
+                            <tr>
+                              <td colspan="4" style="text-align: center; color: #777;">No episodes in this season yet.</td>
+                            </tr>
+                          }
+                        </tbody>
+                      </table>
+                    </div>
+                  }
+                } @else {
+                  <table class="admin-table">
+                    <thead>
+                      <tr>
+                        <th>#</th>
+                        <th>Title</th>
+                        <th>Sources</th>
+                        <th>Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      @for (ep of contentDetailForEpisodes.episodes || []; track ep.id) {
+                        <tr>
+                          <td>{{ ep.number }}</td>
+                          <td><b>{{ ep.title }}</b></td>
+                          <td>
+                            <span class="type-pill" style="font-size: 0.75rem;">{{ ep.videoSources?.length || 0 }} sources</span>
+                          </td>
+                          <td>
+                            <button class="btn-sm" (click)="manageSources(ep)">Manage Sources</button>
+                            <button class="btn-danger-sm" (click)="deleteEpisode(ep.id)">Delete</button>
+                          </td>
+                        </tr>
+                      }
+                      @if (!contentDetailForEpisodes.episodes || contentDetailForEpisodes.episodes.length === 0) {
+                        <tr>
+                          <td colspan="4" style="text-align: center; color: #777;">No movie stream episodes added yet.</td>
+                        </tr>
+                      }
+                    </tbody>
+                  </table>
+                }
+              } @else {
+                <p style="color: #777;">Loading episodes...</p>
+              }
+            </div>
+          </div>
+        </div>
+
+        <!-- Video Sources Manager Panel -->
+        @if (selectedEpisodeForSources) {
+          <div class="admin-card" style="border: 2px solid #ff9a3c; margin-top: 24px; background: #131722;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+              <div>
+                <span class="eyebrow" style="color: #ff9a3c;">MULTI-SOURCE STREAM MANAGEMENT</span>
+                <h3 style="margin: 4px 0;">Sources for: {{ selectedEpisodeForSources.title }} (Ep. {{ selectedEpisodeForSources.number }})</h3>
+                <small style="color: #888;">Order matters: player will attempt Server 1 first and automatically fall back if it fails.</small>
+              </div>
+              <button class="btn-sm" (click)="closeSourceManager()">✕ Close</button>
+            </div>
+
+            <div class="two-col-layout">
+              <!-- Source list & reordering -->
+              <div>
+                <h4>Current Video Sources ({{ episodeSources.length }})</h4>
+                <table class="admin-table">
+                  <thead>
+                    <tr>
+                      <th>Order</th>
+                      <th>Player</th>
+                      <th>Render</th>
+                      <th>Quality</th>
+                      <th>Status</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    @for (src of episodeSources; track src.id; let idx = $index) {
+                      <tr>
+                        <td>
+                          <b>#{{ idx + 1 }}</b>
+                          <div style="display: flex; gap: 2px; margin-top: 2px;">
+                            <button class="btn-sm" [disabled]="idx === 0" (click)="moveSource(idx, 'up')" style="padding: 2px 6px;">▲</button>
+                            <button class="btn-sm" [disabled]="idx === episodeSources.length - 1" (click)="moveSource(idx, 'down')" style="padding: 2px 6px;">▼</button>
+                          </div>
+                        </td>
+                        <td>
+                          <b>{{ src.playerName }}</b>
+                          <div style="font-size: 0.72rem; color: #777; max-width: 220px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+                            {{ src.url }}
+                          </div>
+                        </td>
+                        <td><span class="type-pill" style="font-size: 0.75rem;">{{ src.embedType }}</span></td>
+                        <td><span class="type-pill" style="font-size: 0.75rem;">{{ src.quality || 'Auto' }}</span></td>
+                        <td>
+                          <button
+                            class="btn-toggle"
+                            [class.active]="src.isActive"
+                            (click)="toggleSourceActive(src)"
+                            style="font-size: 0.75rem; padding: 4px 8px;"
+                          >
+                            {{ src.isActive ? 'Active' : 'Disabled' }}
+                          </button>
+                        </td>
+                        <td>
+                          <button class="btn-danger-sm" (click)="deleteSource(src.id)">Delete</button>
+                        </td>
+                      </tr>
+                    }
+                    @if (episodeSources.length === 0) {
+                      <tr>
+                        <td colspan="5" style="text-align: center; color: #888; padding: 20px;">
+                          No video sources yet. Add one using the form on the right.
+                        </td>
+                      </tr>
+                    }
+                  </tbody>
+                </table>
+              </div>
+
+              <!-- Add new source form -->
+              <div class="admin-card" style="background: #171c2a;">
+                <h4>＋ Add Video Source to this Episode</h4>
+                <form (ngSubmit)="addSource()">
+                  <div class="form-row">
+                    <label class="flex-2">
+                      Player / Host Name
+                      <input
+                        type="text"
+                        [(ngModel)]="newSourceForm.playerName"
+                        name="newPlayerName"
+                        placeholder="e.g. Vidmoly, StreamTape, Direct MP4"
+                        required
+                      />
+                    </label>
+                    <label class="flex-1">
+                      Quality
+                      <input
+                        type="text"
+                        [(ngModel)]="newSourceForm.quality"
+                        name="newQuality"
+                        placeholder="1080p, 720p, etc."
+                      />
+                    </label>
+                    <label class="flex-1">
+                      Render Type
+                      <select [(ngModel)]="newSourceForm.embedType" name="newEmbedType">
+                        <option value="Iframe">Iframe / hosted player</option>
+                        <option value="Direct">Direct MP4 / HLS</option>
+                      </select>
+                    </label>
+                  </div>
+
+                  <label>
+                    Stream or Embed URL
+                    <input
+                      type="text"
+                      [(ngModel)]="newSourceForm.url"
+                      name="newUrl"
+                      placeholder="https://embed.vidmoly.to/... or https://cdn.../video.mp4"
+                      required
+                    />
+                  </label>
+
+                  <div class="form-checkbox" style="margin: 8px 0 14px;">
+                    <label>
+                      <input type="checkbox" [(ngModel)]="newSourceForm.isActive" name="newIsActive" />
+                      Active / Enabled for playback
+                    </label>
+                  </div>
+
+                  <button type="submit" class="btn primary">Add Source to Episode</button>
+                </form>
+              </div>
+            </div>
+          </div>
+        }
       }
     }
 
-    <!-- ───────────────────────────────────────────────────────────────── -->
-    <!-- TAB 5: VIDEO & ASSET UPLOAD WIDGET -->
-    <!-- ───────────────────────────────────────────────────────────────── -->
-    @if (activeTab === 'upload') {
-      <header class="admin-header">
-        <span class="eyebrow">STORAGE & MEDIA</span>
-        <h1>Video & Asset Upload</h1>
-        <p>Direct upload to Cloudflare R2 / S3 storage via secure pre-signed URLs.</p>
-      </header>
-
-      <div class="admin-card upload-card">
-        <h3>Direct File Upload</h3>
-        <p class="desc">
-          Upload video files (.mp4, .mkv, .webm) or posters/thumbnails directly. The resulting Key/URL will be provided immediately.
-        </p>
-
-        <div class="upload-controls">
-          <label>
-            Target Folder:
-            <select [(ngModel)]="uploadTargetFolder">
-              <option value="videos">Videos (videos/)</option>
-              <option value="images">Images / Posters (images/)</option>
-              <option value="thumbnails">Thumbnails (thumbnails/)</option>
-            </select>
-          </label>
-
-          <label class="file-dropzone">
-            <span>📁 Click or drag file here to upload</span>
-            <input type="file" (change)="onFileSelected($event)" [disabled]="uploading" />
-          </label>
-        </div>
-
-        @if (uploading) {
-          <div class="upload-progress-box">
-            <div class="progress-bar">
-              <span [style.width.%]="uploadProgress"></span>
-            </div>
-            <b>{{ uploadProgress }}% Uploading...</b>
-          </div>
-        }
-
-        @if (lastUploadedKey) {
-          <div class="upload-result-box">
-            <h4>✓ Upload Complete</h4>
-            <label>
-              Object Key (paste into Episode Video Key):
-              <input type="text" [value]="lastUploadedKey" readonly />
-            </label>
-            @if (lastUploadedUrl) {
-              <label>
-                Public URL:
-                <input type="text" [value]="lastUploadedUrl" readonly />
-              </label>
-            }
-          </div>
-        }
-      </div>
-    }
     </section>
   }
 </main>

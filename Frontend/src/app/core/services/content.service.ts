@@ -11,108 +11,28 @@ import {
   PageResult,
   PlaybackDto,
 } from '../../models/content.model';
-import { Observable, map, of, catchError } from 'rxjs';
+import { Observable, map, of, catchError, throwError, tap } from 'rxjs';
 import { API_BASE_URL } from '../api.config';
 
 @Injectable({ providedIn: 'root' })
 export class ContentService {
   constructor(private readonly http: HttpClient) {}
 
-  readonly fallbackItems: Content[] = [
-    {
-      id: 'mock-1',
-      slug: 'solar-guardians',
-      title: 'Solar Guardians',
-      type: 'Anime',
-      year: 2026,
-      rating: 9.2,
-      duration: '24m',
-      genre: 'Adventure, Sci-Fi',
-      image:
-        'https://images.unsplash.com/photo-1578632767115-351597cf2477?auto=format&fit=crop&w=600&q=80',
-      backdrop:
-        'https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&fit=crop&w=1800&q=85',
-      description:
-        'When a dying star sends a final signal, four unlikely heroes race through the outer worlds to keep their home alive.',
-    },
-    {
-      id: 'mock-2',
-      slug: 'wildwood-chronicles',
-      title: 'Wildwood Chronicles',
-      type: 'Cartoon',
-      year: 2026,
-      rating: 8.7,
-      duration: '22m',
-      genre: 'Family, Fantasy',
-      image:
-        'https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?auto=format&fit=crop&w=600&q=80',
-      backdrop:
-        'https://images.unsplash.com/photo-1511497584788-876760111969?auto=format&fit=crop&w=1800&q=80',
-      description:
-        'A curious explorer and her tiny dragon discover a secret world hidden just beyond the forest.',
-    },
-    {
-      id: 'mock-3',
-      slug: 'neon-horizon',
-      title: 'Neon Horizon',
-      type: 'Movie',
-      year: 2025,
-      rating: 8.9,
-      duration: '1h 54m',
-      genre: 'Sci-Fi, Action',
-      image:
-        'https://images.unsplash.com/photo-1519608487953-e999c86e7455?auto=format&fit=crop&w=600&q=80',
-      backdrop:
-        'https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?auto=format&fit=crop&w=1800&q=85',
-      description:
-        'At the edge of a luminous city, one pilot learns the future is closer than it appears.',
-    },
-    {
-      id: 'mock-4',
-      slug: 'dragon-academy',
-      title: 'Dragon Academy',
-      type: 'Cartoon',
-      year: 2026,
-      rating: 8.5,
-      duration: '26m',
-      genre: 'Fantasy, Kids',
-      image:
-        'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=600&q=80',
-      backdrop:
-        'https://images.unsplash.com/photo-1464802686167-b939a6910659?auto=format&fit=crop&w=1800&q=80',
-      description: 'New students, ancient creatures and a school in the clouds.',
-    },
-    {
-      id: 'mock-5',
-      slug: 'echoes-of-tokyo',
-      title: 'Echoes of Tokyo',
-      type: 'Anime',
-      year: 2025,
-      rating: 9.0,
-      duration: '24m',
-      genre: 'Drama, Supernatural',
-      image:
-        'https://images.unsplash.com/photo-1528360983277-13d401cdc186?auto=format&fit=crop&w=600&q=80',
-      backdrop:
-        'https://images.unsplash.com/photo-1542051841857-5f90071e7989?auto=format&fit=crop&w=1800&q=80',
-      description: 'Some promises are loud. The ones that matter echo quietly.',
-    },
-    {
-      id: 'mock-6',
-      slug: 'deep-blue',
-      title: 'Deep Blue',
-      type: 'Movie',
-      year: 2026,
-      rating: 8.3,
-      duration: '1h 48m',
-      genre: 'Mystery, Adventure',
-      image:
-        'https://images.unsplash.com/photo-1518467166778-b88f373ffec7?auto=format&fit=crop&w=600&q=80',
-      backdrop:
-        'https://images.unsplash.com/photo-1518837695005-2083093ee35b?auto=format&fit=crop&w=1800&q=80',
-      description: 'A dive below the surface reveals a world no map has ever named.',
-    },
-  ];
+  readonly fallbackItems: Content[] = [];
+  private memoryCatalog: Content[] = [];
+  private detailCache = new Map<string, { item: Content; episodes: Episode[]; raw?: ApiContentDetail }>();
+
+  getCachedHome(): Content[] {
+    if (this.memoryCatalog.length > 0) return this.memoryCatalog;
+    try {
+      const raw = localStorage.getItem('anispeaker.cached-home');
+      if (raw) {
+        this.memoryCatalog = JSON.parse(raw);
+        return this.memoryCatalog;
+      }
+    } catch {}
+    return [];
+  }
 
   get(slug: string | null): Content {
     return this.fallbackItems.find((x) => x.slug === slug) || this.fallbackItems[0];
@@ -128,15 +48,26 @@ export class ContentService {
       .pipe(
         map((result) => {
           if (result && result.items && result.items.length > 0) {
-            return result.items.map((item) => this.toContent(item));
+            const mapped = result.items.map((item) => this.toContent(item));
+            if (!type && !categoryId && page === 1) {
+              this.memoryCatalog = mapped;
+              try {
+                localStorage.setItem('anispeaker.cached-home', JSON.stringify(mapped.slice(0, 50)));
+              } catch {}
+            }
+            return mapped;
           }
           return this.fallbackItems.filter((x) => !type || (type === 'Movie' ? x.type === 'Movie' : x.type !== 'Movie'));
         }),
-        catchError(() =>
-          of(
+        catchError(() => {
+          const cached = this.getCachedHome();
+          if (cached.length > 0) {
+            return of(cached.filter((x) => !type || (type === 'Movie' ? x.type === 'Movie' : x.type !== 'Movie')));
+          }
+          return of(
             this.fallbackItems.filter((x) => !type || (type === 'Movie' ? x.type === 'Movie' : x.type !== 'Movie'))
-          )
-        )
+          );
+        })
       );
   }
 
@@ -162,49 +93,59 @@ export class ContentService {
   }
 
   detail(slug: string): Observable<{ item: Content; episodes: Episode[]; raw?: ApiContentDetail }> {
-    return this.http.get<ApiContentDetail>(`${API_BASE_URL}/api/content/${encodeURIComponent(slug)}`).pipe(
-      map((result) => {
-        const rawEpisodes: ApiEpisode[] = [
-          ...(result.episodes || []),
-          ...(result.seasons || []).flatMap((s) => s.episodes || []),
-        ].sort((a, b) => a.number - b.number);
+    const normalized = slug.trim().toLowerCase();
+    const cached = this.detailCache.get(normalized);
 
-        return {
+    const net$ = this.http.get<ApiContentDetail>(`${API_BASE_URL}/api/content/${encodeURIComponent(slug)}`).pipe(
+      map((result) => {
+        const episodeList: Episode[] = [];
+
+        if (result.seasons && result.seasons.length > 0) {
+          for (const s of result.seasons) {
+            const seasonNum = s.number || 1;
+            if (s.episodes && s.episodes.length > 0) {
+              for (const ep of s.episodes) {
+                episodeList.push(this.toEpisode(ep, seasonNum));
+              }
+            }
+          }
+        }
+
+        if (result.episodes && result.episodes.length > 0) {
+          for (const ep of result.episodes) {
+            if (!episodeList.some((x) => x.id === ep.id)) {
+              episodeList.push(this.toEpisode(ep, 1));
+            }
+          }
+        }
+
+        episodeList.sort((a, b) => {
+          const sA = a.seasonNumber || 1;
+          const sB = b.seasonNumber || 1;
+          if (sA !== sB) return sA - sB;
+          return a.number - b.number;
+        });
+
+        const detailObj = {
           item: this.toContent(result),
-          episodes: rawEpisodes.map((ep) => this.toEpisode(ep)),
+          episodes: episodeList,
           raw: result,
         };
+        this.detailCache.set(normalized, detailObj);
+        return detailObj;
       }),
-      catchError(() => {
-        const fallback = this.fallbackItems.find((x) => x.slug === slug) || this.fallbackItems[0];
-        const mockEpisodes: Episode[] = Array.from({ length: 6 }, (_, i) => ({
-          id: `mock-ep-${i + 1}`,
-          contentId: String(fallback.id),
-          number: i + 1,
-          title: `Episode ${i + 1}`,
-          duration: '24m',
-          durationSeconds: 1440,
-          description: fallback.description,
-          image: fallback.backdrop,
-          videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
-        }));
-        return of({
-          item: fallback,
-          episodes: mockEpisodes,
-        });
+      catchError((error) => {
+        if (cached) return of(cached);
+        return throwError(() => error);
       })
     );
+
+    return cached ? of(cached) : net$;
   }
 
   playback(episodeId: string): Observable<PlaybackDto> {
     return this.http.get<PlaybackDto>(`${API_BASE_URL}/api/playback/${episodeId}`).pipe(
-      catchError(() =>
-        of({
-          episodeId,
-          videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
-          expiresAt: new Date(Date.now() + 3600000).toISOString(),
-        })
-      )
+      catchError((error) => throwError(() => error))
     );
   }
 
@@ -232,11 +173,12 @@ export class ContentService {
     };
   }
 
-  toEpisode(episode: ApiEpisode): Episode {
+  toEpisode(episode: ApiEpisode, seasonNumber = 1): Episode {
     return {
       id: episode.id,
       contentId: episode.contentId,
       seasonId: episode.seasonId,
+      seasonNumber,
       number: episode.number,
       title: episode.title || `Episode ${episode.number}`,
       duration: this.formatDuration(episode.durationSeconds),

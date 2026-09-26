@@ -11,11 +11,11 @@
         <p class="description">{{ item.description }}</p>
         <div class="detail-actions">
           @if (episodes.length > 0) {
-            <a class="btn primary" [routerLink]="['/watch', item.slug]" [queryParams]="{ episode: episodes[0].id }">
+            <a class="btn primary" [routerLink]="['/watch', item.slug, 'season-' + (episodes[0].seasonNumber || 1), 'ep-' + episodes[0].number]">
               ▶ Play Now
             </a>
           } @else {
-            <a class="btn primary" [routerLink]="['/watch', item.slug]">
+            <a class="btn primary" [routerLink]="['/watch', item.slug, 'season-1', 'ep-1']">
               ▶ Play Now
             </a>
           }
@@ -41,7 +41,7 @@
               <b>Episode {{ ep.number }}: {{ ep.title }}</b>
               <small>{{ ep.duration }}</small>
             </div>
-            <a [routerLink]="['/watch', item.slug]" [queryParams]="{ episode: ep.id }" class="btn-play-ep" aria-label="Play episode">
+            <a [routerLink]="['/watch', item.slug, 'season-' + (ep.seasonNumber || 1), 'ep-' + ep.number]" class="btn-play-ep" aria-label="Play episode">
               ▶
             </a>
           </article>

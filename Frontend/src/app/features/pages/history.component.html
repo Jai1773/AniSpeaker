@@ -34,12 +34,10 @@
           <div class="history-meta">
             <h3>{{ item.title }}</h3>
             <p>{{ item.subtitle }}</p>
-            <small>{{ item.progressPercent }}% watched</small>
           </div>
           <a
             class="btn primary"
-            [routerLink]="['/watch', item.slug]"
-            [queryParams]="{ episode: item.episodeId }"
+            [routerLink]="['/watch', item.slug, 'season-' + (item.seasonNumber || 1), 'ep-' + (item.episodeNumber || 1)]"
           >
             Continue ▶
           </a>

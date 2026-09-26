@@ -1,4 +1,6 @@
 import { Routes } from '@angular/router';
+import { adminGuard, signedInGuard } from './core/guards/auth.guard';
+
 export const routes: Routes = [
   {
     path: '',
@@ -19,6 +21,22 @@ export const routes: Routes = [
   {
     path: 'content/:slug',
     loadComponent: () => import('./features/pages/pages.component').then((m) => m.DetailComponent),
+  },
+  {
+    path: 'watch/:slug/:seasonSegment/:epSegment',
+    loadComponent: () => import('./features/pages/pages.component').then((m) => m.PlayerComponent),
+  },
+  {
+    path: 'watch/:slug/:epSegment',
+    loadComponent: () => import('./features/pages/pages.component').then((m) => m.PlayerComponent),
+  },
+  {
+    path: 'watch/:slug',
+    loadComponent: () => import('./features/pages/pages.component').then((m) => m.PlayerComponent),
+  },
+  {
+    path: 'watch/:seasonSegment/:epSegment',
+    loadComponent: () => import('./features/pages/pages.component').then((m) => m.PlayerComponent),
   },
   {
     path: 'watch/:id',
@@ -48,6 +66,7 @@ export const routes: Routes = [
   },
   {
     path: 'admin',
+    canActivate: [adminGuard],
     loadChildren: () => import('./features/admin/admin.routes').then((m) => m.ADMIN_ROUTES),
   },
   { path: '**', redirectTo: '' },

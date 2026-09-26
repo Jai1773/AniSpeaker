@@ -3,14 +3,7 @@
   <h1 class="page-title">My Watch Later</h1>
   <p class="page-intro">Your personal watchlist of stories to enjoy anytime.</p>
 
-  @if (!auth.isLoggedIn) {
-    <div class="empty-box">
-      <span>♡</span>
-      <h3>Sign in to access your Watch Later list</h3>
-      <p>Save shows and movies to watch later across all your devices.</p>
-      <a routerLink="/login" class="btn primary">Sign In</a>
-    </div>
-  } @else if (loading) {
+  @if (loading) {
     <div class="empty-box">
       <p>Loading your saved titles...</p>
     </div>
@@ -19,7 +12,15 @@
       <span>♡</span>
       <h3>Your Watch Later list is empty</h3>
       <p>Explore anime, cartoons, and movies, and save your favorites here.</p>
-      <a routerLink="/browse" class="btn primary">Browse Catalog</a>
+      @if (!auth.isLoggedIn) {
+        <p class="guest-hint">Sign in anytime to sync your watchlist across all devices.</p>
+        <div style="display: flex; gap: 12px; justify-content: center; margin-top: 14px;">
+          <a routerLink="/browse" class="btn primary">Browse Catalog</a>
+          <a routerLink="/login" class="btn ghost">Sign In</a>
+        </div>
+      } @else {
+        <a routerLink="/browse" class="btn primary">Browse Catalog</a>
+      }
     </div>
   } @else {
     <div class="grid">

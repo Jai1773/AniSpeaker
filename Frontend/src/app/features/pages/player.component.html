@@ -27,6 +27,7 @@
           class="player-screen"
           controls
           autoplay
+          (error)="onVideoError()"
           (timeupdate)="onTimeUpdate()"
           (loadedmetadata)="onMetadataLoaded()"
         ></video>
@@ -34,6 +35,24 @@
         <div class="player-placeholder">
           <span>▶</span>
           <p>No video available for this episode yet.</p>
+        </div>
+      }
+
+      @if (availableSources.length > 1) {
+        <div class="source-selector-bar">
+          <span class="source-label">⚡ Servers / Mirrors:</span>
+          <div class="source-pills">
+            @for (src of availableSources; track src.id; let idx = $index) {
+              <button
+                type="button"
+                class="btn-source"
+                [class.active]="selectedSourceIndex === idx"
+                (click)="switchSource(idx)"
+              >
+                {{ src.playerName }} {{ src.quality ? '(' + src.quality + ')' : '' }}
+              </button>
+            }
+          </div>
         </div>
       }
 

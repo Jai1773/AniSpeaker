@@ -1,8 +1,10 @@
 using Microsoft.AspNetCore.Identity;
+using System.Text.Json;
 
 namespace ToonSpeaker.Api.Domain;
 
 public enum ContentType { Series, Movie }
+public enum VideoEmbedType { Iframe, Direct }
 
 public sealed class Category
 {
@@ -28,6 +30,8 @@ public sealed class Content
     public bool Published { get; set; }
     public DateTimeOffset CreatedAt { get; set; } = DateTimeOffset.UtcNow;
     public DateTimeOffset UpdatedAt { get; set; } = DateTimeOffset.UtcNow;
+    /// <summary>JSONB catalog document containing the content, seasons, episodes, and video URL list.</summary>
+    public JsonDocument? CatalogJson { get; set; }
     public ICollection<Season> Seasons { get; set; } = new List<Season>();
     public ICollection<Episode> Episodes { get; set; } = new List<Episode>();
 }
@@ -51,10 +55,34 @@ public sealed class Episode
     public Season? Season { get; set; }
     public int Number { get; set; }
     public string Title { get; set; } = string.Empty;
-    public string VideoKey { get; set; } = string.Empty;
     public string? ThumbnailUrl { get; set; }
     public int DurationSeconds { get; set; }
     public bool Published { get; set; }
+    /// <summary>Navigation: multiple video sources for this episode (different players/mirrors).</summary>
+    public ICollection<VideoSource> VideoSources { get; set; } = new List<VideoSource>();
+}
+
+/// <summary>
+/// A single playable source for an episode (e.g. Vidmoly embed, StreamTape, direct R2 MP4).
+/// Episodes can have multiple sources; the player tries them in <see cref="SortOrder"/> order.
+/// </summary>
+public sealed class VideoSource
+{
+    public Guid Id { get; set; } = Guid.NewGuid();
+    public Guid EpisodeId { get; set; }
+    public Episode Episode { get; set; } = null!;
+    /// <summary>Human-readable player/host name, e.g. "Vidmoly", "StreamTape", "Direct MP4".</summary>
+    public string PlayerName { get; set; } = string.Empty;
+    /// <summary>Embed URL or direct file URL for this source.</summary>
+    public string Url { get; set; } = string.Empty;
+    /// <summary>Controls whether the frontend renders this source in an iframe or HTML5 video element.</summary>
+    public VideoEmbedType EmbedType { get; set; } = VideoEmbedType.Iframe;
+    /// <summary>Optional quality label, e.g. "1080p", "720p".</summary>
+    public string? Quality { get; set; }
+    /// <summary>Ascending playback order; lower number plays first.</summary>
+    public int SortOrder { get; set; }
+    /// <summary>When false the source is skipped by the player (dead link toggle without deleting).</summary>
+    public bool IsActive { get; set; } = true;
 }
 
 public sealed class AppUser : IdentityUser<Guid>
