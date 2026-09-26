@@ -410,19 +410,6 @@
       height: 100%;
       object-fit: cover;
     }
-    .history-progress-bar {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      height: 4px;
-      background: rgba(0, 0, 0, 0.7);
-      span {
-        display: block;
-        height: 100%;
-        background: #ff9a3c;
-      }
-    }
   }
   .history-meta {
     flex: 1;
@@ -434,9 +421,6 @@
       color: #aaa;
       margin: 0 0 4px;
       font-size: 0.9rem;
-    }
-    small {
-      color: #ff9a3c;
     }
   }
 }

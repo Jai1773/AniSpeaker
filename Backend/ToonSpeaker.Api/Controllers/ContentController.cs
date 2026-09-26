@@ -33,6 +33,24 @@ public sealed class ContentController(IContentService content) : ControllerBase
     /// </summary>
     /// <param name="slug">URL-friendly slug, e.g. "one-piece".</param>
     /// <param name="cancellationToken"></param>
+    /// <summary>
+    /// Get full content detail by slug, including seasons, episodes, related content, and user status.
+    /// </summary>
+    /// <param name="slug">URL-friendly slug, e.g. "one-piece".</param>
+    /// <param name="userId">Optional user ID to check watch-later status.</param>
+    /// <param name="cancellationToken"></param>
+    [HttpGet("{slug}/composite")]
+    [ProducesResponseType(typeof(CompositeDetailDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<ActionResult<CompositeDetailDto>> GetComposite(
+        string slug,
+        [FromQuery] Guid? userId,
+        CancellationToken cancellationToken)
+    {
+        var result = await content.GetCompositeDetailAsync(slug, userId, false, cancellationToken);
+        return result is null ? NotFound() : Ok(result);
+    }
+
     [HttpGet("{slug}")]
     [ProducesResponseType(typeof(ContentDetailDto), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]

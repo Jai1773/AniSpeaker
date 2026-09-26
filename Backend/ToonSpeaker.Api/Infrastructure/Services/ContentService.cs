@@ -74,19 +74,6 @@ public sealed class ContentService(AppDbContext db, IMemoryCache? cache = null) 
 
     public async Task<PlaybackSourcesDto?> GetPlaybackAsync(Guid episodeId, CancellationToken ct)
     {
-        var documentContent = await db.Content.AsNoTracking()
-            .Where(x => x.CatalogJson != null)
-            .Select(x => x.CatalogJson)
-            .ToListAsync(ct);
-        foreach (var json in documentContent)
-        {
-            var document = CatalogDocumentService.Read(json);
-            var documentEpisode = document?.Seasons.SelectMany(x => x.Episodes).Concat(document.Episodes)
-                .FirstOrDefault(x => x.Id == episodeId && x.Published);
-            if (documentEpisode is not null)
-                return new PlaybackSourcesDto(documentEpisode.Id, documentEpisode.VideoSources);
-        }
-
         var episode = await db.Episodes.AsNoTracking()
             .Include(x => x.VideoSources)
             .Include(x => x.Content)
@@ -101,6 +88,22 @@ public sealed class ContentService(AppDbContext db, IMemoryCache? cache = null) 
             .ToList();
 
         return new PlaybackSourcesDto(episode.Id, sources);
+    }
+
+    public async Task<CompositeDetailDto?> GetCompositeDetailAsync(string slug, Guid? userId, bool includeUnpublished, CancellationToken ct)
+    {
+        var detail = await GetBySlugAsync(slug, includeUnpublished, ct);
+        if (detail is null) return null;
+
+        var related = await db.Content.AsNoTracking()
+            .Where(x => x.CategoryId == detail.CategoryId && x.Slug != detail.Slug && (includeUnpublished || x.Published))
+            .OrderByDescending(x => x.UpdatedAt)
+            .Take(6)
+            .Select(ToSummary)
+            .ToListAsync(ct);
+
+        bool isSaved = false;
+        return new CompositeDetailDto(detail, related, isSaved);
     }
 
     // ─── Static projection helpers ─────────────────────────────────────────────

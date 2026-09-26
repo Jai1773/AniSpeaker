@@ -29,10 +29,11 @@ public sealed record ContentDetailDto(
     IReadOnlyList<SeasonDto> Seasons,
     IReadOnlyList<EpisodeDto> Episodes);
 
-/// <summary>
-/// Response from GET /api/playback/{episodeId}.
-/// Returns all active sources ordered by SortOrder; the player falls back to the next source on failure.
-/// </summary>
+public sealed record CompositeDetailDto(
+    ContentDetailDto Detail,
+    IReadOnlyList<ContentSummaryDto> Related,
+    bool IsSaved);
+
 public sealed record PlaybackSourcesDto(Guid EpisodeId, IReadOnlyList<VideoSourceDto> Sources);
 
 public sealed record PageResult<T>(IReadOnlyList<T> Items, int Page, int PageSize, int TotalCount);

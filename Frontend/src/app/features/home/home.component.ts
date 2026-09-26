@@ -45,7 +45,7 @@ export class RowComponent {
 export class HomeComponent implements OnInit {
   private service = inject(ContentService);
   private account = inject(AccountService);
-  private auth = inject(AuthService);
+  readonly auth = inject(AuthService);
   private localHistory = inject(LocalHistoryService);
   private changeDetector = inject(ChangeDetectorRef);
 

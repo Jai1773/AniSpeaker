@@ -687,8 +687,16 @@ export class RegisterComponent {
   loading = false;
 
   submit(): void {
-    if (!this.name.trim() || !this.email.trim() || this.password.length < 8) {
-      this.error = 'Please provide a name, valid email, and at least 8 characters for password.';
+    if (!this.name.trim()) {
+      this.error = 'Please provide a name.';
+      return;
+    }
+    if (!this.email.trim() || !this.email.includes('@')) {
+      this.error = 'Please provide a valid email address.';
+      return;
+    }
+    if (this.password.length < 8) {
+      this.error = 'Password must be at least 8 characters.';
       return;
     }
 

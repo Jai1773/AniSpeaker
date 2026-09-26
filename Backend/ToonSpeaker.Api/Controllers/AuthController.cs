@@ -16,6 +16,16 @@ public sealed class AuthController(UserManager<AppUser> users, AppDbContext db, 
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<AuthResponse>> Register(RegisterRequest request, CancellationToken ct)
     {
+        if (string.IsNullOrWhiteSpace(request.Email))
+            return BadRequest(new { errors = new[] { new { Code = "EmailRequired", Description = "Email is required." } } });
+
+        if (string.IsNullOrWhiteSpace(request.DisplayName))
+            return BadRequest(new { errors = new[] { new { Code = "DisplayNameRequired", Description = "Display name is required." } } });
+
+        var existingUser = await users.FindByEmailAsync(request.Email);
+        if (existingUser is not null)
+            return BadRequest(new { errors = new[] { new { Code = "EmailExists", Description = "An account with this email already exists." } } });
+
         await using var transaction = await db.Database.BeginTransactionAsync(ct);
         var user = new AppUser { UserName = request.Email, Email = request.Email, DisplayName = request.DisplayName };
         var result = await users.CreateAsync(user, request.Password);

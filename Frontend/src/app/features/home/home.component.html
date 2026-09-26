@@ -16,7 +16,7 @@
     </section>
   }
 
-  @if (continued.length > 0) {
+  @if (auth.isLoggedIn && continued.length > 0) {
     <section class="container continue">
       <div class="head">
         <h2>Continue Watching</h2>
@@ -27,7 +27,7 @@
           <a [routerLink]="['/watch', item.slug, 'season-' + (item.seasonNumber || 1), 'ep-' + (item.episodeNumber || 1)]">
             <img [src]="item.image" [alt]="item.title" />
             <b>{{ item.title }}</b>
-            <small>{{ item.subtitle }} · {{ item.progressPercent }}% watched</small>
+            <small>{{ item.subtitle }}</small>
             <i><em [style.width.%]="item.progressPercent"></em></i>
           </a>
         }
