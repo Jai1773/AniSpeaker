@@ -6,7 +6,7 @@
     "enabled": true
   },
   "assets": {
-    "directory": "./dist/browser",
+    "directory": "./dist/frontend/browser",
     "not_found_handling": "single-page-application"
   }
 }
