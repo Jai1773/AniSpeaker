@@ -29,6 +29,10 @@ public sealed class AppDbContext(DbContextOptions<AppDbContext> options)
         builder.Entity<Content>(e =>
         {
             e.HasIndex(x => x.Slug).IsUnique();
+            e.HasIndex(x => new { x.Published, x.CategoryId, x.Type });
+            e.HasIndex(x => x.UpdatedAt);
+            e.HasIndex(x => x.Title).HasMethod("gin_trgm_ops");
+            e.HasIndex(x => x.Description).HasMethod("gin_trgm_ops");
             e.Property(x => x.Type).HasConversion<string>();
             e.Property(x => x.Tags).HasColumnType("text[]");
             e.Property(x => x.CatalogJson).HasColumnType("jsonb");

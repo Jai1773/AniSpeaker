@@ -5,6 +5,7 @@ import { ContentService } from '../../core/services/content.service';
 import { AccountService } from '../../core/services/account.service';
 import { AuthService } from '../../core/services/auth.service';
 import { LocalHistoryService } from '../../core/services/local-history.service';
+import { forkJoin, of } from 'rxjs';
 import {
   NavComponent,
   ContentCardComponent,
@@ -70,35 +71,42 @@ export class HomeComponent implements OnInit {
   ];
 
   ngOnInit(): void {
-    // 1. Fetch live catalog (or memory cache from service)
-    this.service.browse().subscribe({
-      next: (items) => {
-        this.setCatalog(items);
+    // 1. Prepare data fetches
+    const catalog$ = this.service.browse();
+    const history$ = this.auth.isLoggedIn
+      ? this.account.history()
+      : of(null);
+
+    // 2. Parallel fetch to avoid waterfalls
+    forkJoin({
+      catalog: catalog$,
+      history: history$,
+    }).subscribe({
+      next: ({ catalog, history }) => {
+        this.setCatalog(catalog);
+
+        if (history) {
+          this.setContinueWatching(history);
+        } else {
+          this.loadGuestHistory();
+        }
+
         this.changeDetector.detectChanges();
       },
-      error: () => {
+      error: (err) => {
+        console.error('Home data fetch failed', err);
         if (!this.featured) {
           this.error = 'Unable to load live content.';
         }
+
+        // Fallback for history if the combined request failed
+        if (!this.auth.isLoggedIn || !this.continued.length) {
+          this.loadGuestHistory();
+        }
+
         this.changeDetector.detectChanges();
       },
     });
-
-    // 2. Load Continue Watching (Guest local vs Logged-in synced)
-    if (this.auth.isLoggedIn) {
-      this.account.history().subscribe({
-        next: (hist) => {
-          this.setContinueWatching(hist);
-          this.changeDetector.detectChanges();
-        },
-        error: (err) => {
-          console.warn('Account history unavailable, falling back to local history', err);
-          this.loadGuestHistory();
-        },
-      });
-    } else {
-      this.loadGuestHistory();
-    }
   }
 
   private loadGuestHistory(): void {

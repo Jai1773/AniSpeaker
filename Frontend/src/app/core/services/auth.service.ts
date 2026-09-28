@@ -27,6 +27,20 @@ export class AuthService {
     return !!this.session;
   }
 
+  isTokenExpired(): boolean {
+    if (!this.session?.accessToken) return true;
+    try {
+      const parts = this.session.accessToken.split('.');
+      if (parts.length !== 3) return true;
+      const payload = JSON.parse(atob(parts[1].replace(/-/g, '+').replace(/_/g, '/')));
+      const exp = payload.exp;
+      if (!exp) return false;
+      return Date.now() >= exp * 1000;
+    } catch {
+      return true;
+    }
+  }
+
   get isAdmin(): boolean {
     if (!this.session) return false;
 
