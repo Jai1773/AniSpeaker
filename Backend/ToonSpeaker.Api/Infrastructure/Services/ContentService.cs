@@ -45,8 +45,6 @@ public sealed class ContentService(AppDbContext db, IMemoryCache? cache = null) 
         }
 
         var query = db.Content.AsNoTracking()
-            .Include(x => x.Seasons).ThenInclude(s => s.Episodes).ThenInclude(e => e.VideoSources)
-            .Include(x => x.Episodes).ThenInclude(e => e.VideoSources)
             .AsQueryable();
 
         if (!includeUnpublished) query = query.Where(x => x.Published);
@@ -62,8 +60,15 @@ public sealed class ContentService(AppDbContext db, IMemoryCache? cache = null) 
         return detail;
     }
 
-    public async Task<IReadOnlyList<ContentSummaryDto>> SearchAsync(string query, CancellationToken ct) =>
-        await db.Content.AsNoTracking()
+    public async Task<IReadOnlyList<ContentSummaryDto>> SearchAsync(string query, CancellationToken ct)
+    {
+        var cacheKey = $"search_{query.ToLowerInvariant()}";
+        if (cache is not null && cache.TryGetValue(cacheKey, out IReadOnlyList<ContentSummaryDto>? cached) && cached is not null)
+        {
+            return cached;
+        }
+
+        var results = await db.Content.AsNoTracking()
             .Where(x => x.Published &&
                         (EF.Functions.ILike(x.Title, $"%{query}%") ||
                          (x.Description != null && EF.Functions.ILike(x.Description, $"%{query}%"))))
@@ -71,6 +76,10 @@ public sealed class ContentService(AppDbContext db, IMemoryCache? cache = null) 
             .Take(20)
             .Select(x => ToSummary(x))
             .ToListAsync(ct);
+
+        cache?.Set(cacheKey, results, TimeSpan.FromSeconds(60));
+        return results;
+    }
 
     public async Task<PlaybackSourcesDto?> GetPlaybackAsync(Guid episodeId, CancellationToken ct)
     {

@@ -206,12 +206,15 @@ if (app.Configuration.GetValue<bool>("Database:ApplyMigrations"))
             app.Logger.LogInformation("Seeded default categories.");
         }
 
-        var catalog = scope.ServiceProvider.GetRequiredService<CatalogDocumentService>();
-        var missingDocuments = await db.Content.Where(x => x.CatalogJson == null).Select(x => x.Id).ToListAsync();
-        foreach (var contentId in missingDocuments)
-            await catalog.SyncAsync(contentId, CancellationToken.None);
-        if (missingDocuments.Count > 0)
-            app.Logger.LogInformation("Backfilled {Count} catalog JSON documents.", missingDocuments.Count);
+        if (app.Configuration.GetValue<bool>("Database:BackfillCatalog"))
+        {
+            var catalog = scope.ServiceProvider.GetRequiredService<CatalogDocumentService>();
+            var missingDocuments = await db.Content.Where(x => x.CatalogJson == null).Select(x => x.Id).ToListAsync();
+            foreach (var contentId in missingDocuments)
+                await catalog.SyncAsync(contentId, CancellationToken.None);
+            if (missingDocuments.Count > 0)
+                app.Logger.LogInformation("Backfilled {Count} catalog JSON documents.", missingDocuments.Count);
+        }
 
         // Ensure default admin user exists
         var adminEmail = "admin@anispeaker.com";
