@@ -36,23 +36,6 @@
     </div>
   }
   <section class="page container">
-    @if (item && episodes.length > 0) {
-      <h2>Episodes ({{ episodes.length }})</h2>
-      <div class="episodes-list">
-        @for (ep of episodes; track ep.id) {
-          <article class="episode">
-            <img [src]="ep.image" [alt]="ep.title" />
-            <div class="ep-info">
-              <b>Episode {{ ep.number }}: {{ ep.title }}</b>
-              <small>{{ ep.duration }}</small>
-            </div>
-            <a [routerLink]="['/watch', item.slug, 'season-' + (ep.seasonNumber || 1), 'ep-' + ep.number]" class="btn-play-ep" aria-label="Play episode">
-              ▶
-            </a>
-          </article>
-        }
-      </div>
-    }
     @if (item && related.length > 0) {
       <h2>More Like This</h2>
       <div class="grid">

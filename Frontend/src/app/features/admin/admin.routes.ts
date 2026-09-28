@@ -1,7 +1,6 @@
-import { Routes } from '@angular/router';
+import { Routes, Router, RouterLink, ActivatedRoute } from '@angular/router';
 import { ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { RouterLink } from '@angular/router';
 import { UpperCasePipe } from '@angular/common';
 import {
   AdminService,
@@ -12,7 +11,7 @@ import {
   AdminVideoSource,
   Season,
 } from '../../core/services/admin.service';
-import { ApiContent, ApiContentDetail } from '../../models/content.model';
+import { ApiContent, ApiContentDetail, ApiSeason } from '../../models/content.model';
 import { ContentService } from '../../core/services/content.service';
 import { AuthService } from '../../core/services/auth.service';
 import { forkJoin } from 'rxjs';
@@ -27,6 +26,8 @@ export class AdminComponent implements OnInit {
   private api = inject(AdminService);
   private contentService = inject(ContentService);
   private readonly changeDetector = inject(ChangeDetectorRef);
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
   readonly auth = inject(AuthService);
 
   activeTab: 'dashboard' | 'categories' | 'content' | 'episodes' = 'dashboard';
@@ -71,6 +72,8 @@ export class AdminComponent implements OnInit {
     title: 'Season 1',
   };
   selectedSeasonId = '';
+  activeSeasonId = '';
+  activeSeasonTabId: string = 'all';
   episodeForm: SaveEpisode = {
     number: 1,
     title: '',
@@ -114,7 +117,19 @@ export class AdminComponent implements OnInit {
         `but your role is "${this.auth.session?.role}". Admin role is required.`;
       return;
     }
+
+    // Restore active tab from URL query parameters
+    const tab = this.route.snapshot.queryParamMap.get('tab');
+    if (tab && ['dashboard', 'categories', 'content', 'episodes'].includes(tab)) {
+      this.activeTab = tab as any;
+    }
+
     this.loadAll();
+  }
+
+  setTab(tab: 'dashboard' | 'categories' | 'content' | 'episodes'): void {
+    this.activeTab = tab;
+    this.updateUrl();
   }
 
   logoutAndRedirect(): void {
@@ -166,9 +181,19 @@ export class AdminComponent implements OnInit {
         this.notice = 'Category added successfully!';
         this.catForm = { name: '', slug: '', sortOrder: 0 };
         this.loadAll();
+        this.updateUrl();
         setTimeout(() => (this.notice = ''), 3000);
       },
       error: (err) => (this.error = this.apiError(err, 'Failed to add category.')),
+    });
+  }
+
+  private updateUrl(): void {
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: { tab: this.activeTab },
+      queryParamsHandling: 'merge',
+      replaceUrl: true,
     });
   }
 
@@ -285,7 +310,7 @@ export class AdminComponent implements OnInit {
       published: item.published,
     };
     this.contentTagsInput = (item.tags || []).join(', ');
-    this.activeTab = 'content';
+    this.setTab('content');
   }
 
   deleteContent(item: ApiContent): void {
@@ -346,8 +371,9 @@ export class AdminComponent implements OnInit {
 
   selectContentForEpisodes(item: ApiContent): void {
     this.selectedContentForEpisodes = item;
-    this.activeTab = 'episodes';
+    this.setTab('episodes');
     this.selectedEpisodeForSources = null;
+    this.activeSeasonTabId = 'all';
     this.seasonForm = { number: 1, title: 'Season 1' };
     this.episodeForm = {
       number: 1,
@@ -376,10 +402,14 @@ export class AdminComponent implements OnInit {
           if (!this.seasons.some((season) => season.id === this.selectedSeasonId)) {
             this.selectedSeasonId = this.seasons[0].id;
           }
+          if (this.activeSeasonTabId !== 'all' && !this.seasons.some((season) => season.id === this.activeSeasonTabId)) {
+            this.activeSeasonTabId = 'all';
+          }
           this.seasonForm.number = this.seasons.length + 1;
           this.seasonForm.title = `Season ${this.seasonForm.number}`;
         } else {
           this.selectedSeasonId = '';
+          this.activeSeasonTabId = 'all';
         }
         this.changeDetector.detectChanges();
       },
@@ -390,12 +420,40 @@ export class AdminComponent implements OnInit {
     });
   }
 
+  get displayedSeasons(): ApiSeason[] {
+    if (!this.contentDetailForEpisodes?.seasons) return [];
+    if (!this.activeSeasonTabId || this.activeSeasonTabId === 'all') {
+      return this.contentDetailForEpisodes.seasons;
+    }
+    const found = this.contentDetailForEpisodes.seasons.find((s) => s.id === this.activeSeasonTabId);
+    return found ? [found] : this.contentDetailForEpisodes.seasons;
+  }
+
+  get totalEpisodesCount(): number {
+    if (!this.contentDetailForEpisodes) return 0;
+    if (this.selectedContentForEpisodes?.type === 'Movie') {
+      return this.contentDetailForEpisodes.episodes?.length || 0;
+    }
+    return (this.contentDetailForEpisodes.seasons || []).reduce(
+      (sum, s) => sum + (s.episodes?.length || 0),
+      0
+    );
+  }
+
+  setActiveSeasonTab(seasonId: string): void {
+    this.activeSeasonTabId = seasonId;
+    if (seasonId !== 'all') {
+      this.selectedSeasonId = seasonId;
+    }
+  }
+
   addSeason(): void {
     if (!this.selectedContentForEpisodes) return;
     this.api.createSeason(this.selectedContentForEpisodes.id, this.seasonForm).subscribe({
       next: (s) => {
         this.seasons.push(s);
         this.selectedSeasonId = s.id;
+        this.activeSeasonTabId = s.id;
         this.notice = `Season ${s.number} created!`;
         this.seasonForm.number++;
         this.seasonForm.title = `Season ${this.seasonForm.number}`;
@@ -468,7 +526,7 @@ export class AdminComponent implements OnInit {
       this.error = 'Select a season before importing URLs.';
       return;
     }
-    const urls = this.bulkUrls.split(/\r?\n/).map((url) => url.trim()).filter(Boolean);
+    const urls = this.bulkUrls.split(/\\r?\\n/).map((url) => url.trim()).filter(Boolean);
     if (urls.length === 0) {
       this.error = 'Paste at least one video URL, one per line.';
       return;
@@ -508,14 +566,14 @@ export class AdminComponent implements OnInit {
     if (!confirm('Are you sure you want to delete this episode?')) return;
     this.api.deleteEpisode(episodeId).subscribe({
       next: () => {
-        this.notice = 'Episode deleted.';
+        this.notice = `Episode deleted.`;
         if (this.selectedEpisodeForSources?.id === episodeId) {
           this.selectedEpisodeForSources = null;
         }
         this.refreshSelectedContentEpisodes();
         setTimeout(() => (this.notice = ''), 3000);
       },
-      error: () => (this.error = 'Failed to delete episode.'),
+      error: () => (this.error = 'Could not delete episode.'),
     });
   }
 
@@ -600,7 +658,7 @@ export class AdminComponent implements OnInit {
         this.refreshSelectedContentEpisodes();
         setTimeout(() => (this.notice = ''), 3000);
       },
-      error: () => (this.error = 'Failed to delete video source.'),
+      error: () => (this.error = 'Could not delete video source.'),
     });
   }
 
@@ -623,7 +681,6 @@ export class AdminComponent implements OnInit {
       error: () => (this.error = 'Failed to reorder sources.'),
     });
   }
-
 }
 
 export const ADMIN_ROUTES: Routes = [

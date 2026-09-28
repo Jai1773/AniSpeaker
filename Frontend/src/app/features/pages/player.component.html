@@ -70,8 +70,19 @@
 
     <aside class="playlist-sidebar">
       <h3>Episodes</h3>
+      <div class="season-tabs">
+        @for (s of seasons; track s) {
+          <button
+            type="button"
+            class="season-tab"
+            [class.active]="s === selectedSeason"
+            (click)="selectSeason(s)">
+            Season {{ s }}
+          </button>
+        }
+      </div>
       <div class="playlist-items">
-        @for (ep of episodes; track ep.id) {
+        @for (ep of filteredEpisodes; track ep.id) {
           <a
             [class.active]="ep.id === currentEpisode?.id"
             (click)="selectEpisode(ep)"

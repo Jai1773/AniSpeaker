@@ -153,7 +153,10 @@ export class ContentService {
     let type: ContentType = 'Anime';
     if (item.type === 'Movie') {
       type = 'Movie';
-    } else if (item.tags?.some((t) => t.toLowerCase() === 'cartoon')) {
+    } else if (
+      item.categoryId === '22341509-de1c-44b4-bf6a-ba657e8a6519' ||
+      item.tags?.some((t) => t.toLowerCase() === 'cartoon')
+    ) {
       type = 'Cartoon';
     }
 

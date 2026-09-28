@@ -68,6 +68,7 @@ export class BrowseComponent implements OnInit {
   }
 
   private filterItems(items: Content[], type: string | null): Content[] {
+    if (!type) return items;
     if (type === 'movies' || type === 'movie') return items.filter((item) => item.type === 'Movie');
     if (type === 'anime') return items.filter((item) => item.type === 'Anime');
     if (type === 'cartoon' || type === 'cartoons') return items.filter((item) => item.type === 'Cartoon');
@@ -125,6 +126,10 @@ export class DetailComponent implements OnInit {
   related: Content[] = [];
   isSaved = false;
   feedback = '';
+
+  get availableSeasons(): number[] {
+    return [...new Set(this.episodes.map((e) => e.seasonNumber || 1))].sort((a, b) => a - b);
+  }
 
   ngOnInit(): void {
     this.route.paramMap.subscribe((params) => {
@@ -233,6 +238,15 @@ export class PlayerComponent implements OnInit {
   item?: Content;
   episodes: Episode[] = [];
   currentEpisode?: Episode;
+  selectedSeason: number = 1;
+
+  get seasons(): number[] {
+    return [...new Set(this.episodes.map((e) => e.seasonNumber || 1))].sort((a, b) => a - b);
+  }
+
+  get filteredEpisodes(): Episode[] {
+    return this.episodes.filter((e) => (e.seasonNumber || 1) === this.selectedSeason);
+  }
 
   videoUrl = '';
   safeVideoUrl: SafeResourceUrl | null = null;
@@ -333,6 +347,7 @@ export class PlayerComponent implements OnInit {
                 const sNum = target.seasonNumber || 1;
                 const epNum = target.number;
                 this.router.navigate(['/watch', this.item.slug, `season-${sNum}`, `ep-${epNum}`], { replaceUrl: true });
+                this.selectedSeason = sNum;
                 this.selectEpisode(target, false);
               } else {
                 this.loading = false;
@@ -358,6 +373,7 @@ export class PlayerComponent implements OnInit {
 
   selectEpisode(episode: Episode, updateUrl = true): void {
     this.currentEpisode = episode;
+    this.selectedSeason = episode.seasonNumber || 1;
     this.loading = true;
     this.error = '';
 
@@ -446,6 +462,17 @@ export class PlayerComponent implements OnInit {
       if (guestHistory && guestHistory.progressSeconds > 10 && this.videoElement?.nativeElement) {
         this.videoElement.nativeElement.currentTime = guestHistory.progressSeconds;
       }
+    }
+  }
+
+  selectSeason(season: number): void {
+    this.selectedSeason = season;
+    this.changeDetector.detectChanges();
+
+    // Update URL to reflect the selected season for the current episode
+    if (this.currentEpisode && this.item) {
+      const epNum = this.currentEpisode.number;
+      this.router.navigate(['/watch', this.item.slug, `season-${season}`, `ep-${epNum}`], { replaceUrl: true });
     }
   }
 

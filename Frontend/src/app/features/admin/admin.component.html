@@ -26,16 +26,16 @@
     <aside class="admin-nav">
     <a routerLink="/" class="admin-brand">▶ AniSpeaker</a>
     <nav>
-      <button [class.active]="activeTab === 'dashboard'" (click)="activeTab = 'dashboard'">
+      <button [class.active]="activeTab === 'dashboard'" (click)="setTab('dashboard')">
         📊 Dashboard
       </button>
-      <button [class.active]="activeTab === 'categories'" (click)="activeTab = 'categories'">
+      <button [class.active]="activeTab === 'categories'" (click)="setTab('categories')">
         📁 Categories
       </button>
-      <button [class.active]="activeTab === 'content'" (click)="activeTab = 'content'">
+      <button [class.active]="activeTab === 'content'" (click)="setTab('content')">
         🎬 Content Catalog
       </button>
-      <button [class.active]="activeTab === 'episodes'" (click)="activeTab = 'episodes'">
+      <button [class.active]="activeTab === 'episodes'" (click)="setTab('episodes')">
         📺 Seasons & Episodes
       </button>
     </nav>
@@ -96,7 +96,7 @@
       </div>
 
       <div class="quick-actions-bar">
-        <button class="btn primary" (click)="resetContentForm(); activeTab = 'content'">
+        <button class="btn primary" (click)="resetContentForm(); setTab('content')">
           ＋ New Title
         </button>
       </div>
@@ -498,83 +498,138 @@
 
           <!-- Right Column: Existing Episodes List -->
           <div>
-            <div class="admin-card">
-              <h3>Existing Episodes</h3>
+            <div class="admin-card existing-episodes-card">
+              <div class="existing-episodes-header">
+                <div>
+                  <h3 style="margin-bottom: 2px;">Existing Episodes</h3>
+                  @if (contentDetailForEpisodes) {
+                    <span class="episodes-count-meta">
+                      {{ totalEpisodesCount }} {{ totalEpisodesCount === 1 ? 'episode' : 'episodes' }} total
+                    </span>
+                  }
+                </div>
+              </div>
+
               @if (contentDetailForEpisodes) {
                 @if (selectedContentForEpisodes.type === 'Series') {
-                  @for (s of contentDetailForEpisodes.seasons || []; track s.id) {
-                    <div style="margin-bottom: 20px;">
-                      <h4 style="color: #ff9a3c; margin: 8px 0;">{{ s.title }} ({{ s.episodes.length }} eps)</h4>
-                      <table class="admin-table">
-                        <thead>
-                          <tr>
-                            <th>Thumb</th>
-                            <th>#</th>
-                            <th>Title</th>
-                            <th>Sources</th>
-                            <th>Actions</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          @for (ep of s.episodes || []; track ep.id) {
-                            <tr>
-                              <td>
-                                <img [src]="ep.thumbnailUrl || 'https://images.unsplash.com/photo-1578632767115-351597cf2477?auto=format&fit=crop&w=80&q=80'" class="table-thumb" alt="" />
-                              </td>
-                              <td>{{ ep.number }}</td>
-                              <td><b>{{ ep.title }}</b></td>
-                              <td>
-                                <span class="type-pill" style="font-size: 0.75rem;">{{ ep.videoSources?.length || 0 }} sources</span>
-                              </td>
-                              <td>
-                                <button class="btn-sm" (click)="manageSources(ep)">Manage Sources</button>
-                                <button class="btn-danger-sm" (click)="deleteEpisode(ep.id)">Delete</button>
-                              </td>
-                            </tr>
-                          }
-                          @if (!s.episodes || s.episodes.length === 0) {
-                            <tr>
-                              <td colspan="4" style="text-align: center; color: #777;">No episodes in this season yet.</td>
-                            </tr>
-                          }
-                        </tbody>
-                      </table>
+                  <!-- Season Tabs Bar -->
+                  @if (contentDetailForEpisodes.seasons && contentDetailForEpisodes.seasons.length > 0) {
+                    <div class="season-tabs-bar">
+                      <button
+                        type="button"
+                        class="season-tab-btn"
+                        [class.active]="activeSeasonTabId === 'all'"
+                        (click)="setActiveSeasonTab('all')"
+                      >
+                        All Seasons
+                        <span class="tab-badge">{{ totalEpisodesCount }}</span>
+                      </button>
+                      @for (s of contentDetailForEpisodes.seasons; track s.id) {
+                        <button
+                          type="button"
+                          class="season-tab-btn"
+                          [class.active]="activeSeasonTabId === s.id"
+                          (click)="setActiveSeasonTab(s.id)"
+                        >
+                          {{ s.title }}
+                          <span class="tab-badge">{{ s.episodes.length }}</span>
+                        </button>
+                      }
                     </div>
                   }
+
+                  <!-- Episodes Scrollable Container -->
+                  <div class="episodes-scroll-container">
+                    @for (s of displayedSeasons; track s.id) {
+                      <div class="season-section">
+                        <div class="season-section-header">
+                          <h4 class="season-title">{{ s.title }}</h4>
+                          <span class="season-badge">{{ s.episodes.length }} {{ (s.episodes.length === 1) ? 'episode' : 'episodes' }}</span>
+                        </div>
+                        <table class="admin-table">
+                          <thead>
+                            <tr>
+                              <th style="width: 60px;">Thumb</th>
+                              <th style="width: 50px;">#</th>
+                              <th>Title</th>
+                              <th style="width: 110px;">Sources</th>
+                              <th style="width: 170px;">Actions</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            @for (ep of s.episodes; track ep.id) {
+                              <tr>
+                                <td>
+                                  <img [src]="ep.thumbnailUrl || 'https://images.unsplash.com/photo-1578632767115-351597cf2477?auto=format&fit=crop&w=80&q=80'" class="table-thumb" alt="" />
+                                </td>
+                                <td>{{ ep.number }}</td>
+                                <td><b>{{ ep.title }}</b></td>
+                                <td>
+                                  <span class="type-pill" style="font-size: 0.75rem;">{{ ep.videoSources?.length || 0 }} sources</span>
+                                </td>
+                                <td>
+                                  <div class="action-btn-group">
+                                    <button class="btn-sm" (click)="manageSources(ep)">Manage Sources</button>
+                                    <button class="btn-danger-sm" (click)="deleteEpisode(ep.id)">Delete</button>
+                                  </div>
+                                </td>
+                              </tr>
+                            }
+                            @if (s.episodes.length === 0) {
+                              <tr>
+                                <td colspan="5" style="text-align: center; color: #777; padding: 20px;">No episodes in this season yet.</td>
+                              </tr>
+                            }
+                          </tbody>
+                        </table>
+                      </div>
+                    }
+                    @if (!contentDetailForEpisodes.seasons || contentDetailForEpisodes.seasons.length === 0) {
+                      <div class="episodes-empty-state">
+                        <p>No seasons created yet for this series.</p>
+                        <small>Create Season 1 on the left to start adding episodes.</small>
+                      </div>
+                    }
+                  </div>
                 } @else {
-                  <table class="admin-table">
-                    <thead>
-                      <tr>
-                        <th>#</th>
-                        <th>Title</th>
-                        <th>Sources</th>
-                        <th>Actions</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      @for (ep of contentDetailForEpisodes.episodes || []; track ep.id) {
+                  <!-- Movie Streams / Episodes -->
+                  <div class="episodes-scroll-container">
+                    <table class="admin-table">
+                      <thead>
                         <tr>
-                          <td>{{ ep.number }}</td>
-                          <td><b>{{ ep.title }}</b></td>
-                          <td>
-                            <span class="type-pill" style="font-size: 0.75rem;">{{ ep.videoSources?.length || 0 }} sources</span>
-                          </td>
-                          <td>
-                            <button class="btn-sm" (click)="manageSources(ep)">Manage Sources</button>
-                            <button class="btn-danger-sm" (click)="deleteEpisode(ep.id)">Delete</button>
-                          </td>
+                          <th style="width: 50px;">#</th>
+                          <th>Title</th>
+                          <th style="width: 110px;">Sources</th>
+                          <th style="width: 170px;">Actions</th>
                         </tr>
-                      }
-                      @if (!contentDetailForEpisodes.episodes || contentDetailForEpisodes.episodes.length === 0) {
-                        <tr>
-                          <td colspan="4" style="text-align: center; color: #777;">No movie stream episodes added yet.</td>
-                        </tr>
-                      }
-                    </tbody>
-                  </table>
+                      </thead>
+                      <tbody>
+                        @for (ep of contentDetailForEpisodes.episodes || []; track ep.id) {
+                          <tr>
+                            <td>{{ ep.number }}</td>
+                            <td><b>{{ ep.title }}</b></td>
+                            <td>
+                              <span class="type-pill" style="font-size: 0.75rem;">{{ ep.videoSources?.length || 0 }} sources</span>
+                            </td>
+                            <td>
+                              <div class="action-btn-group">
+                                <button class="btn-sm" (click)="manageSources(ep)">Manage Sources</button>
+                                <button class="btn-danger-sm" (click)="deleteEpisode(ep.id)">Delete</button>
+                              </div>
+                            </td>
+                          </tr>
+                        }
+                        @if (!contentDetailForEpisodes.episodes || contentDetailForEpisodes.episodes.length === 0) {
+                          <tr>
+                            <td colspan="4" style="text-align: center; color: #777; padding: 20px;">No movie stream episodes added yet.</td>
+                          </tr>
+                        }
+                      </tbody>
+                    </table>
+                  </div>
                 }
               } @else {
-                <p style="color: #777;">Loading episodes...</p>
+                <p style="color: #777; padding: 16px;">Loading episodes...</p>
               }
             </div>
           </div>
