@@ -1,4 +1,4 @@
-﻿import { ApplicationConfig, provideBrowserGlobalErrorListeners } from '@angular/core';
+import { ApplicationConfig, provideBrowserGlobalErrorListeners } from '@angular/core';
 import { provideRouter, withViewTransitions, withRouterConfig } from '@angular/router';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { APP_INITIALIZER } from '@angular/core';
@@ -6,6 +6,7 @@ import { firstValueFrom } from 'rxjs';
 
 import { routes } from './app.routes';
 import { authInterceptor } from './core/interceptors/auth.interceptor';
+import { loadingInterceptor } from './core/interceptors/loading.interceptor';
 import { AuthService } from './core/services/auth.service';
 
 export const appConfig: ApplicationConfig = {
@@ -16,7 +17,7 @@ export const appConfig: ApplicationConfig = {
       withViewTransitions(),
       withRouterConfig({ onSameUrlNavigation: 'reload' })
     ),
-    provideHttpClient(withInterceptors([authInterceptor])),
+    provideHttpClient(withInterceptors([loadingInterceptor, authInterceptor])),
     {
       provide: APP_INITIALIZER,
       useFactory: (authService: AuthService) => () => {
@@ -30,3 +31,4 @@ export const appConfig: ApplicationConfig = {
     },
   ],
 };
+
