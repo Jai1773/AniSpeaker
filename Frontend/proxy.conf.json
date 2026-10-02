@@ -1,6 +1,6 @@
 {
   "/api": {
-    "target": "https://anispeaker.onrender.com",
+    "target": "http://localhost:8787",
     "secure": false,
     "changeOrigin": true
   }

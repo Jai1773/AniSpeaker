@@ -102,6 +102,7 @@ export class AdminComponent implements OnInit {
 
   // ─── Bulk URL import ───────────────────────────────────────────────────────
   bulkUrls = '';
+  bulkTitles = '';
   bulkThumbnailUrl = '';
   bulkPlayerName = 'Vidmoly';
   bulkEmbedType: 'Iframe' | 'Direct' = 'Iframe';
@@ -536,8 +537,17 @@ export class AdminComponent implements OnInit {
       this.error = `Invalid video URL: ${invalidUrl}`;
       return;
     }
+
+    const titles = this.bulkTitles.split(/\\r?\\n/).map((t) => t.trim());
+
+    const items = urls.map((url, i) => ({
+      url,
+      title: titles[i] || `Episode ${i + 1}`,
+    }));
+
     this.api.bulkCreateEpisodes(this.selectedSeasonId, {
       urls,
+      items,
       thumbnailUrl: this.bulkThumbnailUrl.trim() || '',
       playerName: this.bulkPlayerName.trim() || 'Vidmoly',
       embedType: this.bulkEmbedType,
@@ -545,6 +555,7 @@ export class AdminComponent implements OnInit {
       next: (created) => {
         this.notice = `${created.length} episodes imported from URLs.`;
         this.bulkUrls = '';
+        this.bulkTitles = '';
         this.bulkThumbnailUrl = '';
         this.refreshSelectedContentEpisodes();
         setTimeout(() => (this.notice = ''), 4000);

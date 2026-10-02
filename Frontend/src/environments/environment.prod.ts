@@ -2,6 +2,6 @@
 // Swapped in by angular.json fileReplacements during `ng build` (production)
 export const environment = {
   production: true,
-  apiBaseUrl: 'https://anispeaker.onrender.com'
+  apiBaseUrl: 'https://api.anispeaker.workers.dev' // Updated to new Cloudflare Worker URL
 };
 

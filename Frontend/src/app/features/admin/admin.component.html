@@ -383,7 +383,7 @@
 
               <div class="admin-card bulk-uploader" style="margin-bottom: 16px; border-left: 4px solid #ff9a3c;">
                 <h3 class="bulk-title">Bulk Add Episodes From URLs</h3>
-                <p class="muted">Paste one hosted video URL per line. Each URL becomes the next episode in this season.</p>
+                <p class="muted">Paste one hosted video URL per line. Titles are optional; if provided, paste one title per line in the same order as the URLs.</p>
 
                 <div class="bulk-season-select">
                   <label>Target Season</label>
@@ -395,10 +395,16 @@
                   </select>
                 </div>
 
-                <label>
-                  Video URLs
-                  <textarea [(ngModel)]="bulkUrls" name="bulkUrls" rows="7" placeholder="https://vidmoly.to/embed/...&#10;https://vidmoly.to/embed/..." class="bulk-textarea"></textarea>
-                </label>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px;">
+                  <label>
+                    Video URLs
+                    <textarea [(ngModel)]="bulkUrls" name="bulkUrls" rows="7" placeholder="https://vidmoly.to/embed/...&#10;https://vidmoly.to/embed/..." class="bulk-textarea"></textarea>
+                  </label>
+                  <label>
+                    Episode Titles (Optional)
+                    <textarea [(ngModel)]="bulkTitles" name="bulkTitles" rows="7" placeholder="The Beginning&#10;The Journey Continues..." class="bulk-textarea"></textarea>
+                  </label>
+                </div>
 
                 <div class="bulk-config-grid">
                   <label>

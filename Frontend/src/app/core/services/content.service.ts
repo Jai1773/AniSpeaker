@@ -44,11 +44,11 @@ export class ContentService {
     if (categoryId) params = params.set('category', categoryId);
 
     return this.http
-      .get<PageResult<ApiContent>>(`${API_BASE_URL}/api/content`, { params })
+      .get<ApiContent[]>(`${API_BASE_URL}/api/content`, { params })
       .pipe(
-        map((result) => {
-          if (result && result.items && result.items.length > 0) {
-            const mapped = result.items.map((item) => this.toContent(item));
+        map((items) => {
+          if (items && items.length > 0) {
+            const mapped = items.map((item) => this.toContent(item));
             if (!type && !categoryId && page === 1) {
               this.memoryCatalog = mapped;
               try {
